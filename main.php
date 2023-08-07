@@ -2,15 +2,17 @@
 
 declare(strict_types=1);
 
-use App\Engine\Component\MapPosition;
-use App\Engine\Component\MapSymbol;
 use App\Engine\Component\Player;
-use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
+use App\Engine\System\AISystemInterface;
 use App\Engine\System\MapDrawUpdater;
+use App\Engine\System\MonsterController;
+use App\Engine\System\MonsterSpawner;
 use App\Engine\System\Physics;
 use App\Engine\System\PlayerController;
 use App\Engine\System\ReceiverSystemInterface;
+use App\Engine\System\TreeSpawner;
+use App\Engine\System\WorldSystemInterface;
 use App\System\CommandPredicate;
 use App\System\World;
 
@@ -18,14 +20,9 @@ require 'vendor/autoload.php';
 
 $entityManager = new EntityManager();
 
-$playerEntity = new Entity(
-    1,
-    new Player(),
-    new MapPosition(5,5),
-    new MapSymbol('P'),
+$entityManager->addEntity(
+    Player::createPlayer(1, 5,5)
 );
-
-$entityManager->addEntity($playerEntity);
 
 $world = new World(10, 10);
 
@@ -33,14 +30,22 @@ $systems = [
     new MapDrawUpdater($world),
     new Physics($world),
     new PlayerController(),
+    new MonsterSpawner($world, $entityManager),
+    new TreeSpawner($world, $entityManager),
+    new MonsterController(),
 ];
-
 
 do {
     //steps, in order:
+
     //process ai (process and move autonomous entities)
+    foreach ($systems as $system) {
+        if ($system instanceof AISystemInterface) {
+            $system->process($entityManager->getEntities());
+        }
+    }
+
     //process physics (check if the entities can move. if so, move them)
-    //update map draw
     foreach ($systems as $system) {
         if ($system instanceof Physics) {
             $system->process($entityManager->getEntities());
@@ -48,6 +53,11 @@ do {
     }
 
     // process world (plant growth, ore regen, entity spawn, etc)
+    foreach ($systems as $system) {
+        if ($system instanceof WorldSystemInterface) {
+            $system->process($entityManager->getEntities());
+        }
+    }
 
     //update map draw
     foreach ($systems as $system) {
@@ -55,6 +65,7 @@ do {
             $system->process($entityManager->getEntities());
         }
     }
+
     //draw map
     $world->draw();
 
@@ -62,7 +73,8 @@ do {
 
     //draw command input
     echo "\n\n";
-    $command = strtolower(readline(">> "));
+    $command = '';//strtolower(readline(">> "));
+    usleep(500000);
 
     //receive commands (player awsd, mine, and so on)
     if ($command) {
