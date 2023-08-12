@@ -50,7 +50,6 @@ $systems = [
  *  multiple instances of the map renderer can be created, and connected to a single player input.
  *
  */
-
 $commandReceiver = new TCPCommandReceiver('127.0.0.1:1988', $systems);
 readline('Press enter to start the game loop.');
 $commandReceiver->init();

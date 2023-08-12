@@ -8,7 +8,10 @@ use App\Engine\Component\Fluid;
 use App\Engine\Component\MapSymbol;
 use App\Engine\Trait\CommandParserTrait;
 use App\System\CommandPredicate;
+use App\System\Event\Dispatcher;
+use App\System\Event\Event\UiMessageEvent;
 use App\System\World;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class WorldController implements ReceiverSystemInterface
 {
@@ -31,15 +34,28 @@ class WorldController implements ReceiverSystemInterface
 
     private function parseWorldViewChange(?CommandPredicate $commandPredicate, array $params): void
     {
-        $worldViewType = match ($commandPredicate) {
-            CommandPredicate::WORLD_SET_VIEW => match($params[0] ?? null) {
-                'fluid' => Fluid::class,
-                'world' => MapSymbol::class,
-                default => null,
+
+        $execute = match ($commandPredicate) {
+            CommandPredicate::WORLD_SET_VIEW => function () use ($params) {
+                $worldType = $params[0] ?? 'world';
+                $worldViewType = match ($worldType) {
+                    'fluid' => Fluid::class,
+                    'world' => MapSymbol::class,
+                    default => (function () use (&$worldType) { $worldType = 'world'; return null;})(),
+                };
+
+                $this->world->setDrawableClass($worldViewType);
+
+                Dispatcher::getInstance()->dispatch(
+                    new UiMessageEvent(
+                        sprintf("World view mode set to %s\n", $worldType)
+                    ),
+                    UiMessageEvent::EVENT_NAME,
+                );
             },
-            default => null,
+            default => null
         };
 
-        $this->world->setDrawableClass($worldViewType);
+        $execute && $execute();
     }
 }

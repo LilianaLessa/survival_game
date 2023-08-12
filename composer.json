@@ -15,6 +15,7 @@
     "require": {
       "ext-readline": "*",
         "ramsey/uuid": "^4.7",
-        "amphp/socket": "^2.1"
+        "amphp/socket": "^2.1",
+        "symfony/event-dispatcher": "^6.3"
     }
 }
