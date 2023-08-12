@@ -15,6 +15,8 @@ class ItemBlueprint
     private ?string $shortDescription = null;
     private ?string $name = null;
 
+    private ?ItemRarity $rarity;
+
     public function __construct(
         private readonly string $id,
         private readonly string $internalName,
@@ -83,6 +85,17 @@ class ItemBlueprint
     public function setName(?string $name): self
     {
         $this->name = $name;
+        return $this;
+    }
+
+    public function getRarity(): ItemRarity
+    {
+        return $this->rarity ?? ItemRarity::TRASH;
+    }
+
+    public function setRarity(?ItemRarity $rarity): self
+    {
+        $this->rarity = $rarity;
         return $this;
     }
 }

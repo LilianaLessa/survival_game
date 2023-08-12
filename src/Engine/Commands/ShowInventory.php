@@ -6,6 +6,7 @@ namespace App\Engine\Commands;
 
 use App\Engine\Component\Item\Inventory;
 use App\Engine\Component\Item\ItemOnInventory;
+use App\System\ConsoleColor;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
 
@@ -35,7 +36,12 @@ class ShowInventory implements InvokableCommandInterface
                 "%d - %dX %s - %s\n",
                 ++$i,
                 $item->getAmount(),
-                $item->getItemBlueprint()->getName(),
+                sprintf(
+                    "%s%s%s",
+                    $item->getItemBlueprint()->getRarity()->getColorCode(),
+                    $item->getItemBlueprint()->getName(),
+                    ConsoleColor::Color_Off->value,
+                ),
                 $item->getItemBlueprint()->getShortDescription(),
             );
         }

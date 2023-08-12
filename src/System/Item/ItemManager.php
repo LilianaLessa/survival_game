@@ -51,6 +51,7 @@ class ItemManager
             $itemBlueprint->setShortDescription($data->shortDescription ?? null);
             $itemBlueprint->setStackable($data->stackable ?? false);
             $itemBlueprint->setStackSize($data->stackSize ?? 1);
+            $itemBlueprint->setRarity(ItemRarity::tryFrom($data->rarity ?? ''));
 
         } catch(\Throwable $e) {}
 
