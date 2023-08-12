@@ -49,8 +49,7 @@ class WorldController implements ReceiverSystemInterface
                 Dispatcher::getInstance()->dispatch(
                     new UiMessageEvent(
                         sprintf("World view mode set to %s\n", $worldType)
-                    ),
-                    UiMessageEvent::EVENT_NAME,
+                    )
                 );
             },
             default => null

@@ -41,10 +41,7 @@ class InspectCell implements InvokableCommandInterface
         }
         $uiMessage .= "\n";
 
-        Dispatcher::getInstance()->dispatch(
-            new UiMessageEvent($uiMessage),
-            UiMessageEvent::EVENT_NAME
-        );
+        Dispatcher::getInstance()->dispatch(new UiMessageEvent($uiMessage));
     }
 
     private function calculateTargetCoordinates(): array

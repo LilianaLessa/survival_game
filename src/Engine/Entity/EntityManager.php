@@ -52,6 +52,11 @@ class EntityManager
         }
     }
 
+    public function entityHasComponent(string $entityId, string $componentClass): bool
+    {
+        return $this->entityCollection->entityHasComponent($entityId, $componentClass);
+    }
+
     /** @return ComponentInterface[] */
     public function getEntitiesWithComponents(string ...$componentClasses): array
     {

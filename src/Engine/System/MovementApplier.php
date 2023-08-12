@@ -7,10 +7,13 @@ namespace App\Engine\System;
 use App\Engine\Commands\MoveEntity;
 use App\Engine\Component\MapPosition;
 use App\Engine\Component\Movable;
+use App\Engine\Component\Player;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
 use App\System\Direction;
+use App\System\Event\Dispatcher;
+use App\System\Event\Event\UiMessageEvent;
 use App\System\World;
 
 class MovementApplier implements PhysicsSystemInterface
@@ -46,8 +49,10 @@ class MovementApplier implements PhysicsSystemInterface
                             $entityId,
                             new MapPosition($targetX, $targetY)
                         );
-                    } else {
-                        //cant move to the position;
+                    } elseif($this->entityManager->entityHasComponent($entityId,Player::class)) {
+                        Dispatcher::getInstance()->dispatch(
+                            new UiMessageEvent("Can't move in this direction.\n")
+                        );
                     }
                 }
             }
@@ -74,9 +79,9 @@ class MovementApplier implements PhysicsSystemInterface
     private function validateMovement(int $currentX, $currentY, int $targetX, int $targetY): bool {
         if (
             $targetX < 0
-            || $targetX > $this->world->getWidth()
+            || $targetX >= $this->world->getWidth()
             || $targetY < 0
-            || $targetY > $this->world->getHeight()
+            || $targetY >= $this->world->getHeight()
         ) { //out of map bounds
             return false;
         }

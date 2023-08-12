@@ -92,6 +92,11 @@ class EntityCollection extends \ArrayObject
         return $foundEntityComponents;
     }
 
+    public function entityHasComponent(string $entityId, string $componentClass): bool
+    {
+        return ($this->components[$componentClass][$entityId] ?? null) !== null;
+    }
+
     private function getComponentClasses(ComponentInterface|string $componentOrClassName): array
     {
         return [

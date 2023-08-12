@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\System\Event;
 
+use App\System\Event\Event\AbstractEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Dispatcher
@@ -27,9 +28,9 @@ class Dispatcher
         $this->dispatcher->addListener($eventName, $listener, $priority);
     }
 
-    public function dispatch(object $event, string $eventName = null): object
+    public function dispatch(AbstractEvent $event): void
     {
-        return $this->dispatcher->dispatch($event, $eventName);
+        $this->dispatcher->dispatch($event, $event->getEventName());
     }
 
     private function __construct()
