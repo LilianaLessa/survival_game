@@ -51,6 +51,7 @@ class CollectItems implements WorldSystemInterface
 
                         /** @var ?Inventory $targetInventory */
                         $collectorEntity->getComponent(Inventory::class)?->addItem(
+                            $this->entityManager,
                             ItemOnInventory::createFromItemOnGround($this->entityManager, $itemOnGround)
                         );
 

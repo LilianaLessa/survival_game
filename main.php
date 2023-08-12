@@ -29,8 +29,8 @@ $entityManager = new EntityManager();
 $itemManager = new ItemManager();
 $itemManager->loadItems('./data/items.json');
 
-$worldWidth = 10;
-$worldHeight = 10;
+$worldWidth = 250;
+$worldHeight = 250;
 $initialViewportWidth = 50;
 $initialViewportHeight = 50;
 

@@ -12,7 +12,7 @@ use App\System\Item\ItemBlueprint;
 //todo stackable items and unique items.
 class ItemOnInventory implements ComponentInterface
 {
-    private function __construct(private ItemBlueprint $itemBlueprint, private int $amount)
+    public function __construct(private ItemBlueprint $itemBlueprint, private int $amount)
     {
     }
 

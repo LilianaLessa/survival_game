@@ -32,10 +32,11 @@ class ShowInventory implements InvokableCommandInterface
          */
         foreach ($items as [$item]) {
             $uiMessage .= sprintf(
-                "%d - %dX %s\n",
+                "%d - %dX %s - %s\n",
                 ++$i,
                 $item->getAmount(),
-                $item->getItemBlueprint()->getInternalName()
+                $item->getItemBlueprint()->getName(),
+                $item->getItemBlueprint()->getShortDescription(),
             );
         }
 

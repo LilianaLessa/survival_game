@@ -36,8 +36,8 @@ class Tree implements ComponentInterface
                 new ItemDropper(
                     $itemManager->getItemBlueprintByInternalName('treeLeaves'),
                     DropOn::DIE,
+                    5,
                     10,
-                    20,
                     1
                 ),
                 new ItemDropper(

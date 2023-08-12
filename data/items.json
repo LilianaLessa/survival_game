@@ -3,270 +3,405 @@
     "id": "7bf45812-24a9-4e4c-986f-7a27b12a6f01",
     "internalName": "ironOre",
     "name": "Iron Ore",
-    "description": "A common ore containing iron that can be smelted into metal."
+    "description": "A common ore containing iron that can be smelted into metal.",
+    "stackable": true,
+    "stackSize": 50,
+    "shortDescription": "Smeltable iron ore."
   },
   {
     "id": "e8f21a9f-05c2-4a09-a14d-2dbf50a8939e",
     "internalName": "copperOre",
     "name": "Copper Ore",
-    "description": "A raw material containing copper, useful for crafting and trading."
+    "description": "A raw material containing copper, useful for crafting and trading.",
+    "stackable": true,
+    "stackSize": 50,
+    "shortDescription": "Crafting and trading material."
   },
   {
     "id": "13db5e47-4bf1-4e89-a1e0-2cbb3763fb9f",
     "internalName": "lumber",
     "name": "Lumber",
-    "description": "Wooden logs processed into planks, essential for construction."
+    "description": "Wooden logs processed into planks, essential for construction.",
+    "stackable": true,
+    "stackSize": 100,
+    "shortDescription": "Processed wooden logs."
   },
   {
     "id": "7367d076-108a-4a76-b4b2-948c15da829d",
     "internalName": "stone",
     "name": "Stone",
-    "description": "Basic building material often used in construction and crafting."
+    "description": "Basic building material often used in construction and crafting.",
+    "stackable": true,
+    "stackSize": 100,
+    "shortDescription": "Common building material."
   },
   {
     "id": "b47f28e3-3c9f-4a95-94c3-96c64a01f3e2",
     "internalName": "wildBerries",
     "name": "Wild Berries",
-    "description": "Edible berries found in the wild, suitable for simple recipes."
+    "description": "Edible berries found in the wild, suitable for simple recipes.",
+    "stackable": true,
+    "stackSize": 50,
+    "shortDescription": "Edible wild berries."
   },
   {
     "id": "941a9a6e-4f09-4b72-bb6c-70876a89a9db",
     "internalName": "herbs",
     "name": "Herbs",
-    "description": "Various medicinal and culinary plants used for potions and cooking."
+    "description": "Various medicinal and culinary plants used for potions and cooking.",
+    "stackable": true,
+    "stackSize": 50,
+    "shortDescription": "Medicinal and culinary plants."
   },
   {
     "id": "e4ebe5e3-49d1-41c7-86c9-ef6c2f0d1e9d",
     "internalName": "goldNugget",
     "name": "Gold Nugget",
-    "description": "A small piece of pure gold, valuable and often used for currency."
+    "description": "A small piece of pure gold, valuable and often used for currency.",
+    "stackable": true,
+    "stackSize": 20,
+    "shortDescription": "Small valuable gold piece."
   },
   {
     "id": "87fc8d26-85b0-4e68-9e79-0e06785c29f1",
     "internalName": "clay",
     "name": "Clay",
-    "description": "Malleable material used in pottery, construction, and crafting."
+    "description": "Malleable material used in pottery, construction, and crafting.",
+    "stackable": true,
+    "stackSize": 100,
+    "shortDescription": "Malleable crafting material."
   },
   {
     "id": "8fa943d0-3d62-4a8e-9d57-5f09794a8112",
     "internalName": "wool",
     "name": "Wool",
-    "description": "Fiber obtained from sheep, used for textiles and crafting."
+    "description": "Fiber obtained from sheep, used for textiles and crafting.",
+    "stackable": true,
+    "stackSize": 50,
+    "shortDescription": "Fiber for textiles and crafting."
   },
   {
     "id": "c62c9c76-4f72-4b76-9091-c050c92d6b84",
     "internalName": "fish",
     "name": "Fish",
-    "description": "Edible aquatic creature, a common food source for many cultures."
+    "description": "Edible aquatic creature, a common food source for many cultures.",
+    "stackable": true,
+    "stackSize": 30,
+    "shortDescription": "Common edible aquatic creature."
   },
   {
     "id": "d1b3aa4d-3a47-4969-8c6d-394e4f02f819",
     "internalName": "coal",
     "name": "Coal",
-    "description": "Carbon-rich mineral used as fuel and for smelting metal ores."
+    "description": "Carbon-rich mineral used as fuel and for smelting metal ores.",
+    "stackable": true,
+    "stackSize": 50,
+    "shortDescription": "Fuel and smelting material."
   },
   {
     "id": "efb4ec38-487d-4c0f-86cd-99bdf8f4c6c9",
     "internalName": "crystalShard",
     "name": "Crystal Shard",
-    "description": "Fragment of a larger crystal, often used in magical or mystical rituals."
+    "description": "Fragment of a larger crystal, often used in magical or mystical rituals.",
+    "stackable": true,
+    "stackSize": 40,
+    "shortDescription": "Fragment for magical rituals."
   },
   {
     "id": "cc03255d-23b3-4bf7-9a9c-81c6a30f76ab",
     "internalName": "honey",
     "name": "Honey",
-    "description": "Sweet and viscous substance produced by bees, a natural sweetener."
+    "description": "Sweet and viscous substance produced by bees, a natural sweetener.",
+    "stackable": true,
+    "stackSize": 20,
+    "shortDescription": "Viscous natural sweetener."
   },
   {
     "id": "cdad9983-53ea-4f91-9670-97d489d68f4c",
     "internalName": "obsidian",
     "name": "Obsidian",
-    "description": "Volcanic glass with sharp edges, used for tools, weapons, and jewelry."
+    "description": "Volcanic glass with sharp edges, used for tools, weapons, and jewelry.",
+    "stackable": true,
+    "stackSize": 30,
+    "shortDescription": "Volcanic glass for tools and weapons."
   },
   {
     "id": "edabed2a-35cc-4be5-ba1e-9649a76c066d",
     "internalName": "silk",
     "name": "Silk",
-    "description": "Luxurious and fine thread produced by silkworms, used for textiles."
+    "description": "Luxurious and fine thread produced by silkworms, used for textiles.",
+    "stackable": true,
+    "stackSize": 40,
+    "shortDescription": "Luxurious thread for textiles."
   },
   {
     "id": "3ad146b0-3523-41e4-9a47-6e5b8b9e3e0f",
     "internalName": "uranium",
     "name": "Uranium",
-    "description": "Radioactive element used as a power source or in advanced technologies."
+    "description": "Radioactive element used as a power source or in advanced technologies.",
+    "stackable": true,
+    "stackSize": 10,
+    "shortDescription": "Radioactive element for power."
   },
   {
     "id": "fe9a3635-5e0a-41fc-92c1-4b2edc6e5b71",
     "internalName": "diamond",
     "name": "Diamond",
-    "description": "Precious gemstone valued for its brilliance and used in jewelry."
+    "description": "Precious gemstone valued for its brilliance and used in jewelry.",
+    "stackable": true,
+    "stackSize": 15,
+    "shortDescription": "Brilliant gemstone for jewelry."
   },
   {
     "id": "901fe6c7-7e7e-44c0-bad2-14289384ea76",
     "internalName": "salt",
     "name": "Salt",
-    "description": "Crystalline mineral used to season food and preserve ingredients."
+    "description": "Crystalline mineral used to season food and preserve ingredients.",
+    "stackable": true,
+    "stackSize": 60,
+    "shortDescription": "Mineral for seasoning and preserving."
   },
   {
     "id": "64b2cf31-bd06-4e7a-b4e7-4b965c52f6f0",
     "internalName": "amber",
     "name": "Amber",
-    "description": "Fossilized resin, often used for crafting and decorative purposes."
+    "description": "Fossilized resin, often used for crafting and decorative purposes.",
+    "stackable": true,
+    "stackSize": 25,
+    "shortDescription": "Fossilized resin for crafting."
   },
   {
     "id": "63c52e0a-5109-4a4d-b7fc-7755a6937c1f",
     "internalName": "quartz",
     "name": "Quartz",
-    "description": "Common crystal with various uses in technology, magic, and decoration."
+    "description": "Common crystal with various uses in technology, magic, and decoration.",
+    "stackable": true,
+    "stackSize": 50,
+    "shortDescription": "Versatile crystal for various uses."
   },
   {
     "id": "61d39a72-8f72-4e1a-8d81-6fc20ee09a2f",
     "internalName": "wood",
     "name": "Wood",
-    "description": "Basic material obtained from trees, used for construction and crafting."
+    "description": "Basic material obtained from trees, used for construction and crafting.",
+    "stackable": true,
+    "stackSize": 100,
+    "shortDescription": "Basic material for construction."
   },
   {
     "id": "45a6f74a-04f5-4e69-8df3-6df88493517b",
     "internalName": "stone",
     "name": "Stone",
-    "description": "Basic building material often used in construction and crafting."
+    "description": "Basic building material often used in construction and crafting.",
+    "stackable": true,
+    "stackSize": 100,
+    "shortDescription": "Common building material."
   },
   {
     "id": "86db624f-4c05-49da-95a7-48dd5603b6a6",
     "internalName": "berries",
     "name": "Berries",
-    "description": "Edible fruits found in nature, often used for simple dishes."
+    "description": "Edible fruits found in nature, often used for simple dishes.",
+    "stackable": true,
+    "stackSize": 50,
+    "shortDescription": "Edible wild berries."
   },
   {
     "id": "d2399c26-8293-4d6d-b73e-3cf75fbca444",
     "internalName": "copper",
     "name": "Copper",
-    "description": "Malleable metal, essential for crafting and technological advancements."
+    "description": "Malleable metal, essential for crafting and technological advancements.",
+    "stackable": true,
+    "stackSize": 80,
+    "shortDescription": "Malleable crafting metal."
   },
   {
     "id": "c1c58d5a-4b15-4aaf-8e23-614ed5df9eaa",
     "internalName": "fiber",
     "name": "Fiber",
-    "description": "Plant-based material used for crafting textiles and basic items."
+    "description": "Plant-based material used for crafting textiles and basic items.",
+    "stackable": true,
+    "stackSize": 60,
+    "shortDescription": "Plant-based material for crafting."
   },
   {
     "id": "1aa67f58-53df-4a97-93c7-b68901e9f77a",
     "internalName": "clay",
     "name": "Clay",
-    "description": "Malleable material used in pottery, construction, and crafting."
+    "description": "Malleable material used in pottery, construction, and crafting.",
+    "stackable": true,
+    "stackSize": 100,
+    "shortDescription": "Malleable crafting material."
   },
   {
     "id": "d8b0894c-6b8f-4ae1-98d0-9717a6c0c08b",
     "internalName": "fish",
     "name": "Fish",
-    "description": "Edible aquatic creature, a common food source for many cultures."
+    "description": "Edible aquatic creature, a common food source for many cultures.",
+    "stackable": true,
+    "stackSize": 30,
+    "shortDescription": "Common edible aquatic creature."
   },
   {
     "id": "2a0aa31b-33e6-4a13-a381-903e9c554aa6",
     "internalName": "coal",
     "name": "Coal",
-    "description": "Carbon-rich mineral used as fuel and for smelting metal ores."
+    "description": "Carbon-rich mineral used as fuel and for smelting metal ores.",
+    "stackable": true,
+    "stackSize": 50,
+    "shortDescription": "Fuel and smelting material."
   },
   {
     "id": "d860eef6-00ab-4e84-92d9-6c6a0a9ec7f3",
     "internalName": "water",
     "name": "Water",
-    "description": "Essential liquid for hydration, cooking, and various processes."
+    "description": "Essential liquid for hydration, cooking, and various processes.",
+    "stackable": true,
+    "stackSize": 75,
+    "shortDescription": "Essential liquid for hydration and cooking."
   },
   {
     "id": "d52264ec-9be7-4c53-9259-85f3e3c16319",
     "internalName": "mushroom",
     "name": "Mushroom",
-    "description": "Fungal growth with various culinary and medicinal uses."
+    "description": "Fungal growth with various culinary and medicinal uses.",
+    "stackable": true,
+    "stackSize": 40,
+    "shortDescription": "Versatile fungal growth."
   },
   {
     "id": "f45a7df6-77f1-4c2e-95c8-78e6e8e9032a",
     "internalName": "monsterHide",
     "name": "Monster Hide",
-    "description": "Durable hide obtained from defeated monsters, used for crafting."
+    "description": "Durable hide obtained from defeated monsters, used for crafting.",
+    "stackable": true,
+    "stackSize": 20,
+    "shortDescription": "Durable hide for crafting."
   },
   {
     "id": "a8b403c3-4a7e-4d0f-8277-56ad2a5b28a2",
     "internalName": "fang",
     "name": "Fang",
-    "description": "Sharp tooth or pointed organ extracted from creatures, often used in weaponry."
+    "description": "Sharp tooth or pointed organ extracted from creatures, often used in weaponry.",
+    "stackable": true,
+    "stackSize": 30,
+    "shortDescription": "Sharp tooth or organ for crafting."
   },
   {
     "id": "c614867f-21f1-4e61-aa4f-18d7717a4346",
     "internalName": "claw",
     "name": "Claw",
-    "description": "Sharp and sturdy appendage from animals, useful for crafting and combat."
+    "description": "Sharp and sturdy appendage from animals, useful for crafting and combat.",
+    "stackable": true,
+    "stackSize": 25,
+    "shortDescription": "Sharp appendage for crafting and combat."
   },
   {
     "id": "6db605a9-51e2-4b7a-bfe5-0ebed6e8fb3e",
     "internalName": "bone",
     "name": "Bone",
-    "description": "Hard skeletal structure of creatures, utilized in crafting and tools."
+    "description": "Hard skeletal structure of creatures, utilized in crafting and tools.",
+    "stackable": true,
+    "stackSize": 40,
+    "shortDescription": "Hard skeletal material for crafting."
   },
   {
     "id": "a1b4e2e8-7242-4d9a-9cc2-989b18e752f5",
     "internalName": "slime",
     "name": "Slime",
-    "description": "Viscous and gooey substance with various magical and practical applications."
+    "description": "Viscous and gooey substance with various magical and practical applications.",
+    "stackable": true,
+    "stackSize": 60,
+    "shortDescription": "Viscous substance for various uses."
   },
   {
     "id": "ca642983-83f7-4e13-9a0f-b59aae32f7d0",
     "internalName": "crackedCrystal",
     "name": "Cracked Crystal",
-    "description": "Flawed crystal with reduced mystical properties, still valuable for certain crafts."
+    "description": "Flawed crystal with reduced mystical properties, still valuable for certain crafts.",
+    "stackable": true,
+    "stackSize": 35,
+    "shortDescription": "Flawed crystal for certain crafts."
   },
   {
     "id": "3bda88dd-7cc1-4a6d-a7a5-85807349c677",
     "internalName": "ratTail",
     "name": "Rat Tail",
-    "description": "Long and slender tail from rodents, used in potion making and alchemy."
+    "description": "Long and slender tail from rodents, used in potion making and alchemy.",
+    "stackable": true,
+    "stackSize": 50,
+    "shortDescription": "Long rodent tail for potion making."
   },
   {
     "id": "dcfcf916-6331-4d42-b58f-10e1d20e1191",
     "internalName": "insectAntenna",
     "name": "Insect Antenna",
-    "description": "Sensitive sensory organ of insects, sometimes used for magical purposes."
+    "description": "Sensitive sensory organ of insects, sometimes used for magical purposes.",
+    "stackable": true,
+    "stackSize": 45,
+    "shortDescription": "Insect antenna for magical purposes."
   },
   {
     "id": "3a7e92b4-2554-437b-9b22-62d3000a547a",
     "internalName": "feather",
     "name": "Feather",
-    "description": "Lightweight and pliable feather, commonly used in crafts and ornamental designs."
+    "description": "Lightweight and pliable feather, commonly used in crafts and ornamental designs.",
+    "stackable": true,
+    "stackSize": 50,
+    "shortDescription": "Lightweight feather for crafts."
   },
   {
     "id": "2c8fbff1-e5ef-4ed4-b6e1-7c862f96dbac",
     "internalName": "chitin",
     "name": "Chitin",
-    "description": "Strong and lightweight exoskeleton material from insects, useful for armor and tools."
+    "description": "Strong and lightweight exoskeleton material from insects, useful for armor and tools.",
+    "stackable": true,
+    "stackSize": 40,
+    "shortDescription": "Exoskeleton material for armor and tools."
   },
   {
     "id": "7b3961a1-72c3-4f63-91c7-837b3c4a823c",
     "internalName": "treeBark",
     "name": "Tree Bark",
-    "description": "Tough outer layer of the tree, used for crafting and tanning."
+    "description": "Tough outer layer of the tree, used for crafting and tanning.",
+    "stackable": true,
+    "stackSize": 60,
+    "shortDescription": "Tough layer for crafting and tanning."
   },
   {
     "id": "f8c3d8c6-9466-4077-bfb2-cb3666d3f91c",
     "internalName": "treeResin",
     "name": "Tree Resin",
-    "description": "Sticky sap collected from the tree, used in crafting and alchemy."
+    "description": "Sticky sap collected from the tree, used in crafting and alchemy.",
+    "stackable": true,
+    "stackSize": 50,
+    "shortDescription": "Sticky sap for crafting and alchemy."
   },
   {
     "id": "19285db4-c9e9-417b-a1c5-79e3e98a5eac",
     "internalName": "treeSeed",
     "name": "Tree Seed",
-    "description": "A viable seed that can be planted to grow a new tree."
+    "description": "A viable seed that can be planted to grow a new tree.",
+    "stackable": true,
+    "stackSize": 80,
+    "shortDescription": "Viable seed for tree growth."
   },
   {
     "id": "d409312d-0d49-47ec-9615-b4ef4821793c",
     "internalName": "woodenStump",
     "name": "Wooden Stump",
-    "description": "Remnant of the tree trunk, used as a crafting material or fuel."
+    "description": "Remnant of the tree trunk, used as a crafting material or fuel.",
+    "stackable": true,
+    "stackSize": 70,
+    "shortDescription": "Tree trunk remnant for crafting."
   },
   {
     "id": "62402c54-4a2c-4b07-93d9-d8f7a5f9be75",
     "internalName": "treeLeaves",
     "name": "Tree Leaves",
-    "description": "Foliage from the tree, can be used for composting or as crafting material."
+    "description": "Foliage from the tree, can be used for composting or as crafting material.",
+    "stackable": true,
+    "stackSize": 100,
+    "shortDescription": "Tree foliage for composting and crafting."
   }
 ]

@@ -46,6 +46,12 @@ class ItemManager
                 $data->internalName,
             );
 
+            $itemBlueprint->setName($data->name ?? null);
+            $itemBlueprint->setDescription($data->description ?? null);
+            $itemBlueprint->setShortDescription($data->shortDescription ?? null);
+            $itemBlueprint->setStackable($data->stackable ?? false);
+            $itemBlueprint->setStackSize($data->stackSize ?? 1);
+
         } catch(\Throwable $e) {}
 
         return $itemBlueprint;

@@ -40,7 +40,7 @@ class EntityManager
         $this->entityCollection->removeComponentsFromEntity($entityId, ...$componentClasses);
     }
 
-    public function updateEntityComponents(string $entityId, ComponentInterface ...$components): void
+    public function updateEntityComponents(string $entityId, ComponentInterface ...$components): ?Entity
     {
         $entity = $this->getEntityById($entityId);
         if ($entity) {
@@ -50,6 +50,8 @@ class EntityManager
 
             $this->addEntity($entity);
         }
+
+        return $entity;
     }
 
     public function entityHasComponent(string $entityId, string $componentClass): bool
