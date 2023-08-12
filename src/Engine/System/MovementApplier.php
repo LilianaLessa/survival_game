@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Engine\System;
 
 use App\Engine\Commands\MoveEntity;
-use App\Engine\Component\Collideable;
 use App\Engine\Component\MapPosition;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
@@ -23,7 +22,7 @@ class MovementApplier implements PhysicsSystemInterface
 
     /** @param Entity[] $entityCollection */
     public function process(): void    {
-        $entityCollection = $this->entityManager->getEntities();
+        $entityCollection = $this->entityManager->getEntityCollection()->getEntities();
         //process all move commands for each entity. fulfill only one. if one is fulfilled, remove others.
         foreach ($entityCollection as $entity) {
             //entity has no position: skip

@@ -9,6 +9,8 @@ use App\Engine\Component\ComponentInterface;
 
 class Entity
 {
+    //TODO components and commands should also be managed by EntityManager.
+
     /** @var ComponentInterface[] */
     private array $components = [];
 
