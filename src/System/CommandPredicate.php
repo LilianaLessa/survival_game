@@ -12,6 +12,9 @@ enum CommandPredicate : string {
     case PLAYER_MOVE_RIGHT = 'd';
     case MINE = 'm';
     case INVENTORY = 'i';
+
+    case DEBUG_INSPECT_CELL = 'ins';
+
     case BUILD = 'b';
     case PLACE_OBJECT = 'p';
 

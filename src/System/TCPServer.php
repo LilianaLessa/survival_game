@@ -11,7 +11,7 @@ use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
 use function Amp\async;
 
-class TCPCommandReceiver
+class TCPServer
 {
     /** @var ResourceSocket[]  */
     private array $sockets;
@@ -28,24 +28,7 @@ class TCPCommandReceiver
 
         $server = Socket\listen($this->address);
         echo 'TCP Command listener on ' . $server->getAddress() . ' ...' . PHP_EOL;
-        async(function () use ($server) {
-            while ($socket = $server->accept()) {
-                $this->sockets[] = $socket;
-                async(function () use ($socket) {
-                    do {
-                        $data = $socket->read();
-                        if ($data) {
-                            foreach ($this->systems as $system) {
-                                if ($system instanceof ReceiverSystemInterface) {
-                                    $system->parse($data);
-                                }
-                            }
-                        }
-                    } while($data !== null && $data !=='exit');
-                    $socket->close();
-                });
-            }
-        });
+        $this->handleConnections($server);
     }
 
     private function setUpUiMessageEventListener(): void
@@ -59,5 +42,32 @@ class TCPCommandReceiver
                 }
             }
         );
+    }
+
+    private function handleConnections(Socket\ResourceServerSocket $server): void
+    {
+        async(function () use ($server) {
+            while ($socket = $server->accept()) {
+                $this->sockets[] = $socket;
+                $this->handleMessages($socket);
+            }
+        });
+    }
+
+    private function handleMessages(ResourceSocket $socket): void
+    {
+        async(function () use ($socket) {
+            do {
+                $data = $socket->read();
+                if ($data) {
+                    foreach ($this->systems as $system) {
+                        if ($system instanceof ReceiverSystemInterface) {
+                            $system->parse($data);
+                        }
+                    }
+                }
+            } while ($data !== null && $data !== 'exit');
+            $socket->close();
+        });
     }
 }

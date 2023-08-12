@@ -15,7 +15,7 @@ use App\Engine\System\PlayerController;
 use App\Engine\System\TreeSpawner;
 use App\Engine\System\WorldController;
 use App\Engine\System\WorldSystemInterface;
-use App\System\TCPCommandReceiver;
+use App\System\TCPServer;
 use App\System\World;
 use function Amp\delay;
 
@@ -25,7 +25,7 @@ $entityManager = new EntityManager();
 
 Player::createPlayer($entityManager, 5,5);
 
-$world = new World(50, 50);
+$world = new World(10, 10);
 
 $systems = [
     new MapDrawUpdater($world, $entityManager),
@@ -38,7 +38,7 @@ $systems = [
 
     //controllers
     new MonsterController($entityManager),
-    new PlayerController($entityManager),
+    new PlayerController($world, $entityManager),
     new WorldController($world),
 ];
 
@@ -50,7 +50,7 @@ $systems = [
  *  multiple instances of the map renderer can be created, and connected to a single player input.
  *
  */
-$commandReceiver = new TCPCommandReceiver('127.0.0.1:1988', $systems);
+$commandReceiver = new TCPServer('127.0.0.1:1988', $systems);
 readline('Press enter to start the game loop.');
 $commandReceiver->init();
 
