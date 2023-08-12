@@ -6,7 +6,6 @@ use App\Engine\Component\Player;
 use App\Engine\Entity\EntityManager;
 use App\Engine\System\AISystemInterface;
 use App\Engine\System\FluidDynamics;
-use App\Engine\System\MapDrawUpdater;
 use App\Engine\System\MonsterController;
 use App\Engine\System\MonsterSpawner;
 use App\Engine\System\MovementApplier;
@@ -19,7 +18,6 @@ use App\System\Screen\ScreenUpdater;
 use App\System\TCP\TCPServer;
 use App\System\World;
 use function Amp\delay;
-use function Amp\async;
 
 require_once 'vendor/autoload.php';
 
@@ -27,11 +25,10 @@ $entityManager = new EntityManager();
 
 Player::createPlayer($entityManager, 5,5);
 
-$world = new World(10, 10);
-$screenUpdater = new ScreenUpdater($world, 10);
+$world = new World(11, 11);
+$screenUpdater = new ScreenUpdater($entityManager, $world, 10);
 
 $systems = [
-    new MapDrawUpdater($world, $entityManager),
     new MovementApplier($world, $entityManager),
     new FluidDynamics($world, $entityManager),
     //new FireDynamics($world, $entityManager),
@@ -85,13 +82,5 @@ do { //game loop
             $system->process();
         }
     }
-
-    //update map draw
-    foreach ($systems as $system) {
-        if ($system instanceof MapDrawUpdater) {
-            $system->process();
-        }
-    }
-    
     delay($tickDurationInSeconds); //tick
 } while(1);
