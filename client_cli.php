@@ -2,37 +2,28 @@
 
 require_once 'vendor/autoload.php';
 
-function translateKeypress($string) {
-    switch ($string) {
-        case "\033[A":
-            return "UP";
-        case "\033[B":
-            return "DOWN";
-        case "\033[C":
-            return "RIGHT";
-        case "\033[D":
-            return "LEFT";
-        case "\n":
-            return "ENTER";
-        case " ":
-            return "SPACE";
-        case "\010":
-        case "\177":
-            return "BACKSPACE";
-        case "\t":
-            return "TAB";
-        case "\e":
-            return "ESC";
-    }
-    return $string;
-}
-
 use Amp\Socket\ClientTlsContext;
 use Amp\Socket\ConnectContext;
+use App\Engine\System\WorldActorActionType;
+use App\System\Direction;
+use App\System\Key;
 use League\Uri\Http;
 use function Amp\Socket\connect;
 use function Amp\Socket\connectTls;
-use function Amp\delay;
+
+function key2Command($string) {
+    return match (Key::tryFrom($string)) {
+        Key::ARROW_UP => sprintf("action %s %s", WorldActorActionType::PRIMARY->value, Direction::UP->value),
+        Key::ARROW_DOWN => sprintf("action %s %s", WorldActorActionType::PRIMARY->value, Direction::DOWN->value),
+        Key::ARROW_RIGHT => sprintf("action %s %s", WorldActorActionType::PRIMARY->value, Direction::RIGHT->value),
+        Key::ARROW_LEFT => sprintf("action %s %s", WorldActorActionType::PRIMARY->value, Direction::LEFT->value),
+        Key::W => Direction::UP->value,
+        Key::S => Direction::DOWN->value,
+        Key::D => Direction::RIGHT->value,
+        Key::A => Direction::LEFT->value,
+        default => '',
+    };
+}
 
 function connectToGameServer(string $address): \Amp\Socket\Socket
 {
@@ -56,8 +47,8 @@ function unblockingInputMode(\Amp\Socket\Socket $socket): void
 
     $keypress = fgets($stdin);
     if ($keypress) {
-        $key = translateKeypress($keypress);
-        $socket->write($key);
+        $command = key2Command($keypress);
+        $socket->write($command);
     }
 
     fclose($stdin);
@@ -91,12 +82,12 @@ echo match($argv[2] ?? null) {
 $socket = null;
 do {
     if (!$socket || $socket->isClosed()) {
-        echo "No connection found. Trying to connect...";
+        echo time() . " - No connection found. Trying to connect...";
         while(!$socket || $socket->isClosed()) {
             try {
                 echo ".";
                 $socket = connectToGameServer($argv[1]);
-                echo "Connected!\n\n";
+                echo " Connected!\n\n";
                 break;
             } catch (\Throwable $e) {}
         }
@@ -131,10 +122,12 @@ do {
             }
             continue;
         }
-    } catch (\Throwable) {}
+    } catch (\Throwable $e) {
+        echo sprintf("\n\nException! %s\n\n", $e->getMessage());
+    }
 
     $socket->close();
     $socket = null;
-    echo "\n\nConnection Closed!\n\n";
+    echo "\n\n" . time() . " - Connection Closed!\n\n";
 } while (1);
 

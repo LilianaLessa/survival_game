@@ -9,6 +9,7 @@ use App\Engine\Component\Tree;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
+use App\System\Item\ItemManager;
 use App\System\World;
 
 class TreeSpawner implements WorldSystemInterface
@@ -18,6 +19,7 @@ class TreeSpawner implements WorldSystemInterface
     public function __construct(
         private readonly World $world,
         private readonly EntityManager $entityManager,
+        private readonly ItemManager $itemManager,
         private readonly int $maxTrees
     ) {
     }
@@ -51,6 +53,7 @@ class TreeSpawner implements WorldSystemInterface
             if ($this->canOverlapOnWorld($spawnPosition->getX(), $spawnPosition->getY()) && rand(1,100) < 30) {
                 Tree::createTree(
                     $this->entityManager,
+                    $this->itemManager,
                     $spawnPosition->getX(),
                     $spawnPosition->getY()
                 );

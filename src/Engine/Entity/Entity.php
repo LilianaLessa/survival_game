@@ -32,6 +32,11 @@ class Entity
         return $this->id;
     }
 
+    /**
+     * TODO fix this false deprecation notice.
+     * @deprecated Do not use it outside of EntityManager.
+     *
+     */
     public function addComponent(ComponentInterface $component): void {
         $class = get_class($component);
         $this->components[$class] = $component;

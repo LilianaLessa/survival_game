@@ -9,6 +9,7 @@ use App\Engine\Commands\InvokableCommandInterface;
 use App\Engine\Commands\MoveEntity;
 use App\Engine\Commands\SetMapViewport;
 use App\Engine\Commands\WhereAmI;
+use App\Engine\Commands\WorldAction;
 use App\Engine\Component\MapPosition;
 use App\Engine\Component\Movable;
 use App\Engine\Component\Player;
@@ -38,10 +39,11 @@ class PlayerController implements ReceiverSystemInterface
 
         /** @var Movable $movable */
         /** @var MapPosition $position */
-        foreach ($entityCollection as [$movable, $position]) {
+        foreach ($entityCollection as $entityId => [$movable, $position]) {
             $this->parseMovementCommand($commandPredicate, $movable);
             $this->parseDebugCommand($commandPredicate, $commandArguments, $position);
             $this->parseInfoCommand($commandPredicate, $commandArguments, $position);
+            $this->parseActionOnWorldCommand($commandPredicate, $commandArguments, $entityId);
 
             break;
         }
@@ -60,8 +62,11 @@ class PlayerController implements ReceiverSystemInterface
         $moveCommand && $movementQueue->add($moveCommand);
     }
 
-    private function parseInfoCommand(?CommandPredicate $commandPredicate, array $commandArguments, MapPosition $position): void
-    {
+    private function parseInfoCommand(
+        ?CommandPredicate $commandPredicate,
+        array $commandArguments,
+        MapPosition $position
+    ): void {
         $command = match ($commandPredicate) {
             CommandPredicate::PLAYER_SELF_WHERE => new WhereAmI($position),
             CommandPredicate::PLAYER_VIEWPORT => new SetMapViewport($this->world, $commandArguments),
@@ -71,6 +76,23 @@ class PlayerController implements ReceiverSystemInterface
         $command && $command();
     }
 
+    private function parseActionOnWorldCommand(
+        ?CommandPredicate $commandPredicate,
+        array $commandArguments,
+        string $entityId,
+    ): void {
+        $command = match ($commandPredicate) {
+            CommandPredicate::PLAYER_ACTION => new WorldAction(
+                $this->entityManager,
+                $entityId,
+                $commandArguments[0],
+                Direction::tryFrom($commandArguments[1] ?? null)
+            ),
+            default => null,
+        };
+
+        $command && $command();
+    }
 
     private function parseDebugCommand(
         ?CommandPredicate $commandPredicate,

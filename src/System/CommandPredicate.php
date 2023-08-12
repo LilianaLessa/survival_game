@@ -14,6 +14,8 @@ enum CommandPredicate : string {
     case PLAYER_SELF_WHERE = 'where';
     case PLAYER_VIEWPORT = 'vi';
 
+    case PLAYER_ACTION = 'action';
+
     case MINE = 'm';
     case INVENTORY = 'i';
 
