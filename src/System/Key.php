@@ -14,4 +14,5 @@ enum Key: string
     case S = "s";
     case D = "d";
     case A  = "a";
+    case I  = "i";
 }

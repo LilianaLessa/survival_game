@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Engine\Component\ItemDropper;
+namespace App\Engine\Component\Item\ItemDropper;
 
 use App\Engine\Component\ComponentInterface;
 use App\System\Item\ItemBlueprint;

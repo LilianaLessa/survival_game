@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Engine\System;
 
 use App\Engine\Component\HitPoints;
-use App\Engine\Component\ItemDropper\DropOn;
-use App\Engine\Component\ItemDropper\ItemDropper;
-use App\Engine\Component\ItemOnGround;
+use App\Engine\Component\Item\ItemDropper\DropOn;
+use App\Engine\Component\Item\ItemDropper\ItemDropper;
+use App\Engine\Component\Item\ItemOnGround;
 use App\Engine\Component\MapPosition;
 use App\Engine\Entity\EntityManager;
 

@@ -5,6 +5,7 @@ require_once 'vendor/autoload.php';
 use Amp\Socket\ClientTlsContext;
 use Amp\Socket\ConnectContext;
 use App\Engine\System\WorldActorActionType;
+use App\System\CommandPredicate;
 use App\System\Direction;
 use App\System\Key;
 use League\Uri\Http;
@@ -21,6 +22,7 @@ function key2Command($string) {
         Key::S => Direction::DOWN->value,
         Key::D => Direction::RIGHT->value,
         Key::A => Direction::LEFT->value,
+        Key::I => CommandPredicate::INVENTORY->value,
         default => '',
     };
 }

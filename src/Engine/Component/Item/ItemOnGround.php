@@ -2,14 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Engine\Component;
+namespace App\Engine\Component\Item;
 
+use App\Engine\Component\ComponentInterface;
+use App\Engine\Component\MapPosition;
+use App\Engine\Component\MapSymbol;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\System\Item\ItemBlueprint;
 
 readonly class ItemOnGround implements ComponentInterface
 {
+
     private function __construct(private ItemBlueprint $itemBlueprint, private int $amount)
     {
     }

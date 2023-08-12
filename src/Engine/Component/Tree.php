@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Engine\Component;
 
-use App\Engine\Component\ItemDropper\DropOn;
-use App\Engine\Component\ItemDropper\ItemDropper;
+use App\Engine\Component\Item\ItemDropper\DropOn;
+use App\Engine\Component\Item\ItemDropper\ItemDropper;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\System\Item\ItemManager;

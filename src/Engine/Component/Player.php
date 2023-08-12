@@ -6,6 +6,8 @@ namespace App\Engine\Component;
 
 use App\Engine\Component\ActionHandler\ActionHandlerList;
 use App\Engine\Component\ActionHandler\HitTarget;
+use App\Engine\Component\Item\Inventory;
+use App\Engine\Component\Item\ItemCollector;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\Engine\System\WorldActorActionType;
@@ -25,7 +27,9 @@ class Player implements ComponentInterface
                 [
                     WorldActorActionType::PRIMARY->value => new HitTarget()
                 ]
-            )
+            ),
+            new ItemCollector(),
+            new Inventory(),
         );
     }
 }

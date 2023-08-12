@@ -52,6 +52,14 @@ class World
         $this->entityMap = $entityMap;
     }
 
+    /**
+     * @return EntityCollection[][]
+     */
+    public function getEntityMap(): array
+    {
+        return $this->entityMap;
+    }
+
     public function draw(): void
     {
         [$viewportStart, $viewportEnd] =$this->calculateViewport();

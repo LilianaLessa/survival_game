@@ -7,6 +7,7 @@ use App\Engine\Entity\EntityManager;
 use App\Engine\System\AISystemInterface;
 use App\Engine\System\Battler;
 use App\Engine\System\FluidDynamics;
+use App\Engine\System\ItemCollection\CollectItems;
 use App\Engine\System\MonsterController;
 use App\Engine\System\MonsterSpawner;
 use App\Engine\System\MovementApplier;
@@ -39,6 +40,7 @@ $world = new World($entityManager,$worldWidth, $worldHeight, $initialViewportWid
 
 $systems = [
     new WorldActionApplier($world, $entityManager),
+    new CollectItems($world, $entityManager),
     new MovementApplier($world, $entityManager),
     new Battler($entityManager),
     new FluidDynamics($world, $entityManager),
