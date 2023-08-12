@@ -46,7 +46,7 @@ $systems = [
     new FluidDynamics($world, $entityManager),
     //new FireDynamics($world, $entityManager),
     //new SoundDynamics($world, $entityManager),
-    new MonsterSpawner($world, $entityManager, (int) ceil(($worldWidth * $worldHeight) * 0.005)),
+    new MonsterSpawner($world, $itemManager, $entityManager, (int) ceil(($worldWidth * $worldHeight) * 0.005)),
     new TreeSpawner($world, $entityManager, $itemManager, (int) ceil(($worldWidth * $worldHeight) * 0.1)),
     //controllers
     new MonsterController($entityManager),

@@ -45,7 +45,7 @@ class Battler implements AISystemInterface
                             $deadEntity->getComponent(ItemDropper::class),
                             ...$deadEntity->getComponent(
                                 ItemDropperCollection::class
-                            )?->getItemDroppers() ?? null,
+                            )?->getItemDroppers() ?? [],
                         ]
                     )
                 );

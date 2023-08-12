@@ -9,6 +9,7 @@ use App\Engine\Component\Monster;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
+use App\System\Item\ItemManager;
 use App\System\World;
 
 class MonsterSpawner implements WorldSystemInterface
@@ -17,6 +18,7 @@ class MonsterSpawner implements WorldSystemInterface
 
     public function __construct(
         private readonly World $world,
+        private readonly ItemManager $itemManager,
         private readonly EntityManager $entityManager,
         private readonly int $maxMonstersInMap
     ) {
@@ -53,6 +55,11 @@ class MonsterSpawner implements WorldSystemInterface
 
     private function spawnMonster(int $targetX, int $targetY): Entity
     {
-        return Monster::createMonster($this->entityManager, $targetX, $targetY);
+        return Monster::createMonster(
+            $this->itemManager,
+            $this->entityManager,
+            $targetX,
+            $targetY
+        );
     }
 }
