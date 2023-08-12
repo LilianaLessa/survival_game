@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\System;
+namespace App\System\TCP;
 
 use Amp\Socket;
 use Amp\Socket\ResourceSocket;

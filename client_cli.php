@@ -95,6 +95,15 @@ switch ($argv[2] ?? null) {
         //subscribe to map
         //messageReceiverMode($socket);
         break;
+    case '-i':
+        echo "\n\nPersistent interface mode active\n\n";
+        //this is an updatable interface view, that should show info like
+        // --- tool equipped
+        // --- shortcut list
+        // hp/sp?
+        // statuses
+        //messageReceiverMode($socket);
+        break;
     case '-c':
     default:
         commandInputMode($socket);

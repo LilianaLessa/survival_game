@@ -15,9 +15,11 @@ use App\Engine\System\PlayerController;
 use App\Engine\System\TreeSpawner;
 use App\Engine\System\WorldController;
 use App\Engine\System\WorldSystemInterface;
-use App\System\TCPServer;
+use App\System\Screen\ScreenUpdater;
+use App\System\TCP\TCPServer;
 use App\System\World;
 use function Amp\delay;
+use function Amp\async;
 
 require_once 'vendor/autoload.php';
 
@@ -26,6 +28,7 @@ $entityManager = new EntityManager();
 Player::createPlayer($entityManager, 5,5);
 
 $world = new World(10, 10);
+$screenUpdater = new ScreenUpdater($world, 10);
 
 $systems = [
     new MapDrawUpdater($world, $entityManager),
@@ -54,7 +57,12 @@ $commandReceiver = new TCPServer('127.0.0.1:1988', $systems);
 readline('Press enter to start the game loop.');
 $commandReceiver->init();
 
+$screenUpdater->intiScreenUpdate();
+
+
+$tickDurationInSeconds = 0.1;
 do { //game loop
+
     //steps, in order:
 
     //process ai (process and move autonomous entities)
@@ -84,9 +92,6 @@ do { //game loop
             $system->process();
         }
     }
-
-    //draw map
-    system('clear');
-    $world->draw();
-    delay(0.1);
+    
+    delay($tickDurationInSeconds); //tick
 } while(1);
