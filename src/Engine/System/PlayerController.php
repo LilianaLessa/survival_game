@@ -10,20 +10,21 @@ use App\Engine\Component\Movable;
 use App\Engine\Component\Player;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
+use App\Engine\Trait\CommandParserTrait;
 use App\System\CommandPredicate;
 use App\System\Direction;
 
 class PlayerController implements ReceiverSystemInterface
 {
+    use CommandParserTrait;
+
     public function __construct(private readonly EntityManager $entityManager)
     {
     }
 
-    /** @param Entity[] $entityCollection */
-    public function parse(string $command): void
+    public function parse(string $rawCommand): void
     {
-        $commandArray = explode(' ', $command);
-        $commandPredicate = array_shift($commandArray);
+        [$commandPredicate] = $this->extractCommand($rawCommand);
 
         $entityCollection = $this->entityManager->getEntitiesWithComponents(
             Movable::class,
@@ -33,18 +34,22 @@ class PlayerController implements ReceiverSystemInterface
 
         /** @var Movable $movementQueue */
         foreach ($entityCollection as [$movementQueue]) {
-            $command = match (CommandPredicate::tryFrom($commandPredicate)) {
-                CommandPredicate::UP => new MoveEntity(Direction::UP),
-                CommandPredicate::DOWN => new MoveEntity(Direction::DOWN),
-                CommandPredicate::LEFT => new MoveEntity(Direction::LEFT),
-                CommandPredicate::RIGHT => new MoveEntity(Direction::RIGHT),
-                default => null,
-            };
-
-            $command && $movementQueue->add($command);
+            $this->parseMovementCommand($commandPredicate, $movementQueue);
 
             break;
         }
     }
 
+    private function parseMovementCommand(mixed $commandPredicate, Movable $movementQueue): void
+    {
+        $moveCommand = match ($commandPredicate) {
+            CommandPredicate::PLAYER_MOVE_UP => new MoveEntity(Direction::UP),
+            CommandPredicate::PLAYER_MOVE_DOWN => new MoveEntity(Direction::DOWN),
+            CommandPredicate::PLAYER_MOVE_LEFT => new MoveEntity(Direction::LEFT),
+            CommandPredicate::PLAYER_MOVE_RIGHT => new MoveEntity(Direction::RIGHT),
+            default => null,
+        };
+
+        $moveCommand && $movementQueue->add($moveCommand);
+    }
 }

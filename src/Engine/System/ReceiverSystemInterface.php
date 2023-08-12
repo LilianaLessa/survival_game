@@ -8,6 +8,5 @@ use App\Engine\Entity\Entity;
 
 interface ReceiverSystemInterface
 {
-    /** @param Entity[] $entityCollection */
-    public function parse(string $command): void;
+    public function parse(string $rawCommand): void;
 }

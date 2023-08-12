@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\System;
 
+use App\Engine\Component\DrawableInterface;
 use App\Engine\Component\MapSymbol;
 use App\Engine\Entity\Entity;
 
@@ -11,8 +12,13 @@ class World
 {
     private const EMPTY_CELL_SYMBOL = '.';
 
+    // TODO implement viewport/scrollable world?
+
+    /** TODO This should be a bi-dimensional entity matrix */
     /** @var Entity[][][]  */
     private array $entityMap = [];
+
+    private string $drawableClass = MapSymbol::class;
 
     public function __construct(private readonly int $width, private readonly int $height)
     {
@@ -44,7 +50,7 @@ class World
                 /* @var bool|Entity $topEntity */
                 $topEntity = end($entities);
                 /* @var null|MapSymbol $symbol */
-                $symbol = $topEntity ? $topEntity->getComponent(MapSymbol::class) : null;
+                $symbol = $topEntity ? $topEntity->getComponent($this->drawableClass) : null;
                 $symbol = $symbol?->getSymbol() ?? self::EMPTY_CELL_SYMBOL;
 
                 echo sprintf(" %s ", $symbol);
@@ -76,5 +82,12 @@ class World
         || $x > $this->world->getWidth()
         || $y < 0
         || $y > $this->world->getHeight();
+    }
+
+    public function setDrawableClass(?string $drawableClass): void
+    {
+        $this->drawableClass =
+            ($drawableClass && in_array(DrawableInterface::class, class_implements($drawableClass))
+            ? $drawableClass : MapSymbol::class);
     }
 }
