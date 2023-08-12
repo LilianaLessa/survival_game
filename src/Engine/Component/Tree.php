@@ -48,13 +48,6 @@ class Tree implements ComponentInterface
                     0.4
                 ),
                 new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('enchantedFruit'),
-                    DropOn::DIE,
-                    1,
-                    1,
-                    0.1
-                ),
-                new ItemDropper(
                     $itemManager->getItemBlueprintByInternalName('rottenTwig'),
                     DropOn::DIE,
                     1,
@@ -67,62 +60,34 @@ class Tree implements ComponentInterface
                     1,
                     2,
                     0.7
-                ),
-                new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('eternalSap'),
-                    DropOn::DIE,
-                    1,
-                    1,
-                    0.05
-                ),
-                new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('sylvanHeart'),
-                    DropOn::DIE,
-                    1,
-                    1,
-                    0.05
                 ),
                 new ItemDropper(
                     $itemManager->getItemBlueprintByInternalName('honey'),
                     DropOn::DIE,
                     1,
                     1,
-                    0.3
+                    0.05
                 ),
                 new ItemDropper(
                     $itemManager->getItemBlueprintByInternalName('enchantedFruit'),
                     DropOn::DIE,
                     1,
                     1,
-                    0.1
-                ),
-                new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('rottenTwig'),
-                    DropOn::DIE,
-                    1,
-                    2,
-                    0.8
-                ),
-                new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('insectCarcass'),
-                    DropOn::DIE,
-                    1,
-                    2,
-                    0.7
+                    0.01
                 ),
                 new ItemDropper(
                     $itemManager->getItemBlueprintByInternalName('eternalSap'),
                     DropOn::DIE,
                     1,
                     1,
-                    0.05
+                    0.005
                 ),
                 new ItemDropper(
                     $itemManager->getItemBlueprintByInternalName('sylvanHeart'),
                     DropOn::DIE,
                     1,
                     1,
-                    0.05
+                    0.005
                 ),
             ),
         );
