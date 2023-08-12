@@ -13,9 +13,10 @@
         }
     ],
     "require": {
+      "php": ">=8.2.4",
       "ext-readline": "*",
-        "ramsey/uuid": "^4.7",
-        "amphp/socket": "^2.1",
-        "symfony/event-dispatcher": "^6.3"
+      "ramsey/uuid": "^4.7",
+      "amphp/socket": "^2.1",
+      "symfony/event-dispatcher": "^6.3"
     }
 }
