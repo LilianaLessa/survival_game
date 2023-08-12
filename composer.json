@@ -13,6 +13,7 @@
         }
     ],
     "require": {
-      "ext-readline": "*"
+      "ext-readline": "*",
+        "ramsey/uuid": "^4.7"
     }
 }

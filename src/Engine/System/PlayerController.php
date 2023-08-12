@@ -8,35 +8,41 @@ use App\Engine\Commands\MoveEntity;
 use App\Engine\Component\MapPosition;
 use App\Engine\Component\Player;
 use App\Engine\Entity\Entity;
+use App\Engine\Entity\EntityManager;
 use App\System\CommandPredicate;
 use App\System\Direction;
 
 class PlayerController implements ReceiverSystemInterface
 {
+    public function __construct(private readonly EntityManager $entityManager)
+    {
+    }
 
     /** @param Entity[] $entityCollection */
-    public function parse(string $command, array $entityCollection): void
+    public function parse(string $command): void
     {
-        $commandArray = explode(' ',$command);
+        $commandArray = explode(' ', $command);
         $commandPredicate = array_shift($commandArray);
 
-        foreach ($entityCollection as $entity) {
-            $player = $entity->getComponent(Player::class);
-            $position = $entity->getComponent(MapPosition::class);
+        $entityCollection = $this->entityManager->getEntitiesWithComponents(
+            Player::class,
+            MapPosition::class
+        );
 
-            if ($player && $position) {
-                $command = match (CommandPredicate::tryFrom($commandPredicate)) {
-                    CommandPredicate::UP => new MoveEntity(Direction::UP),
-                    CommandPredicate::DOWN => new MoveEntity(Direction::DOWN),
-                    CommandPredicate::LEFT => new MoveEntity(Direction::LEFT),
-                    CommandPredicate::RIGHT => new MoveEntity(Direction::RIGHT),
-                    default => null,
-                };
+        /** @var Player $player */
+        foreach ($entityCollection as $entityId => $components) {
+            $command = match (CommandPredicate::tryFrom($commandPredicate)) {
+                CommandPredicate::UP => new MoveEntity(Direction::UP),
+                CommandPredicate::DOWN => new MoveEntity(Direction::DOWN),
+                CommandPredicate::LEFT => new MoveEntity(Direction::LEFT),
+                CommandPredicate::RIGHT => new MoveEntity(Direction::RIGHT),
+                default => null,
+            };
 
-                $command && $entity->addCommand($command);
+            $command && $this->entityManager->getEntityById($entityId)->addCommand($command);
 
-                break;
-            }
+            break;
         }
     }
+
 }

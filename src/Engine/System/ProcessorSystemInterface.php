@@ -9,5 +9,5 @@ use App\Engine\Entity\Entity;
 interface ProcessorSystemInterface
 {
     /** @param Entity[] $entityCollection */
-    public function process(array $entityCollection): void;
+    public function process(): void;
 }

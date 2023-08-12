@@ -5,23 +5,25 @@ declare(strict_types=1);
 namespace App\Engine\System;
 
 use App\Engine\Commands\MoveEntity;
-use App\Engine\Component\Colideable;
+use App\Engine\Component\Collideable;
 use App\Engine\Component\MapPosition;
 use App\Engine\Entity\Entity;
+use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
 use App\System\Direction;
 use App\System\World;
 
-class Physics implements ProcessorSystemInterface
+class MovementApplier implements PhysicsSystemInterface
 {
     use WorldAwareTrait;
 
-    public function __construct(private readonly World $world)
+    public function __construct(private readonly World $world, private readonly EntityManager $entityManager)
     {
     }
 
     /** @param Entity[] $entityCollection */
-    public function process(array $entityCollection): void    {
+    public function process(): void    {
+        $entityCollection = $this->entityManager->getEntities();
         //process all move commands for each entity. fulfill only one. if one is fulfilled, remove others.
         foreach ($entityCollection as $entity) {
             //entity has no position: skip
@@ -40,8 +42,11 @@ class Physics implements ProcessorSystemInterface
 
                         [$targetX, $targetY] = $this->calculateTargetCoordinates($position, $command);
 
-                        if ($this->validateMovement($targetX, $targetY)) {
-                            $entity->addComponent(new MapPosition($targetX, $targetY));
+                        if ($this->validateMovement($position->getX(), $position->getY(), $targetX, $targetY)) {
+                            $this->entityManager->updateEntityComponents(
+                                $entity->getId(),
+                                new MapPosition($targetX, $targetY)
+                            );
                         } else {
                             //cant move to the position;
                         }
@@ -68,7 +73,7 @@ class Physics implements ProcessorSystemInterface
         ];
     }
 
-    private function validateMovement(int $targetX, int $targetY): bool {
+    private function validateMovement(int $currentX, $currentY, int $targetX, int $targetY): bool {
         if (
             $targetX < 0
             || $targetX > $this->world->getWidth()
@@ -78,7 +83,14 @@ class Physics implements ProcessorSystemInterface
             return false;
         }
 
-        if (!$this->canOverlap($targetX, $targetY)) { //target not empty.
+        if (!$this->canOverlapOnWorld($targetX, $targetY)) { //target not empty.
+            return false;
+        }
+
+        $heightDifference = abs(
+            $this->getTerrainHeight($currentX, $currentY) - $this->getTerrainHeight($targetX, $targetY)
+        );
+        if ($heightDifference > 1) { //height gap is too high.
             return false;
         }
 

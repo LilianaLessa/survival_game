@@ -47,7 +47,7 @@ class World
                 $symbol = $topEntity ? $topEntity->getComponent(MapSymbol::class) : null;
                 $symbol = $symbol?->getSymbol() ?? self::EMPTY_CELL_SYMBOL;
 
-                echo " " . $symbol;
+                echo sprintf(" %s ", $symbol);
 
             }
             echo "\n";
@@ -67,5 +67,14 @@ class World
     public function getHeight(): int
     {
         return $this->height;
+    }
+
+    public function isOutOfBounds(int $x, int $y): bool
+    {
+        return
+        $x < 0
+        || $x > $this->world->getWidth()
+        || $y < 0
+        || $y > $this->world->getHeight();
     }
 }

@@ -7,29 +7,28 @@ namespace App\Engine\System;
 use App\Engine\Component\MapPosition;
 use App\Engine\Component\MapSymbol;
 use App\Engine\Entity\Entity;
+use App\Engine\Entity\EntityManager;
 use App\System\World;
 
 class MapDrawUpdater implements ProcessorSystemInterface
 {
-    public function __construct(private readonly World $world)
+    public function __construct(private readonly World $world, private readonly EntityManager $entityManager)
     {
     }
 
-    /** @param Entity[] $entityCollection */
-    public function process(array $entityCollection): void
+    public function process(): void
     {
         $entityMap = [];
+        $entitiesToUpdate = $this->entityManager->getEntitiesWithComponents(
+            MapSymbol::class,
+            MapPosition::class,
+        );
 
-        foreach ($entityCollection as $entity) {
-            /** @var MapSymbol $drawable */
-            $drawable = $entity->getComponent(MapSymbol::class);
-            /** @var MapPosition $position */
-            $position = $entity->getComponent(MapPosition::class);
-            if ($drawable && $position) {
-                $entityMap[$position->getX()][$position->getY()] =
-                    $entityMap[$position->getX()][$position->getY()] ?? [];
-                $entityMap[$position->getX()][$position->getY()][] = $entity;
-            }
+        /** @var MapPosition $position */
+        foreach ($entitiesToUpdate as $entityId => [,$position]) {
+            $entityMap[$position->getX()][$position->getY()] =
+                $entityMap[$position->getX()][$position->getY()] ?? [];
+            $entityMap[$position->getX()][$position->getY()][] = $this->entityManager->getEntityById($entityId);
         }
 
         $this->world->resetEntityMap();

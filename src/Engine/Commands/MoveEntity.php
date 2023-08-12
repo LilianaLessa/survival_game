@@ -8,6 +8,8 @@ use App\System\Direction;
 
 class MoveEntity implements CommandInterface
 {
+    //todo should different types of movement be declared here?
+    // for example, climb, swim, walk, run and so on?
     public function __construct(private readonly Direction $direction)
     {
     }

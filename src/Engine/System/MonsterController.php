@@ -15,17 +15,22 @@ use App\System\World;
 
 class MonsterController implements AISystemInterface
 {
-    public function __construct()
+    public function __construct(private readonly EntityManager $entityManager)
     {
     }
 
     /** @param Entity[] $entityCollection */
-    public function process(array $entityCollection): void
+    public function process(): void
     {
-        $monsterInMap = array_filter($entityCollection, fn ($e) => $e->getComponent(Monster::class));
-        foreach ($monsterInMap as $monster) {
+        $monsterInMap = $this->entityManager->getEntitiesWithComponents(
+            Monster::class,
+            MapPosition::class
+        );
+
+        foreach ($monsterInMap as $entityId => [$monster]) {
             if (rand(0,100) < 30) {
-                $monster->addCommand(match (rand(1,4)) {
+                $this->entityManager->getEntityById($entityId)
+                    ->addCommand(match (rand(1,4)) {
                     1 => new MoveEntity(Direction::UP),
                     2 => new MoveEntity(Direction::DOWN),
                     3 => new MoveEntity(Direction::LEFT),

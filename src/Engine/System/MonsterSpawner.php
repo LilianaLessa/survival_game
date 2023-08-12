@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace App\Engine\System;
 
-use App\Engine\Commands\MoveEntity;
 use App\Engine\Component\MapPosition;
-use App\Engine\Component\MapSymbol;
 use App\Engine\Component\Monster;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
-use App\System\Direction;
 use App\System\World;
 
 class MonsterSpawner implements WorldSystemInterface
@@ -26,10 +23,13 @@ class MonsterSpawner implements WorldSystemInterface
     }
 
     /** @param Entity[] $entityCollection */
-    public function process(array $entityCollection): void
+    public function process(): void
     {
         //check amount of monster in map
-        $monsterInMap = array_filter($entityCollection, fn ($e) => $e->getComponent(Monster::class));
+        $monsterInMap = $this->entityManager->getEntitiesWithComponents(
+            Monster::class,
+            MapPosition::class
+        );
         $maxMonsterInMap = self::MAX_MONSTER_IN_MAP;
 
         if (count($monsterInMap) < $maxMonsterInMap) {
@@ -39,11 +39,11 @@ class MonsterSpawner implements WorldSystemInterface
                     $targetX = rand(0, $this->world->getWidth() -1);
                     $targetY = rand(0, $this->world->getHeight() -1);
 
-                    if (!$this->canOverlap($targetX, $targetY)) { //target not empty.
+                    if (!$this->canOverlapOnWorld($targetX, $targetY)) { //target not empty.
                         continue;
                     }
 
-                    $this->entityManager->addEntity($this->spawnMonster($targetX, $targetY));
+                    $this->spawnMonster($targetX, $targetY);
 
                     break;
                 } while (true);
@@ -53,6 +53,6 @@ class MonsterSpawner implements WorldSystemInterface
 
     private function spawnMonster(int $targetX, int $targetY): Entity
     {
-        return Monster::createMonster(time(), $targetX, $targetY);
+        return Monster::createMonster($this->entityManager, $targetX, $targetY);
     }
 }

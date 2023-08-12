@@ -15,7 +15,7 @@ class Entity
     /** @var CommandInterface[] */
     private array $commands = [];
 
-    public function __construct(private readonly int $id, ComponentInterface ...$components)
+    public  function __construct(private readonly string $id, ComponentInterface ...$components)
     {
         $this->components = [];
         foreach ($components as $component) {
@@ -23,24 +23,9 @@ class Entity
         }
     }
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    public function addComponent(ComponentInterface $component): void {
-        $class = get_class($component);
-        $this->components[$class] = $component;
-    }
-
     public function getComponent(string $componentType): ?ComponentInterface
     {
         return $this->components[$componentType] ?? null;
-    }
-
-    public function removeComponent(string $componentType): void
-    {
-        unset($this->components[$componentType]);
     }
 
     public function addCommand(CommandInterface $command): self
@@ -62,4 +47,26 @@ class Entity
 
         return $this;
     }
+
+    public  function getId(): string
+    {
+        return $this->id;
+    }
+
+    public function addComponent(ComponentInterface $component): void {
+        $class = get_class($component);
+        $this->components[$class] = $component;
+    }
+
+    /** @return ComponentInterface[] */
+    public  function getComponents(): array
+    {
+        return $this->components;
+    }
+
+    public function removeComponent(string $componentType): void
+    {
+        unset($this->components[$componentType]);
+    }
 }
+
