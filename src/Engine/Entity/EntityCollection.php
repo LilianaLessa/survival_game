@@ -34,7 +34,7 @@ class EntityCollection extends \ArrayObject
 
     public function removeEntity(string $entityId): void
     {
-        $entity = $this[$entityId];
+        $entity = $this[$entityId] ?? null;
 
         if ($entity) {
             //unset components;

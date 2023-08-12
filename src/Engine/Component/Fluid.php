@@ -7,8 +7,9 @@ namespace App\Engine\Component;
 use App\System\ForceDirection;
 
 class Fluid implements DrawableInterface
+//class Fluid extends MapSymbol implements DrawableInterface
 {
-    public function __construct(private readonly ForceDirection $forceDirection, private readonly int $strength)
+    public function __construct(private readonly ForceDirection $forceDirection, private readonly float $strength)
     {
     }
 
@@ -17,7 +18,7 @@ class Fluid implements DrawableInterface
         return $this->forceDirection;
     }
 
-    public function getStrength(): int
+    public function getStrength(): float
     {
         return $this->strength;
     }
