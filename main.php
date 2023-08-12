@@ -23,18 +23,23 @@ require_once 'vendor/autoload.php';
 
 $entityManager = new EntityManager();
 
-Player::createPlayer($entityManager, 5,5);
+$worldWidth = 250;
+$worldHeight = 250;
+$initialViewportWidth = 50;
+$initialViewportHeight = 50;
 
-$world = new World(50, 50, 11, 11);
-$screenUpdater = new ScreenUpdater($entityManager, $world, 10);
+Player::createPlayer($entityManager, rand(0,$worldWidth-1),rand(0,$worldHeight-1));
+
+$world = new World($entityManager,$worldWidth, $worldHeight, $initialViewportWidth, $initialViewportHeight);
+$screenUpdater = new ScreenUpdater($entityManager, $world, 20);
 
 $systems = [
     new MovementApplier($world, $entityManager),
     new FluidDynamics($world, $entityManager),
     //new FireDynamics($world, $entityManager),
     //new SoundDynamics($world, $entityManager),
-    new MonsterSpawner($world, $entityManager),
-    new TreeSpawner($world, $entityManager),
+    new MonsterSpawner($world, $entityManager, (int) floor(($worldWidth * $worldHeight) * 0.005)),
+    new TreeSpawner($world, $entityManager, (int) floor(($worldWidth * $worldHeight) * 0.1)),
 
     //controllers
     new MonsterController($entityManager),

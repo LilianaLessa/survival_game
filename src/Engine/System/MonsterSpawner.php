@@ -13,13 +13,13 @@ use App\System\World;
 
 class MonsterSpawner implements WorldSystemInterface
 {
-
     use WorldAwareTrait;
 
-    private const MAX_MONSTER_IN_MAP = 3;
-
-    public function __construct(private readonly World $world, private readonly EntityManager $entityManager)
-    {
+    public function __construct(
+        private readonly World $world,
+        private readonly EntityManager $entityManager,
+        private readonly int $maxMonstersInMap
+    ) {
     }
 
     /** @param Entity[] $entityCollection */
@@ -30,7 +30,7 @@ class MonsterSpawner implements WorldSystemInterface
             Monster::class,
             MapPosition::class
         );
-        $maxMonsterInMap = self::MAX_MONSTER_IN_MAP;
+        $maxMonsterInMap = $this->maxMonstersInMap;
 
         if (count($monsterInMap) < $maxMonsterInMap) {
             //30% of spawning a new monster

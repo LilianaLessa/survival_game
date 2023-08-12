@@ -15,10 +15,11 @@ class TreeSpawner implements WorldSystemInterface
 {
     use WorldAwareTrait;
 
-    private const MAX_TREES = 10;
-
-    public function __construct(private readonly World $world, private readonly EntityManager $entityManager)
-    {
+    public function __construct(
+        private readonly World $world,
+        private readonly EntityManager $entityManager,
+        private readonly int $maxTrees
+    ) {
     }
 
     /** @param Entity[] $entityCollection */
@@ -31,8 +32,11 @@ class TreeSpawner implements WorldSystemInterface
             MapPosition::class,
             Tree::class
         );
-        if (count($treesOnMap) < self::MAX_TREES) {
+        if (count($treesOnMap) < $this->maxTrees) {
             $randomTreeId = array_keys($treesOnMap)[rand(0,count($treesOnMap)-1)] ?? null;
+
+            //chance to pick a random location.
+            $randomTreeId = rand(1,100) < 50 ? null : $randomTreeId;
 
             [ $basePosition ] = $treesOnMap[$randomTreeId] ?? [new MapPosition(
                 rand(0, $this->world->getWidth()),
@@ -44,7 +48,7 @@ class TreeSpawner implements WorldSystemInterface
                 min($this->world->getHeight(), max(0, $basePosition->getY() + rand(-1,1))),
             );
 
-            if ($this->canOverlapOnWorld($spawnPosition->getX(), $spawnPosition->getY()) && rand(1,100) < 15) {
+            if ($this->canOverlapOnWorld($spawnPosition->getX(), $spawnPosition->getY()) && rand(1,100) < 30) {
                 Tree::createTree(
                     $this->entityManager,
                     $spawnPosition->getX(),
