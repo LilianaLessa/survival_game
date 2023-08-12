@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Engine\System;
 
+use App\Engine\Component\DrawableInterface;
 use App\Engine\Component\MapPosition;
 use App\Engine\Component\MapSymbol;
 use App\Engine\Entity\Entity;
+use App\Engine\Entity\EntityCollection;
 use App\Engine\Entity\EntityManager;
 use App\System\World;
 
@@ -18,17 +20,21 @@ class MapDrawUpdater implements ProcessorSystemInterface
 
     public function process(): void
     {
+        /** @var EntityCollection[][] $entityMap */
         $entityMap = [];
         $entitiesToUpdate = $this->entityManager->getEntitiesWithComponents(
-            MapSymbol::class,
             MapPosition::class,
+            DrawableInterface::class,
         );
 
         /** @var MapPosition $position */
-        foreach ($entitiesToUpdate as $entityId => [,$position]) {
+        foreach ($entitiesToUpdate as $entityId => [$position]) {
             $entityMap[$position->getX()][$position->getY()] =
-                $entityMap[$position->getX()][$position->getY()] ?? [];
-            $entityMap[$position->getX()][$position->getY()][] = $this->entityManager->getEntityById($entityId);
+                $entityMap[$position->getX()][$position->getY()] ?? new EntityCollection();
+
+            $entityMap[$position->getX()][$position->getY()]->addEntity(
+                $this->entityManager->getEntityById($entityId)
+            );
         }
 
         $this->world->resetEntityMap();

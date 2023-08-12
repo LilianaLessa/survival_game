@@ -7,6 +7,7 @@ namespace App\System;
 use App\Engine\Component\DrawableInterface;
 use App\Engine\Component\MapSymbol;
 use App\Engine\Entity\Entity;
+use App\Engine\Entity\EntityCollection;
 
 class World
 {
@@ -15,7 +16,7 @@ class World
     // TODO implement viewport/scrollable world?
 
     /** TODO This should be a bi-dimensional entity matrix */
-    /** @var Entity[][][]  */
+    /** @var EntityCollection[][]  */
     private array $entityMap = [];
 
     private string $drawableClass = MapSymbol::class;
@@ -35,7 +36,7 @@ class World
     }
 
     /**
-     * @param Entity[][][] $entityMap
+     * @param EntityCollection[][] $entityMap
      */
     public function setEntityMap(array $entityMap): void
     {
@@ -46,23 +47,28 @@ class World
     {
         for ($h = 0; $h < $this->height; $h++) {
             for ($w = 0; $w < $this->width; $w++) {
-                $entities = $this->entityMap[$w][$h] ?? [];
+                $entities = $this->entityMap[$w][$h] ?? new EntityCollection();
+                $drawableEntities = $entities->getEntitiesWithComponents(
+                    $this->drawableClass
+                );
+
                 /* @var bool|Entity $topEntity */
-                $topEntity = end($entities);
-                /* @var null|MapSymbol $symbol */
-                $symbol = $topEntity ? $topEntity->getComponent($this->drawableClass) : null;
-                $symbol = $symbol?->getSymbol() ?? self::EMPTY_CELL_SYMBOL;
+                $topEntity = end($drawableEntities);
+
+                /** @var null|DrawableInterface */
+                [ $drawable ] = $topEntity ? $topEntity : [ null ];
+
+                $symbol = $drawable?->getSymbol() ?? self::EMPTY_CELL_SYMBOL;
 
                 echo sprintf(" %s ", $symbol);
-
             }
             echo "\n";
         }
     }
 
-    public function getEntityCollection(int $x, int $y): array
+    public function getEntityCollection(int $x, int $y): EntityCollection
     {
-        return $this->entityMap[$x][$y] ?? [];
+        return $this->entityMap[$x][$y] ?? new EntityCollection();
     }
 
     public function getWidth(): int
@@ -79,9 +85,9 @@ class World
     {
         return
         $x < 0
-        || $x > $this->world->getWidth()
+        || $x > $this->getWidth()
         || $y < 0
-        || $y > $this->world->getHeight();
+        || $y > $this->getHeight();
     }
 
     public function setDrawableClass(?string $drawableClass): void

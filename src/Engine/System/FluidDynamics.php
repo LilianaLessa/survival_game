@@ -27,7 +27,7 @@ class FluidDynamics implements PhysicsSystemInterface
 
         /** @var MapPosition $position */
         /** @var Fluid $fluid */
-        foreach($fluidEntitiesOnMap as $entityId => [$position, $fluid]) {
+        foreach($fluidEntitiesOnMap as $entityId => [$fluid, $position]) {
 
             $vectorForce = $fluid->getForceDirection()->getVectorForce();
             $newPosition = [

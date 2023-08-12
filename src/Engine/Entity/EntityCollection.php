@@ -54,15 +54,18 @@ class EntityCollection extends \ArrayObject
 
         if ($entity) {
             foreach ($componentClasses as $componentClass) {
-                $entity->removeComponent($componentClass);
+                $classToRemove = is_string($componentClass) ? $componentClass : get_class($componentClass);
+                $entity->removeComponent($classToRemove);
                 $allClasses = [
-                    $componentClass,
+                    $classToRemove,
                     ...$this->getComponentClasses($componentClass)
                 ];
 
                 foreach ($allClasses as $subClass) {
-                    $this->components[$subClass][$entityId] = null;
-                    unset($this->components[$subClass][$entityId]);
+                    if ($this->components[$subClass][$entityId] ?? null) {
+                        $this->components[$subClass][$entityId] = null;
+                        unset($this->components[$subClass][$entityId]);
+                    }
                 }
             }
         }
