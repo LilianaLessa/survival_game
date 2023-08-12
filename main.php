@@ -25,7 +25,7 @@ $entityManager = new EntityManager();
 
 Player::createPlayer($entityManager, 5,5);
 
-$world = new World(11, 11);
+$world = new World(50, 50, 11, 11);
 $screenUpdater = new ScreenUpdater($entityManager, $world, 10);
 
 $systems = [

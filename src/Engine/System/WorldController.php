@@ -11,7 +11,6 @@ use App\System\CommandPredicate;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
 use App\System\World;
-use Symfony\Contracts\EventDispatcher\Event;
 
 class WorldController implements ReceiverSystemInterface
 {

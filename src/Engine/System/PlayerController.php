@@ -7,6 +7,7 @@ namespace App\Engine\System;
 use App\Engine\Commands\InspectCell;
 use App\Engine\Commands\InvokableCommandInterface;
 use App\Engine\Commands\MoveEntity;
+use App\Engine\Commands\WhereAmI;
 use App\Engine\Component\MapPosition;
 use App\Engine\Component\Movable;
 use App\Engine\Component\Player;
@@ -39,6 +40,7 @@ class PlayerController implements ReceiverSystemInterface
         foreach ($entityCollection as [$movable, $position]) {
             $this->parseMovementCommand($commandPredicate, $movable);
             $this->parseDebugCommand($commandPredicate, $commandArguments, $position);
+            $this->parseInfoCommand($commandPredicate, $position);
 
             break;
         }
@@ -56,6 +58,17 @@ class PlayerController implements ReceiverSystemInterface
 
         $moveCommand && $movementQueue->add($moveCommand);
     }
+
+    private function parseInfoCommand(?CommandPredicate $commandPredicate, MapPosition $position): void
+    {
+        $command = match ($commandPredicate) {
+            CommandPredicate::PLAYER_SELF_WHERE => new WhereAmI($position),
+            default => null,
+        };
+
+        $command && $command();
+    }
+
 
     private function parseDebugCommand(
         ?CommandPredicate $commandPredicate,

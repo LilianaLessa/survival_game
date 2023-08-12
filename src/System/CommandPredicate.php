@@ -10,6 +10,9 @@ enum CommandPredicate : string {
     case PLAYER_MOVE_DOWN = 's';
     case PLAYER_MOVE_LEFT = 'a';
     case PLAYER_MOVE_RIGHT = 'd';
+
+    case PLAYER_SELF_WHERE = 'where';
+
     case MINE = 'm';
     case INVENTORY = 'i';
 

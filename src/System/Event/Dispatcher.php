@@ -18,6 +18,11 @@ class Dispatcher
        return self::$instance = self::$instance ?? new self();
     }
 
+    public static function dispatch(AbstractEvent $event): void
+    {
+        self::getInstance()->dispatchEvent($event);
+    }
+
     public function init()
     {
         $this->dispatcher = new EventDispatcher();
@@ -28,7 +33,7 @@ class Dispatcher
         $this->dispatcher->addListener($eventName, $listener, $priority);
     }
 
-    public function dispatch(AbstractEvent $event): void
+    private function dispatchEvent(AbstractEvent $event): void
     {
         $this->dispatcher->dispatch($event, $event->getEventName());
     }
