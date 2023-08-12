@@ -51,7 +51,7 @@ $systems = [
     //controllers
     new MonsterController($entityManager),
     //todo this should be attached to the player cli/unblocking cli socket.
-    new PlayerController($world, $entityManager),
+    new PlayerController($world, $entityManager, $itemManager),
     new WorldController($world),
 ];
 

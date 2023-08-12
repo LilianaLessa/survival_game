@@ -20,6 +20,7 @@ enum CommandPredicate : string {
     case INVENTORY = 'i';
 
     case DEBUG_INSPECT_CELL = 'ins';
+    case DEBUG_GIVE_ITEM = 'item_give';
 
     case BUILD = 'b';
     case PLACE_OBJECT = 'p';

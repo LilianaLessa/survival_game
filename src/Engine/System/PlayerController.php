@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Engine\System;
 
+use App\Engine\Commands\GiveItemToPlayer;
 use App\Engine\Commands\InspectCell;
 use App\Engine\Commands\InvokableCommandInterface;
 use App\Engine\Commands\MoveEntity;
@@ -19,13 +20,18 @@ use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\CommandParserTrait;
 use App\System\CommandPredicate;
 use App\System\Direction;
+use App\System\Item\ItemManager;
 use App\System\World;
 
 class PlayerController implements ReceiverSystemInterface
 {
     use CommandParserTrait;
 
-    public function __construct(private readonly World $world, private readonly EntityManager $entityManager)
+    public function __construct(
+        private readonly World $world,
+        private readonly EntityManager $entityManager,
+        private readonly ItemManager $itemManager,
+    )
     {
     }
 
@@ -100,20 +106,27 @@ class PlayerController implements ReceiverSystemInterface
         $command && $command();
     }
 
+    //todo these commands should be moved to their own debug controller.
     private function parseDebugCommand(
         ?CommandPredicate $commandPredicate,
         array $commandArguments,
         MapPosition $position,
     ): void {
-        $skillCommand = match ($commandPredicate) {
+        $debugCommand = match ($commandPredicate) {
             CommandPredicate::DEBUG_INSPECT_CELL => new InspectCell(
                 world: $this->world,
                 from: $position,
                 direction: Direction::tryFrom($commandArguments[0] ?? ''),
             ),
+            CommandPredicate::DEBUG_GIVE_ITEM => new GiveItemToPlayer(
+                $this->entityManager,
+                $this->itemManager,
+                $commandArguments[0] ?? 'wood',
+                (int) ($commandArguments[1] ?? 1),
+            ),
             default => null,
         };
 
-        $skillCommand instanceof InvokableCommandInterface && $skillCommand();
+        $debugCommand && $debugCommand();
     }
 }
