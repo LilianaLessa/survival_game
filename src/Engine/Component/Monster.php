@@ -15,6 +15,7 @@ class Monster implements ComponentInterface
             new Monster(),
             new MapPosition($x,$y),
             new MapSymbol("\033[31m♞\033[0m"),
+            new Colideable(),
         );
     }
 }

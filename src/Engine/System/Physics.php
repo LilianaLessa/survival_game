@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace App\Engine\System;
 
 use App\Engine\Commands\MoveEntity;
+use App\Engine\Component\Colideable;
 use App\Engine\Component\MapPosition;
 use App\Engine\Entity\Entity;
+use App\Engine\Trait\WorldAwareTrait;
 use App\System\Direction;
 use App\System\World;
 
 class Physics implements ProcessorSystemInterface
 {
+    use WorldAwareTrait;
+
     public function __construct(private readonly World $world)
     {
     }
@@ -74,12 +78,10 @@ class Physics implements ProcessorSystemInterface
             return false;
         }
 
-        $entitiesOnTarget = $this->world->getEntityCollection($targetX, $targetY);
-        if (count($entitiesOnTarget)) { //target not empty.
+        if (!$this->canOverlap($targetX, $targetY)) { //target not empty.
             return false;
         }
 
         return true;
     }
-
 }

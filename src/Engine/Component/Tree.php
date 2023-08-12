@@ -15,6 +15,7 @@ class Tree implements ComponentInterface
             new Tree(),
             new MapPosition($x,$y),
             new MapSymbol("\033[32m♣\033[0m"),
+            new Colideable(),
         );
     }
 }

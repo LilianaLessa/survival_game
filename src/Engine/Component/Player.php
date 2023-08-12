@@ -15,6 +15,7 @@ class Player implements ComponentInterface
             new Player(),
             new MapPosition($x,$y),
             new MapSymbol("\033[1;33m☺\033[0m"),
+            new Colideable(),
         );
     }
 }

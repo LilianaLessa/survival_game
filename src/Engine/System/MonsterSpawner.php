@@ -10,11 +10,15 @@ use App\Engine\Component\MapSymbol;
 use App\Engine\Component\Monster;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
+use App\Engine\Trait\WorldAwareTrait;
 use App\System\Direction;
 use App\System\World;
 
 class MonsterSpawner implements WorldSystemInterface
 {
+
+    use WorldAwareTrait;
+
     private const MAX_MONSTER_IN_MAP = 3;
 
     public function __construct(private readonly World $world, private readonly EntityManager $entityManager)
@@ -35,8 +39,7 @@ class MonsterSpawner implements WorldSystemInterface
                     $targetX = rand(0, $this->world->getWidth() -1);
                     $targetY = rand(0, $this->world->getHeight() -1);
 
-                    $entitiesOnTarget = $this->world->getEntityCollection($targetX, $targetY);
-                    if (count($entitiesOnTarget)) { //target not empty.
+                    if (!$this->canOverlap($targetX, $targetY)) { //target not empty.
                         continue;
                     }
 
