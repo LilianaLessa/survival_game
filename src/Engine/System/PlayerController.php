@@ -6,6 +6,7 @@ namespace App\Engine\System;
 
 use App\Engine\Commands\MoveEntity;
 use App\Engine\Component\MapPosition;
+use App\Engine\Component\Movable;
 use App\Engine\Component\Player;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
@@ -25,12 +26,13 @@ class PlayerController implements ReceiverSystemInterface
         $commandPredicate = array_shift($commandArray);
 
         $entityCollection = $this->entityManager->getEntitiesWithComponents(
+            Movable::class,
             Player::class,
             MapPosition::class
         );
 
-        /** @var Player $player */
-        foreach ($entityCollection as $entityId => $components) {
+        /** @var Movable $movementQueue */
+        foreach ($entityCollection as [$movementQueue]) {
             $command = match (CommandPredicate::tryFrom($commandPredicate)) {
                 CommandPredicate::UP => new MoveEntity(Direction::UP),
                 CommandPredicate::DOWN => new MoveEntity(Direction::DOWN),
@@ -39,7 +41,7 @@ class PlayerController implements ReceiverSystemInterface
                 default => null,
             };
 
-            $command && $this->entityManager->getEntityById($entityId)->addCommand($command);
+            $command && $movementQueue->add($command);
 
             break;
         }

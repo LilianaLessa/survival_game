@@ -16,6 +16,7 @@ class Player implements ComponentInterface
             new MapPosition($x,$y),
             new MapSymbol("\033[1;33m☺\033[0m"),
             new Collideable(),
+            new Movable(),
         );
     }
 }

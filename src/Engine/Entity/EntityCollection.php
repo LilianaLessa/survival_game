@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace App\Engine\Entity;
 
-use App\Engine\Commands\CommandInterface;
 use App\Engine\Component\ComponentInterface;
 
 class EntityCollection extends \ArrayObject
 {
    /** @var ComponentInterface[] */
     private array $components;
-
-    /** @var CommandInterface[] */
-    private array $commands;
 
     /** Entity[] */
     public function getEntities(): array

@@ -9,13 +9,10 @@ use App\Engine\Component\ComponentInterface;
 
 class Entity
 {
-    //TODO components and commands should also be managed by EntityManager.
+    //TODO components should also be managed by EntityManager?.
 
     /** @var ComponentInterface[] */
     private array $components = [];
-
-    /** @var CommandInterface[] */
-    private array $commands = [];
 
     public  function __construct(private readonly string $id, ComponentInterface ...$components)
     {
@@ -28,26 +25,6 @@ class Entity
     public function getComponent(string $componentType): ?ComponentInterface
     {
         return $this->components[$componentType] ?? null;
-    }
-
-    public function addCommand(CommandInterface $command): self
-    {
-        $this->commands[] = $command;
-
-        return $this;
-    }
-
-    /** @return CommandInterface[] */
-    public function getCommands(): array
-    {
-        return $this->commands;
-    }
-
-    public function setCommands(CommandInterface ...$commands): self
-    {
-        $this->commands = $commands;
-
-        return $this;
     }
 
     public  function getId(): string

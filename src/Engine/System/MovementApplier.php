@@ -6,6 +6,7 @@ namespace App\Engine\System;
 
 use App\Engine\Commands\MoveEntity;
 use App\Engine\Component\MapPosition;
+use App\Engine\Component\Movable;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
@@ -22,38 +23,36 @@ class MovementApplier implements PhysicsSystemInterface
 
     /** @param Entity[] $entityCollection */
     public function process(): void    {
-        $entityCollection = $this->entityManager->getEntityCollection()->getEntities();
+        $moveableEntities = $this->entityManager->getEntitiesWithComponents(
+            Movable::class,
+            MapPosition::class
+        );
+
         //process all move commands for each entity. fulfill only one. if one is fulfilled, remove others.
-        foreach ($entityCollection as $entity) {
-            //entity has no position: skip
-            /** @var MapPosition $position */
-            $position = $entity->getComponent(MapPosition::class);
-            if (!$position) {
-                continue;
-            }
-
+        /**
+         * @var Movable $movable
+         * @var MapPosition $position
+         */
+        foreach ($moveableEntities as $entityId => [$movable, $position]) {
             $moved = false;
-            $commands = $entity->getCommands();
-            foreach ($commands as $index => $command) {
-                if ($command instanceof MoveEntity) {
-                    if (!$moved) {
-                       $moved = true;
+            foreach ($movable->getMovementQueue() as $command) {
+                if (!$moved) {
+                   $moved = true;
 
-                        [$targetX, $targetY] = $this->calculateTargetCoordinates($position, $command);
+                    [$targetX, $targetY] = $this->calculateTargetCoordinates($position, $command);
 
-                        if ($this->validateMovement($position->getX(), $position->getY(), $targetX, $targetY)) {
-                            $this->entityManager->updateEntityComponents(
-                                $entity->getId(),
-                                new MapPosition($targetX, $targetY)
-                            );
-                        } else {
-                            //cant move to the position;
-                        }
+                    if ($this->validateMovement($position->getX(), $position->getY(), $targetX, $targetY)) {
+                        $this->entityManager->updateEntityComponents(
+                            $entityId,
+                            new MapPosition($targetX, $targetY)
+                        );
+                    } else {
+                        //cant move to the position;
                     }
-                    unset ($commands[$index]);
                 }
             }
-            $entity->setCommands(...$commands);
+
+            $moved && $movable->clear();
         }
     }
 
