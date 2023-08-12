@@ -7,6 +7,7 @@ namespace App\Engine\System;
 use App\Engine\Component\HitPoints;
 use App\Engine\Component\Item\ItemDropper\DropOn;
 use App\Engine\Component\Item\ItemDropper\ItemDropper;
+use App\Engine\Component\Item\ItemDropper\ItemDropperCollection;
 use App\Engine\Component\Item\ItemOnGround;
 use App\Engine\Component\MapPosition;
 use App\Engine\Entity\EntityManager;
@@ -39,7 +40,14 @@ class Battler implements AISystemInterface
                 $deadEntity = $this->entityManager->getEntityById($entityId);
                 $deadEntity && $this->processDropsOnDie(
                     $mapPosition,
-                    $deadEntity->getComponent(ItemDropper::class)
+                    ...array_filter(
+                        [
+                            $deadEntity->getComponent(ItemDropper::class),
+                            ...$deadEntity->getComponent(
+                                ItemDropperCollection::class
+                            )?->getItemDroppers() ?? null,
+                        ]
+                    )
                 );
 
                 $this->entityManager->removeEntity($entityId);
@@ -49,22 +57,24 @@ class Battler implements AISystemInterface
 
     private function processDropsOnDie(
         MapPosition $mapPosition,
-        ?ItemDropper $itemDropper
+        ItemDropper ...$itemDroppers
     ) {
-        if ($itemDropper && $itemDropper->getDropOn() === DropOn::DIE) {
-            $chance = $itemDropper->getChance(); //0~1
-            $dice = mt_rand() / mt_getrandmax();
-            if ($dice <= $chance) { //success on drop.
-                $amount = rand($itemDropper->getMinAmount(), $itemDropper->getMaxAmount());
-                $itemBluePrint = $itemDropper->getItemBlueprint();
+        foreach ($itemDroppers as $itemDropper) {
+            if ($itemDropper->getDropOn() === DropOn::DIE) {
+                $chance = $itemDropper->getChance(); //0~1
+                $dice = mt_rand() / mt_getrandmax();
+                if ($dice <= $chance) { //success on drop.
+                    $amount = rand($itemDropper->getMinAmount(), $itemDropper->getMaxAmount());
+                    $itemBluePrint = $itemDropper->getItemBlueprint();
 
-                ItemOnGround::createItemOnGround(
-                    $this->entityManager,
-                    $itemBluePrint,
-                    $amount,
-                    $mapPosition->getX(),
-                    $mapPosition->getY(),
-                );
+                    ItemOnGround::createItemOnGround(
+                        $this->entityManager,
+                        $itemBluePrint,
+                        $amount,
+                        $mapPosition->getX(),
+                        $mapPosition->getY(),
+                    );
+                }
             }
         }
     }

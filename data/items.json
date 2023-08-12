@@ -238,5 +238,35 @@
     "internalName": "chitin",
     "name": "Chitin",
     "description": "Strong and lightweight exoskeleton material from insects, useful for armor and tools."
+  },
+  {
+    "id": "7b3961a1-72c3-4f63-91c7-837b3c4a823c",
+    "internalName": "treeBark",
+    "name": "Tree Bark",
+    "description": "Tough outer layer of the tree, used for crafting and tanning."
+  },
+  {
+    "id": "f8c3d8c6-9466-4077-bfb2-cb3666d3f91c",
+    "internalName": "treeResin",
+    "name": "Tree Resin",
+    "description": "Sticky sap collected from the tree, used in crafting and alchemy."
+  },
+  {
+    "id": "19285db4-c9e9-417b-a1c5-79e3e98a5eac",
+    "internalName": "treeSeed",
+    "name": "Tree Seed",
+    "description": "A viable seed that can be planted to grow a new tree."
+  },
+  {
+    "id": "d409312d-0d49-47ec-9615-b4ef4821793c",
+    "internalName": "woodenStump",
+    "name": "Wooden Stump",
+    "description": "Remnant of the tree trunk, used as a crafting material or fuel."
+  },
+  {
+    "id": "62402c54-4a2c-4b07-93d9-d8f7a5f9be75",
+    "internalName": "treeLeaves",
+    "name": "Tree Leaves",
+    "description": "Foliage from the tree, can be used for composting or as crafting material."
   }
 ]
