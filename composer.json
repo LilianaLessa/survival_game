@@ -14,6 +14,7 @@
     ],
     "require": {
       "ext-readline": "*",
-        "ramsey/uuid": "^4.7"
+        "ramsey/uuid": "^4.7",
+        "amphp/socket": "^2.1"
     }
 }

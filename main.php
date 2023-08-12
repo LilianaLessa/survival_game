@@ -5,85 +5,89 @@ declare(strict_types=1);
 use App\Engine\Component\Player;
 use App\Engine\Entity\EntityManager;
 use App\Engine\System\AISystemInterface;
+use App\Engine\System\FluidDynamics;
 use App\Engine\System\MapDrawUpdater;
 use App\Engine\System\MonsterController;
 use App\Engine\System\MonsterSpawner;
-use App\Engine\System\Physics;
+use App\Engine\System\MovementApplier;
+use App\Engine\System\PhysicsSystemInterface;
 use App\Engine\System\PlayerController;
-use App\Engine\System\ReceiverSystemInterface;
 use App\Engine\System\TreeSpawner;
+use App\Engine\System\WorldController;
 use App\Engine\System\WorldSystemInterface;
-use App\System\CommandPredicate;
+use App\System\TCPCommandReceiver;
 use App\System\World;
+use function Amp\delay;
 
-require 'vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
 $entityManager = new EntityManager();
 
-$entityManager->addEntity(
-    Player::createPlayer(1, 5,5)
-);
+Player::createPlayer($entityManager, 5,5);
 
-$world = new World(10, 10);
+$world = new World(50, 50);
 
 $systems = [
-    new MapDrawUpdater($world),
-    new Physics($world),
-    new PlayerController(),
+    new MapDrawUpdater($world, $entityManager),
+    new MovementApplier($world, $entityManager),
+    new FluidDynamics($world, $entityManager),
+    //new FireDynamics($world, $entityManager),
+    //new SoundDynamics($world, $entityManager),
     new MonsterSpawner($world, $entityManager),
     new TreeSpawner($world, $entityManager),
-    new MonsterController(),
+
+    //controllers
+    new MonsterController($entityManager),
+    new PlayerController($entityManager),
+    new WorldController($world),
 ];
 
-do {
+/**
+ * todo
+ *  separate the map render from the game logics from the player cli.
+ *  the map renderer will receive information from the game logic.
+ *  the player cli will send and receive information to the game logic.
+ *  multiple instances of the map renderer can be created, and connected to a single player input.
+ *
+ */
+
+$commandReceiver = new TCPCommandReceiver('127.0.0.1:1988', $systems);
+readline('Press enter to start the game loop.');
+$commandReceiver->init();
+
+do { //game loop
     //steps, in order:
 
     //process ai (process and move autonomous entities)
     foreach ($systems as $system) {
         if ($system instanceof AISystemInterface) {
-            $system->process($entityManager->getEntities());
+            $system->process();
         }
     }
 
-    //process physics (check if the entities can move. if so, move them)
+    //process physics (movement applier, fluid flow, and so on)
     foreach ($systems as $system) {
-        if ($system instanceof Physics) {
-            $system->process($entityManager->getEntities());
+        if ($system instanceof PhysicsSystemInterface) {
+            $system->process();
         }
     }
 
     // process world (plant growth, ore regen, entity spawn, etc)
     foreach ($systems as $system) {
         if ($system instanceof WorldSystemInterface) {
-            $system->process($entityManager->getEntities());
+            $system->process();
         }
     }
 
     //update map draw
     foreach ($systems as $system) {
         if ($system instanceof MapDrawUpdater) {
-            $system->process($entityManager->getEntities());
+            $system->process();
         }
     }
 
     //draw map
+    system('clear');
     $world->draw();
-
-    //draw system messages
-
-    //draw command input
-    echo "\n\n";
-    $command = '';//strtolower(readline(">> "));
-    usleep(500000);
-
-    //receive commands (player awsd, mine, and so on)
-    if ($command) {
-        foreach ($systems as $system) {
-            if ($system instanceof ReceiverSystemInterface) {
-                $system->parse($command, $entityManager->getEntities());
-            }
-        }
-    }
-} while(CommandPredicate::tryFrom($command) !== CommandPredicate::EXIT);
-
-echo "good bye";
+    delay(0.1);
+} while(1);

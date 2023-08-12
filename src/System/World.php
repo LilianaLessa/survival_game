@@ -60,7 +60,7 @@ class World
 
                 $symbol = $drawable?->getSymbol() ?? self::EMPTY_CELL_SYMBOL;
 
-                echo sprintf(" %s ", $symbol);
+                echo sprintf(" %s", $symbol);
             }
             echo "\n";
         }
