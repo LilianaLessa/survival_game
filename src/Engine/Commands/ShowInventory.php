@@ -12,7 +12,7 @@ use App\System\Event\Event\UiMessageEvent;
 
 class ShowInventory implements InvokableCommandInterface
 {
-    public function __construct(private readonly Inventory $inventory)
+    public function __construct(private readonly Inventory $inventory, private readonly bool $detailed)
     {
     }
 
@@ -32,18 +32,38 @@ class ShowInventory implements InvokableCommandInterface
         * @var ItemOnInventory $item
          */
         foreach ($items as [$item]) {
-            $uiMessage .= sprintf(
+            $itemBlueprint = $item->getItemBlueprint();
+            $header = sprintf(
                 "%d - %dX %s - %s\n",
                 ++$i,
                 $item->getAmount(),
                 sprintf(
                     "%s%s%s",
-                    $item->getItemBlueprint()->getRarity()->getColorCode(),
-                    $item->getItemBlueprint()->getName(),
+                    $itemBlueprint->getRarity()->getColorCode(),
+                    $itemBlueprint->getName(),
                     ConsoleColor::Color_Off->value,
                 ),
                 $item->getItemBlueprint()->getShortDescription(),
             );
+
+            $rarityAndLongDescription = sprintf(
+                "\t(%s) - %s\n",
+                $itemBlueprint->getRarity()->value,
+                $itemBlueprint->getDescription(),
+            );
+
+            $price = sprintf(
+                "\t%dC \033[1;37m%dS \033[1;33m%dG\033[0m\n",
+                $itemBlueprint->getItemPrice()->getC(),
+                $itemBlueprint->getItemPrice()->getS(),
+                $itemBlueprint->getItemPrice()->getG(),
+            );
+            $uiMessage .= $header;
+            if ($this->detailed) {
+                $uiMessage .=
+                    $rarityAndLongDescription .
+                    $price;
+            }
         }
 
         $uiMessage .= "\n-----------------\n";

@@ -20,6 +20,8 @@ use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\CommandParserTrait;
 use App\System\CommandPredicate;
 use App\System\Direction;
+use App\System\Event\Dispatcher;
+use App\System\Event\Event\UiMessageEvent;
 use App\System\Item\ItemManager;
 use App\System\World;
 
@@ -35,6 +37,11 @@ class PlayerController implements ReceiverSystemInterface
     {
     }
 
+    //todo movement actions would also change the player facing, so no need of sending a main action based on
+    //     directions.
+    //     so, the arrows would be used to control the aim for long-distance skills.
+    //     or when selected the skill, the aim should appear and the action arrows should be disabled.
+    //     maybe this is better, as there's not a way to show character sight direction yet,
     public function parse(string $rawCommand): void
     {
         [$commandPredicate, $commandArguments] = $this->extractCommand($rawCommand);
@@ -46,16 +53,28 @@ class PlayerController implements ReceiverSystemInterface
             Inventory::class,
         );
 
-        /** @var Movable $movable */
-        /** @var MapPosition $position */
-        /** @var Inventory $inventory */
-        foreach ($entityCollection as $entityId => [,$movable, $position, $inventory]) {
-            $this->parseMovementCommand($commandPredicate, $movable);
-            $this->parseDebugCommand($commandPredicate, $commandArguments, $position);
-            $this->parseInfoCommand($commandPredicate, $commandArguments, $position, $inventory);
-            $this->parseActionOnWorldCommand($commandPredicate, $commandArguments, $entityId);
+        try {
+            /** @var Movable $movable */
+            /** @var MapPosition $position */
+            /** @var Inventory $inventory */
+            foreach ($entityCollection as $entityId => [,$movable, $position, $inventory]) {
+                $this->parseMovementCommand($commandPredicate, $movable);
+                $this->parseDebugCommand($commandPredicate, $commandArguments, $position);
+                $this->parseInfoCommand($commandPredicate, $commandArguments, $position, $inventory);
+                $this->parseActionOnWorldCommand($commandPredicate, $commandArguments, $entityId);
 
-            break;
+                break;
+            }
+        } catch (\Throwable $e) {
+            Dispatcher::dispatch(
+                new UiMessageEvent(
+                    sprintf(
+                        "\nException on parsing player command (%s): %s\n",
+                        $rawCommand,
+                        $e->getMessage(),
+                    )
+                )
+            );
         }
     }
 
@@ -81,7 +100,7 @@ class PlayerController implements ReceiverSystemInterface
         $command = match ($commandPredicate) {
             CommandPredicate::PLAYER_SELF_WHERE => new WhereAmI($position),
             CommandPredicate::PLAYER_VIEWPORT => new SetMapViewport($this->world, $commandArguments),
-            CommandPredicate::INVENTORY => new ShowInventory($inventory),
+            CommandPredicate::INVENTORY => new ShowInventory($inventory, (bool)($commandArguments[0] ?? false)),
             default => null,
         };
 

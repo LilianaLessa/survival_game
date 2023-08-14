@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\System\Item;
 
 class ItemBlueprint
-{
-
-    private bool $stackable = false;
+{    private bool $stackable = false;
     private int $stackSize = 1;
 
     private ?string $description = null;
@@ -15,7 +13,9 @@ class ItemBlueprint
     private ?string $shortDescription = null;
     private ?string $name = null;
 
-    private ?ItemRarity $rarity;
+    private ?ItemRarity $rarity = null;
+
+    private ?ItemPrice $itemPrice = null;
 
     public function __construct(
         private readonly string $id,
@@ -96,6 +96,17 @@ class ItemBlueprint
     public function setRarity(?ItemRarity $rarity): self
     {
         $this->rarity = $rarity;
+        return $this;
+    }
+
+    public function getItemPrice(): ItemPrice
+    {
+        return $this->itemPrice ?? new ItemPrice(0,0,0);
+    }
+
+    public function setItemPrice(?ItemPrice $itemPrice): self
+    {
+        $this->itemPrice = $itemPrice;
         return $this;
     }
 }
