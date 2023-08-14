@@ -1,0 +1,85 @@
+[
+  {
+    "id": "9c8f29a6-045f-43e4-8e74-7a59418b689d",
+    "name": "Young Equine",
+    "internalName": "youngEquine",
+    "description": "A docile and gentle young equine creature, just starting its journey.",
+    "type": "animal",
+    "level": 1,
+    "totalHitPoints": 10,
+    "symbol": "♞",
+    "dropCollection": [
+      {
+        "internalName": "softFur",
+        "events": [
+          {
+            "type": "die",
+            "chance": 0.1
+          },
+          {
+            "type": "pet",
+            "chance": 0.4
+          }
+        ]
+      },
+      {
+        "internalName": "hoofShard",
+        "events": [
+          {
+            "type": "die",
+            "chance": 0.2
+          },
+          {
+            "type": "harvest",
+            "chance": 0.3
+          }
+        ]
+      },
+      {
+        "internalName": "apple",
+        "events": [
+          {
+            "type": "harvest",
+            "chance": 0.4
+          }
+        ]
+      },
+      {
+        "internalName": "carrot",
+        "events": [
+          {
+            "type": "harvest",
+            "chance": 0.2
+          }
+        ]
+      }
+    ],
+    "spawnArea": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    },
+    "maxInMap": 25,
+    "spawnChance": 0.8,
+    "spawnBiomes": [
+      {
+        "internalName": "meadow",
+        "chance": 1.0
+      }
+    ],
+    "sightRadius": 5,
+    "hearRadius": 4,
+    "behavior": "passive",
+    "elements": [
+      {
+        "element": "nature",
+        "level": 1
+      }
+    ],
+    "race": "beast",
+    "size": "small",
+    "movementSpeed": 0.5,
+    "attackSpeed": 0.2
+  }
+]
