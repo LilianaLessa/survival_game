@@ -6,7 +6,6 @@ namespace App\Engine\System;
 
 use App\Engine\Commands\GiveItemToPlayer;
 use App\Engine\Commands\InspectCell;
-use App\Engine\Commands\InvokableCommandInterface;
 use App\Engine\Commands\MoveEntity;
 use App\Engine\Commands\SetMapViewport;
 use App\Engine\Commands\ShowInventory;
@@ -14,7 +13,7 @@ use App\Engine\Commands\WhereAmI;
 use App\Engine\Commands\WorldAction;
 use App\Engine\Component\Item\Inventory;
 use App\Engine\Component\MapPosition;
-use App\Engine\Component\Movable;
+use App\Engine\Component\MovementQueue;
 use App\Engine\Component\Player;
 use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\CommandParserTrait;
@@ -22,6 +21,7 @@ use App\System\CommandPredicate;
 use App\System\Direction;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
+use App\System\Helpers\Point2D;
 use App\System\Item\ItemManager;
 use App\System\World;
 
@@ -48,17 +48,17 @@ class PlayerController implements ReceiverSystemInterface
 
         $entityCollection = $this->entityManager->getEntitiesWithComponents(
             Player::class,
-            Movable::class,
+            MovementQueue::class,
             MapPosition::class,
             Inventory::class,
         );
 
         try {
-            /** @var Movable $movable */
+            /** @var MovementQueue $movable */
             /** @var MapPosition $position */
             /** @var Inventory $inventory */
             foreach ($entityCollection as $entityId => [,$movable, $position, $inventory]) {
-                $this->parseMovementCommand($commandPredicate, $movable);
+                $this->parseMovementCommand($commandPredicate, $movable, $position);
                 $this->parseDebugCommand($commandPredicate, $commandArguments, $position);
                 $this->parseInfoCommand($commandPredicate, $commandArguments, $position, $inventory);
                 $this->parseActionOnWorldCommand($commandPredicate, $commandArguments, $entityId);
@@ -78,13 +78,20 @@ class PlayerController implements ReceiverSystemInterface
         }
     }
 
-    private function parseMovementCommand(?CommandPredicate $commandPredicate, Movable $movementQueue): void
-    {
+    private function parseMovementCommand(
+        ?CommandPredicate $commandPredicate,
+        MovementQueue $movementQueue,
+        MapPosition $from
+    ): void {
         $moveCommand = match ($commandPredicate) {
-            CommandPredicate::PLAYER_MOVE_UP => new MoveEntity(Direction::UP),
-            CommandPredicate::PLAYER_MOVE_DOWN => new MoveEntity(Direction::DOWN),
-            CommandPredicate::PLAYER_MOVE_LEFT => new MoveEntity(Direction::LEFT),
-            CommandPredicate::PLAYER_MOVE_RIGHT => new MoveEntity(Direction::RIGHT),
+            CommandPredicate::PLAYER_MOVE_UP => 
+                new MoveEntity($this->calculateTargetCoordinates($from, Direction::UP)),
+            CommandPredicate::PLAYER_MOVE_DOWN => 
+                new MoveEntity($this->calculateTargetCoordinates($from, Direction::DOWN)),
+            CommandPredicate::PLAYER_MOVE_LEFT => 
+                new MoveEntity($this->calculateTargetCoordinates($from, Direction::LEFT)),
+            CommandPredicate::PLAYER_MOVE_RIGHT => 
+                new MoveEntity($this->calculateTargetCoordinates($from, Direction::RIGHT)),
             default => null,
         };
 
@@ -147,5 +154,21 @@ class PlayerController implements ReceiverSystemInterface
         };
 
         $debugCommand && $debugCommand();
+    }
+
+    private function calculateTargetCoordinates(MapPosition $from, Direction $direction): Point2D
+    {
+        $diff = match ($direction) {
+            Direction::UP => [0,-1],
+            Direction::DOWN => [0,1],
+            Direction::LEFT => [-1,0],
+            Direction::RIGHT => [1,0],
+            default => [0,0],
+        };
+
+        return new Point2D(
+            $from->getX() + $diff[0],
+            $from->getY() + $diff[1],
+        );
     }
 }

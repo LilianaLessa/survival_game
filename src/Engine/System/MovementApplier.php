@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\Engine\System;
 
-use App\Engine\Commands\MoveEntity;
 use App\Engine\Component\MapPosition;
-use App\Engine\Component\Movable;
+use App\Engine\Component\MovementQueue;
 use App\Engine\Component\Player;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
-use App\System\Direction;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
 use App\System\World;
@@ -26,54 +24,44 @@ class MovementApplier implements PhysicsSystemInterface
 
     /** @param Entity[] $entityCollection */
     public function process(): void    {
-        $moveableEntities = $this->entityManager->getEntitiesWithComponents(
-            Movable::class,
+        $movableEntities = $this->entityManager->getEntitiesWithComponents(
+            MovementQueue::class,
             MapPosition::class
         );
 
         //process all move commands for each entity. fulfill only one. if one is fulfilled, remove others.
         /**
-         * @var Movable $movable
+         * @var MovementQueue $movable
          * @var MapPosition $position
          */
-        foreach ($moveableEntities as $entityId => [$movable, $position]) {
-            $moved = false;
-            foreach ($movable->getMovementQueue() as $command) {
-                if (!$moved) {
-                   $moved = true;
-
-                    [$targetX, $targetY] = $this->calculateTargetCoordinates($position, $command);
-
-                    if ($this->validateMovement($position->getX(), $position->getY(), $targetX, $targetY)) {
-                        $this->entityManager->updateEntityComponents(
-                            $entityId,
-                            new MapPosition($targetX, $targetY)
-                        );
-                    } elseif($this->entityManager->entityHasComponent($entityId,Player::class)) {
-                        Dispatcher::getInstance()->dispatch(
-                            new UiMessageEvent("Can't move in this direction.\n")
-                        );
-                    }
-                }
+        foreach ($movableEntities as $entityId => [$movable, $position]) {
+            $next = $movable->dequeue();
+            if (!$next) {
+                continue;
             }
 
-            $moved && $movable->clear();
+            [$targetX, $targetY] = $next->getCoordinates()->toArray();
+
+            if ($this->validateMovement($position->getX(), $position->getY(), $targetX, $targetY)) {
+                $this->entityManager->updateEntityComponents(
+                    $entityId,
+                    new MapPosition($targetX, $targetY)
+                );
+            } else {
+                if($this->entityManager->entityHasComponent($entityId,Player::class)) {
+                    Dispatcher::getInstance()->dispatch(
+                        new UiMessageEvent("Can't move in this direction.\n")
+                    );
+                }
+                $movable->clear();
+                continue;
+            }
+
+            $this->entityManager->updateEntityComponents($entityId, $movable);
         }
-    }
 
-    private function calculateTargetCoordinates(MapPosition $position, MoveEntity $command): array
-    {
-        $diff = match ($command->getDirection()) {
-            Direction::UP => [0,-1],
-            Direction::DOWN => [0,1],
-            Direction::LEFT => [-1,0],
-            Direction::RIGHT => [1,0],
-        };
+        //$moved && $movable->clear();
 
-        return [
-            $position->getX() + $diff[0],
-            $position->getY() + $diff[1],
-        ];
     }
 
     private function validateMovement(int $currentX, $currentY, int $targetX, int $targetY): bool {

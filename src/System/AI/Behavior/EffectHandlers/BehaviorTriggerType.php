@@ -7,5 +7,6 @@ namespace App\System\AI\Behavior\EffectHandlers;
 enum BehaviorTriggerType: string
 {
     case ARE_ACTION_QUEUES_EMPTY = "areActionQueuesEmpty";
-    case TIME_FROM_LAST_EFFECT = "timeFromLastEffect";
+
+    case MS_TIME_FROM_LAST_BEHAVIOR_ACTIVATION = "msTimeFromLastBehaviorActivation";
 }

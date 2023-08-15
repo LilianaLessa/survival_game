@@ -6,14 +6,14 @@ namespace App\System\AI\Behavior;
 
 class BehaviorEffectConfig
 {
-    /** @var BehaviorEffectParameter[]  */
-    private array $effectParameters = [];
+    /** @var BehaviorEffectParameterConfig[]  */
+    private array $effectParameterConfigs = [];
 
     public function __construct(
         private readonly BehaviorEffectType $behaviorEffectType,
-        BehaviorEffectParameter ...$effectParameters
+        BehaviorEffectParameterConfig ...$effectParameterConfigs
     ) {
-        $this->effectParameters = $effectParameters;
+        $this->effectParameterConfigs = $effectParameterConfigs;
     }
 
     public function getBehaviorEffectType(): BehaviorEffectType
@@ -21,14 +21,8 @@ class BehaviorEffectConfig
         return $this->behaviorEffectType;
     }
 
-    public function getEffectParameters(): array
+    public function getEffectParameterConfigs(): array
     {
-        $resultArray = [];
-
-        foreach ($this->effectParameters as $effectParameter) {
-            $resultArray[$effectParameter->getName()] = $effectParameter->getValue();
-        }
-
-        return $resultArray;
+        return $this->effectParameterConfigs;
     }
 }

@@ -10,12 +10,11 @@ use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
 use App\System\Item\ItemManager;
-use App\System\Monster\MonsterPresetLibrary;
 use App\System\World;
 
 //todo this monster spawner can be a component for a entity on map.
 //     then a combination of map area, monster preset holder and spawn rules components would do the rest.
-class MonsterSpawner implements WorldSystemInterface
+class MonsterSpawner_BKP implements WorldSystemInterface
 {
     use WorldAwareTrait;
 
@@ -23,7 +22,6 @@ class MonsterSpawner implements WorldSystemInterface
         private readonly World $world,
         private readonly ItemManager $itemManager,
         private readonly EntityManager $entityManager,
-        private readonly MonsterPresetLibrary $monsterPresetLibrary,
         private readonly int $maxMonstersInMap
     ) {
     }
@@ -57,12 +55,9 @@ class MonsterSpawner implements WorldSystemInterface
         }
     }
 
-    private function spawnMonster(int $targetX, int $targetY): void
+    private function spawnMonster(int $targetX, int $targetY): Entity
     {
-        $monsterPreset = $this->monsterPresetLibrary->getPresetByName('youngEquine');
-
-        $monsterPreset && Monster::createMonster(
-            $monsterPreset,
+        return Monster::createMonster(
             $this->itemManager,
             $this->entityManager,
             $targetX,

@@ -1,15 +1,15 @@
 [
   {
-    "id": "9c8f29a6-045f-43e4-8e74-7a59418b689d",
-    "name": "Young Equine",
-    "internalName": "youngEquine",
+    "dataType": "monsterPreset",
+    "name": "youngEquine",
+    "inGameName": "Young Equine",
     "description": "A docile and gentle young equine creature, just starting its journey.",
     "type": "animal",
     "level": 1,
     "totalHitPoints": 10,
     "symbol": "♞",
     "behaviors":  [
-      {"presetGroup": "passiveMonster"}
+      {"preset": "idle"}
     ],
     "dropCollection": [
       {

@@ -8,7 +8,7 @@ use App\Engine\System\AISystemInterface;
 use App\Engine\System\Battler;
 use App\Engine\System\FluidDynamics;
 use App\Engine\System\ItemCollection\CollectItems;
-use App\Engine\System\MonsterController;
+use App\Engine\System\ItemCollection\EntityBehaviorSystem;
 use App\Engine\System\MonsterSpawner;
 use App\Engine\System\MovementApplier;
 use App\Engine\System\PhysicsSystemInterface;
@@ -17,7 +17,9 @@ use App\Engine\System\TreeSpawner;
 use App\Engine\System\WorldActionApplier;
 use App\Engine\System\WorldController;
 use App\Engine\System\WorldSystemInterface;
+use App\System\AI\AiBehaviorManager;
 use App\System\Item\ItemManager;
+use App\System\Monster\MonsterPresetLibrary;
 use App\System\Screen\ScreenUpdater;
 use App\System\TCP\TCPServer;
 use App\System\World;
@@ -26,11 +28,28 @@ use function Amp\delay;
 require_once 'vendor/autoload.php';
 
 $entityManager = new EntityManager();
-$itemManager = new ItemManager();
-$itemManager->loadItems('./data/items.json');
 
-$worldWidth = 250;
-$worldHeight = 250;
+$aiBehaviorManager = new AiBehaviorManager(
+    './data/Entity/AI/Behavior',
+);
+
+$aiBehaviorManager->load();
+
+$monsterPresetLibrary = new MonsterPresetLibrary(
+    $aiBehaviorManager
+);
+$monsterPresetLibrary->load('./data/Entity/Monster');
+
+//die();
+
+
+
+
+$itemManager = new ItemManager();
+$itemManager->loadItems('./data/Item/items.json');
+
+$worldWidth = 10;
+$worldHeight = 10;
 $initialViewportWidth = 50;
 $initialViewportHeight = 50;
 
@@ -46,10 +65,17 @@ $systems = [
     new FluidDynamics($world, $entityManager),
     //new FireDynamics($world, $entityManager),
     //new SoundDynamics($world, $entityManager),
-    new MonsterSpawner($world, $itemManager, $entityManager, (int) ceil(($worldWidth * $worldHeight) * 0.005)),
-    new TreeSpawner($world, $entityManager, $itemManager, (int) ceil(($worldWidth * $worldHeight) * 0.1)),
+    new EntityBehaviorSystem($entityManager),
+    new MonsterSpawner(
+        $world,
+        $itemManager,
+        $entityManager,
+        $monsterPresetLibrary,
+        (int) ceil(($worldWidth * $worldHeight) * 0.005)
+    ),
+    //new TreeSpawner($world, $entityManager, $itemManager, (int) ceil(($worldWidth * $worldHeight) * 0.1)),
     //controllers
-    new MonsterController($entityManager),
+    //new MonsterController($entityManager),
     //todo this should be attached to the player cli/unblocking cli socket.
     new PlayerController($world, $entityManager, $itemManager),
     new WorldController($world),

@@ -6,5 +6,4 @@ namespace App\System\AI\Behavior\EffectHandlers;
 
 interface EffectParameterInterface
 {
-
 }

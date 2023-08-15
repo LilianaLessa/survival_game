@@ -134,6 +134,7 @@ class World
         return $this->height;
     }
 
+    //todo fix it, as world size ends on dimension-1.
     public function isOutOfBounds(int $x, int $y): bool
     {
         return

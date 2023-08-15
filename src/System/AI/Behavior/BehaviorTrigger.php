@@ -19,6 +19,8 @@ class BehaviorTrigger
         return $this->name;
     }
 
+    //todo this should support Symfony formula syntax
+    //    so, there could be something like triggerType: between(1,2)
     public function getValue(): mixed
     {
         return $this->value;

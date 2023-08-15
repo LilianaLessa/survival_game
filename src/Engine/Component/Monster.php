@@ -10,17 +10,24 @@ use App\Engine\Component\Item\ItemDropper\ItemDropperCollection;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\System\Item\ItemManager;
+use App\System\Monster\MonsterPreset;
 
 class Monster implements ComponentInterface
 {
-    static public function createMonster(ItemManager $itemManager, EntityManager $entityManager, $x, $y): Entity
-    {
+    static public function createMonster(
+        MonsterPreset $monsterPreset,
+        ItemManager $itemManager,
+        EntityManager $entityManager,
+        int $x,
+        int $y
+    ): Entity {
         return $entityManager->createEntity(
+            new MapSymbol($monsterPreset->getSymbol()),
+            new BehaviorCollection(...$monsterPreset->getBehaviorCollection()->getBehaviors()),
             new Monster(),
             new MapPosition($x, $y),
-            new MapSymbol("♞"),
             new Collideable(),
-            new Movable(),
+            new MovementQueue(),
             new HitPoints(10, 10),
             new ItemDropperCollection(
                 new ItemDropper(

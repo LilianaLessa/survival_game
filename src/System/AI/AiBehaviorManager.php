@@ -12,9 +12,16 @@ use App\System\AI\Behavior\BehaviorTransitions;
 use App\System\AI\Behavior\BehaviorTrigger;
 use App\System\AI\Behavior\EffectHandlers\BehaviorTriggerType;
 use App\System\AI\Behavior\EffectHandlers\Move\Move;
+use App\System\PresetDataLoaderTrait;
+use App\System\PresetDataType;
 
-class AIBehaviorManager
+//TODO the behaviors are not only related to AI, but they can be related to all scriptable behavior.
+//     A tree that grows in a certain pace, under certain conditions, and starts to yield fruits at some point
+//           is a behavior that can also be implemented using the engine's behavior system.
+class AiBehaviorManager
 {
+    use PresetDataLoaderTrait;
+
     /** @var BehaviorPreset[] */
     private array $presetsByName = [];
 
@@ -28,8 +35,12 @@ class AIBehaviorManager
     {
         [
             $rawPresets,
-            $rawPresetGroups,
-        ] = $this->loadRawBehaviorData();
+            //$rawPresetGroups,
+        ] = $this->loadRawPresetData(
+            $this->aiBehaviorDataDirectory,
+            PresetDataType::BEHAVIOR_PRESET,
+            PresetDataType::BEHAVIOR_PRESET_GROUP,
+        );
 
         //load the presets from the data
         foreach ($rawPresets as $rawPreset) {
@@ -66,10 +77,10 @@ class AIBehaviorManager
                 foreach ($rawObjectCollection as $rawObject) {
                     $objectType = $rawObject?->type;
                     if ($objectType) {
-                        (match (BehaviorAiConfigType::tryFrom($objectType)) {
-                            BehaviorAiConfigType::PRESET =>
+                        (match (PresetDataType::tryFrom($objectType)) {
+                            PresetDataType::BEHAVIOR_PRESET =>
                                 function ($o) use (&$presets) { $presets[] = $o; },
-                            BehaviorAiConfigType::PRESET_GROUP =>
+                            PresetDataType::BEHAVIOR_PRESET_GROUP =>
                                 function ($o) use (&$presetGroups) { $presetGroups[] = $o;},
                             default => fn ($o) => []
                         })($rawObject);
@@ -131,6 +142,7 @@ class AIBehaviorManager
 
     private function loadBehaviorTransitions(object $rawPreset): BehaviorTransitions
     {
-        return new BehaviorTransitions();
+        //todo load it correctly;
+        return new BehaviorTransitions([]);
     }
 }

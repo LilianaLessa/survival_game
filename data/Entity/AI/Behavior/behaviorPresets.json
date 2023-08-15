@@ -1,17 +1,17 @@
 [
   {
-    "type": "preset",
+    "dataType": "behaviorPreset",
     "name": "idle",
     "triggers": {
       "areActionQueuesEmpty": true,
-      "timeFromLastEffect": 7
+      "msTimeFromLastBehaviorActivation": 2500
     },
     "effects": [
       {
         "move": {
           "target": "randomCoordinates",
-          "minDistance": 3,
-          "maxDistance": 5
+          "minDistance": 1,
+          "maxDistance": 3
         }
       }
     ],
@@ -21,7 +21,7 @@
     }
   },
   {
-    "type": "preset_debug",
+    "dataType": "preset_debug",
     "name": "increaseAggroOnAttacked",
     "effect": {
       "increaseAggro": {
@@ -37,7 +37,7 @@
     }
   },
   {
-    "type": "preset_debug",
+    "dataType": "preset_debug",
     "name": "attack",
     "effect": {
       "attack": {
@@ -60,7 +60,7 @@
     }
   },
   {
-    "type": "preset_debug",
+    "dataType": "preset_debug",
     "name": "returnToSelfBiome",
     "effect": {
       "move": {

@@ -6,7 +6,7 @@ namespace App\Engine\Component;
 
 use App\Engine\Commands\MoveEntity;
 
-class Movable implements ComponentInterface
+class MovementQueue implements ActionQueueComponentInterface
 {
     /** @var MoveEntity[]  */
     private array $movementQueue = [];
@@ -16,9 +16,10 @@ class Movable implements ComponentInterface
         $this->movementQueue[] = $moveEntity;
     }
 
-    public function getMovementQueue(): array
+    public function dequeue(): ?MoveEntity
     {
-        return $this->movementQueue;
+        $v = array_shift($this->movementQueue);
+        return $v;
     }
 
     public function clear()
@@ -30,5 +31,10 @@ class Movable implements ComponentInterface
         }
 
         $this->movementQueue = [];
+    }
+
+    public function isQueueEmpty(): bool
+    {
+        return empty($this->movementQueue);
     }
 }

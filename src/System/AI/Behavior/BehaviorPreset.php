@@ -25,6 +25,9 @@ class BehaviorPreset
         return $this->name;
     }
 
+    /**
+     * @return BehaviorEffectConfig[]
+     */
     public function getEffectConfigs(): array
     {
         return $this->effectConfigs;

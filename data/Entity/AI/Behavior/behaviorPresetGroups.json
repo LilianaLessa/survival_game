@@ -1,6 +1,6 @@
 [
   {
-    "type": "presetGroup_debug",
+    "dataType": "presetGroup_debug",
     "name": "passiveMonster",
     "presets": [
       {"preset": "idle"},
@@ -8,7 +8,7 @@
     ]
   },
   {
-    "type": "presetGroup_debug",
+    "dataType": "presetGroup_debug",
     "name": "biomeAwarePassiveMonster",
     "presets": [
       {

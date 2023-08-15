@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace App\Engine\Commands;
 
-use App\System\Direction;
+use App\System\Helpers\Point2D;
 
-class MoveEntity implements CommandInterface
+class MoveEntity
 {
-    //todo should different types of movement be declared here?
-    // for example, climb, swim, walk, run and so on?
     public function __construct(
-        private readonly Direction $direction
+        private readonly Point2D $coordinates
     ) {
     }
 
-    public function getDirection(): Direction
+    public function getCoordinates(): Point2D
     {
-        return $this->direction;
+        return $this->coordinates;
     }
 }
