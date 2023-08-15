@@ -17,7 +17,7 @@ use App\System\PresetLibrary\PresetDataType;
 
 class BehaviorPresetLibrary extends AbstractPresetLibrary
 {
-    protected function createPreset(?PresetDataType $presetDataType, mixed $rawPreset): AbstractPreset
+    protected function createPreset(?PresetDataType $presetDataType, object $rawPreset): AbstractPreset
     {
         return new BehaviorPreset(
             $rawPreset->name,

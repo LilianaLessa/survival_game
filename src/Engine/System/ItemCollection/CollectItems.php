@@ -61,7 +61,7 @@ class CollectItems implements WorldSystemInterface
                                     sprintf(
                                         "You got %dx %s.\n",
                                         $itemOnGround->getAmount(),
-                                        $itemOnGround->getItemBlueprint()->getInternalName(),
+                                        $itemOnGround->getItemBlueprint()->getName(),
                                     )
                                 )
                             );

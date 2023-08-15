@@ -9,18 +9,18 @@ use App\Engine\Component\MapPosition;
 use App\Engine\Component\MapSymbol;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
-use App\System\Item\ItemBlueprint;
+use App\System\Item\ItemPreset;
 
 readonly class ItemOnGround implements ComponentInterface
 {
 
-    private function __construct(private ItemBlueprint $itemBlueprint, private int $amount)
+    private function __construct(private ItemPreset $itemBlueprint, private int $amount)
     {
     }
 
     public static function createItemOnGround(
         EntityManager $entityManager,
-        ItemBlueprint $itemBlueprint,
+        ItemPreset $itemBlueprint,
         int $amount,
         int $x,
         int $y
@@ -32,7 +32,7 @@ readonly class ItemOnGround implements ComponentInterface
         );
     }
 
-    public function getItemBlueprint(): ItemBlueprint
+    public function getItemBlueprint(): ItemPreset
     {
         return $this->itemBlueprint;
     }

@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Engine\Component\Item\ItemDropper;
 
 use App\Engine\Component\ComponentInterface;
-use App\System\Item\ItemBlueprint;
+use App\System\Item\ItemPreset;
 
 class ItemDropper implements ComponentInterface
 {
     public function __construct(
-        private readonly ItemBlueprint $itemBlueprint,
+        private readonly ItemPreset $itemBlueprint,
         private readonly DropOn $dropOn,
         private readonly int $minAmount,
         private readonly int $maxAmount,
@@ -18,7 +18,7 @@ class ItemDropper implements ComponentInterface
     ) {
     }
 
-    public function getItemBlueprint(): ItemBlueprint
+    public function getItemBlueprint(): ItemPreset
     {
         return $this->itemBlueprint;
     }

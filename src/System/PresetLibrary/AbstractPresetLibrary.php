@@ -72,7 +72,7 @@ abstract class AbstractPresetLibrary
         return array_values($rawPresetData);
     }
 
-    abstract protected  function createPreset(?PresetDataType $presetDataType, mixed $rawPreset): AbstractPreset;
+    abstract protected  function createPreset(?PresetDataType $presetDataType, object $rawPreset): AbstractPreset;
 
     /** @return PresetDataType[] */
     abstract protected function getPresetTypesToLoad(): array;

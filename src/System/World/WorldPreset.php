@@ -9,6 +9,8 @@ use App\System\PresetLibrary\PresetDataType;
 
 class WorldPreset extends AbstractPreset
 {
+    private int $screenUpdaterFps = 10;
+
     public function __construct(
         string $name,
         private readonly int $mapWidth,
@@ -26,5 +28,16 @@ class WorldPreset extends AbstractPreset
     public function getMapHeight(): int
     {
         return $this->mapHeight;
+    }
+
+    public function getScreenUpdaterFps(): int
+    {
+        return $this->screenUpdaterFps;
+    }
+
+    public function setScreenUpdaterFps(int $screenUpdaterFps): self
+    {
+        $this->screenUpdaterFps = $screenUpdaterFps;
+        return $this;
     }
 }

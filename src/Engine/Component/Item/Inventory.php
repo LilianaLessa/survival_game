@@ -48,7 +48,7 @@ class Inventory implements ComponentInterface
             $itemOnInventory = $itemEntity->getComponent(ItemOnInventory::class);
             $itemBluePrint = $itemOnInventory->getItemBlueprint();
 
-            if ($newItemOnInventory->getItemBlueprint()->getInternalName() === $itemBluePrint->getInternalName()) {
+            if ($newItemOnInventory->getItemBlueprint()->getName() === $itemBluePrint->getName()) {
                 //todo items are not completing the stack before creating a new one
                 //     if the amount can't fit without dividing, it will create a new stack.
                 //     fix it!

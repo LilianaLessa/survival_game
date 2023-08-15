@@ -20,7 +20,8 @@ use App\System\AI\Behavior\EffectHandlers\Move\Parameters\TargetCoordinateTypes;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
 use App\System\Helpers\Point2D;
-use App\System\PresetLibrary\PresetDataType;
+use App\System\Kernel;
+use App\System\World\WorldManager;
 use App\System\World\WorldPreset;
 use App\System\World\WorldPresetLibrary;
 use BlackScorp\Astar\Astar;
@@ -30,11 +31,12 @@ class Move implements BehaviorEffectHandlerInterface
 {
     public function __construct(
         private readonly EntityManager $entityManager,
-        private readonly WorldPresetLibrary $worldPresetLibrary,
+        private readonly WorldManager $worldManager,
     ){
     }
 
     /**
+     * todo
      *  return a array of strings with the required parameter classes,
      *      so the engine can understand what should be injected on the handle method.
      *
@@ -52,13 +54,7 @@ class Move implements BehaviorEffectHandlerInterface
     //     So, it would be up to the caller fill this collection with all types of parameters and their values.
     public function handle(Entity $targetEntity, EffectParameterInterface ...$effectParameter): void
     {
-        Dispatcher::dispatch(
-            new UiMessageEvent(
-                sprintf(
-                    "DEBUG-BEHAVIOR: handling move\n",
-                )
-            )
-        );
+
 
         /** @var TargetCoordinatesInterface $movementType */
         $movementType = $effectParameter[0];
@@ -69,23 +65,7 @@ class Move implements BehaviorEffectHandlerInterface
         $movementQueue = $targetEntity->getComponent(MovementQueue::class);
 
         if ($mapPosition && $movementQueue) {
-
-            //todo get real info.
-            /** @var WorldPreset $worldPreset */
-            [ $worldPreset ] = $this->worldPresetLibrary->getPresetByNameAndTypes(
-                'defaultWorldPreset',
-                PresetDataType::WORLD_PRESET
-            );
-
-            $mapPassableBlocks = array_fill(
-                0,
-                $worldPreset->getMapWidth(),
-                array_fill(
-                    0,
-                    $worldPreset->getMapHeight(),
-                    0
-                )
-            );
+            $mapPassableBlocks = $this->worldManager->getPathGroundWeights();
 
             $startPoint = $mapPosition->get();
             $targetPoint = $movementType->getTargetPoint($startPoint);
@@ -107,27 +87,6 @@ class Move implements BehaviorEffectHandlerInterface
                     $targetEntity->getId(),
                     $movementQueue
                 );
-
-                Dispatcher::dispatch(
-                    new UiMessageEvent(
-                        sprintf(
-                            "Route triggered: %d,%d => %d,%d => %s\n",
-                            ...[
-                                ...$startPoint->toArray(),
-                                ...$targetPoint->toArray(),
-                                implode(
-                                    ' ',
-                                    array_map(
-                                        fn (Point2D $p) => sprintf('%d,%d', ...$p->toArray()),
-                                        $route
-                                    )
-                                )
-                            ]
-                        )
-                    )
-                );
-
-
             }
         }
 
@@ -169,11 +128,15 @@ class Move implements BehaviorEffectHandlerInterface
 
         $target = $resultArray['target'] ?? TargetCoordinateTypes::RANDOM_COORDINATES;
 
+        //todo get real info.
+        /** @var WorldPreset $worldPreset */
+        $worldPreset = Kernel::getContainer()->get(WorldPresetLibrary::class)->getDefaultWorldPreset();
+
         return [
             match ($target) {
                 TargetCoordinateTypes::RANDOM_COORDINATES => new RandomTargetCoordinates(
-                    10, //todo these should come from world, somehow.
-                    10,
+                    $worldPreset->getMapWidth(),
+                    $worldPreset->getMapHeight(),
                     $resultArray['minDistance'] ?? 2,
                     $resultArray['maxDistance'] ?? 2
                 )

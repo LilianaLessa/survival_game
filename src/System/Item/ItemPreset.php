@@ -5,33 +5,33 @@ declare(strict_types=1);
 namespace App\System\Item;
 
 //todo maybe it should be called ItemPreset? To follow the convention of the AI's BehaviorPreset
-class ItemBlueprint
+use App\System\PresetLibrary\AbstractPreset;
+use App\System\PresetLibrary\PresetDataType;
+
+class ItemPreset extends AbstractPreset
 {    private bool $stackable = false;
     private int $stackSize = 1;
 
     private ?string $description = null;
 
     private ?string $shortDescription = null;
-    private ?string $name = null;
 
     private ?ItemRarity $rarity = null;
 
     private ?ItemPrice $itemPrice = null;
 
     public function __construct(
-        private readonly string $id,
-        private readonly string $internalName,
+         string $name,
     ) {
+        parent::__construct(
+            PresetDataType::ITEM_PRESET,
+            $name
+        );
     }
 
     public function getId(): string
     {
         return $this->id;
-    }
-
-    public function getInternalName(): string
-    {
-        return $this->internalName;
     }
 
     public function isStackable(): bool
@@ -78,7 +78,7 @@ class ItemBlueprint
         return $this;
     }
 
-    public function getName(): string
+    public function getInGameName(): string
     {
         return $this->name ?? $this->internalName;
     }

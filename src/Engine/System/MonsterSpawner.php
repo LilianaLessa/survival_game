@@ -9,7 +9,7 @@ use App\Engine\Component\Monster;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
-use App\System\Item\ItemManager;
+use App\System\Item\ItemPresetLibrary;
 use App\System\Monster\MonsterPresetLibrary;
 use App\System\PresetLibrary\PresetDataType;
 use App\System\World\WorldManager;
@@ -21,11 +21,11 @@ class MonsterSpawner implements WorldSystemInterface
     use WorldAwareTrait;
 
     public function __construct(
-        private readonly WorldManager         $world,
-        private readonly ItemManager          $itemManager,
-        private readonly EntityManager        $entityManager,
+        private readonly WorldManager $world,
+        private readonly ItemPresetLibrary $itemManager,
+        private readonly EntityManager $entityManager,
         private readonly MonsterPresetLibrary $monsterPresetLibrary,
-        private readonly int                  $maxMonstersInMap
+        private readonly int $maxMonstersInMap
     ) {
     }
 

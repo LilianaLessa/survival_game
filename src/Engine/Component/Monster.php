@@ -9,14 +9,14 @@ use App\Engine\Component\Item\ItemDropper\ItemDropper;
 use App\Engine\Component\Item\ItemDropper\ItemDropperCollection;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
-use App\System\Item\ItemManager;
+use App\System\Item\ItemPresetLibrary;
 use App\System\Monster\MonsterPreset;
 
 class Monster implements ComponentInterface
 {
     static public function createMonster(
         MonsterPreset $monsterPreset,
-        ItemManager $itemManager,
+        ItemPresetLibrary $itemManager,
         EntityManager $entityManager,
         int $x,
         int $y
@@ -31,63 +31,63 @@ class Monster implements ComponentInterface
             new HitPoints(10, 10),
             new ItemDropperCollection(
                 new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('tatteredCloth'),
+                    $itemManager->getPresetByName('tatteredCloth'),
                     DropOn::DIE,
                     1,
                     1,
                     0.8
                 ),
                 new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('rustyDagger'),
+                    $itemManager->getPresetByName('rustyDagger'),
                     DropOn::DIE,
                     1,
                     1,
                     0.7
                 ),
                 new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('monsterHide'),
+                    $itemManager->getPresetByName('monsterHide'),
                     DropOn::DIE,
                     1,
                     1,
                     0.6
                 ),
                 new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('shimmeringScale'),
+                    $itemManager->getPresetByName('shimmeringScale'),
                     DropOn::DIE,
                     1,
                     1,
                     0.3
                 ),
                 new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('crackedCrystal'),
+                    $itemManager->getPresetByName('crackedCrystal'),
                     DropOn::DIE,
                     1,
                     1,
                     0.25
                 ),
                 new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('enchantedInk'),
+                    $itemManager->getPresetByName('enchantedInk'),
                     DropOn::DIE,
                     1,
                     1,
                     0.2
                 ),
                 new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('ancientRelic'),
+                    $itemManager->getPresetByName('ancientRelic'),
                     DropOn::DIE,
                     1,
                     1,
                     0.05
                 ),
                 new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('mangledFur'),
+                    $itemManager->getPresetByName('mangledFur'),
                     DropOn::DIE,
                     1,
                     1,
                     0.9
                 ),
                 new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('slimyGoo'),
+                    $itemManager->getPresetByName('slimyGoo'),
                     DropOn::DIE,
                     1,
                     1,

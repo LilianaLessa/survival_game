@@ -1,6 +1,7 @@
 {
   "dataType": "worldConfigPreset",
   "name": "defaultWorldPreset",
-  "mapWidth": 10,
-  "mapHeight": 10
+  "mapWidth": 30,
+  "mapHeight": 30,
+  "screenUpdaterFps": 25
 }

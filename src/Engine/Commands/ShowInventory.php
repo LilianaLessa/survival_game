@@ -40,7 +40,7 @@ class ShowInventory implements InvokableCommandInterface
                 sprintf(
                     "%s%s%s",
                     $itemBlueprint->getRarity()->getColorCode(),
-                    $itemBlueprint->getName(),
+                    $itemBlueprint->getInGameName(),
                     ConsoleColor::Color_Off->value,
                 ),
                 $item->getItemBlueprint()->getShortDescription(),

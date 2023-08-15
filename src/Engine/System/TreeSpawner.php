@@ -9,7 +9,7 @@ use App\Engine\Component\Tree;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
-use App\System\Item\ItemManager;
+use App\System\Item\ItemPresetLibrary;
 use App\System\World\WorldManager;
 
 class TreeSpawner implements WorldSystemInterface
@@ -17,10 +17,10 @@ class TreeSpawner implements WorldSystemInterface
     use WorldAwareTrait;
 
     public function __construct(
-        private readonly WorldManager  $world,
+        private readonly WorldManager $world,
         private readonly EntityManager $entityManager,
-        private readonly ItemManager   $itemManager,
-        private readonly int           $maxTrees
+        private readonly ItemPresetLibrary $itemManager,
+        private readonly int $maxTrees
     ) {
     }
 

@@ -7,12 +7,12 @@ namespace App\Engine\Component\Item;
 use App\Engine\Component\ComponentInterface;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
-use App\System\Item\ItemBlueprint;
+use App\System\Item\ItemPreset;
 
 //todo stackable items and unique items.
 class ItemOnInventory implements ComponentInterface
 {
-    public function __construct(private ItemBlueprint $itemBlueprint, private int $amount)
+    public function __construct(private ItemPreset $itemBlueprint, private int $amount)
     {
     }
 
@@ -26,7 +26,7 @@ class ItemOnInventory implements ComponentInterface
         );
     }
 
-    public function getItemBlueprint(): ItemBlueprint
+    public function getItemBlueprint(): ItemPreset
     {
         return $this->itemBlueprint;
     }

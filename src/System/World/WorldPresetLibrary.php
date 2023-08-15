@@ -20,13 +20,14 @@ class WorldPresetLibrary extends AbstractPresetLibrary
         return $defaultWorldPreset;
     }
 
-    protected function createPreset(?PresetDataType $presetDataType, mixed $rawPreset): AbstractPreset
+    protected function createPreset(?PresetDataType $presetDataType, object $rawPreset): AbstractPreset
     {
-        return new WorldPreset(
+        return (new WorldPreset(
             $rawPreset->name,
             $rawPreset->mapWidth ?? 20,
             $rawPreset->mapHeight ?? 20,
-        );
+        ))
+            ->setScreenUpdaterFps($rawPreset->screenUpdaterFps ?? 10);
     }
 
     protected function getPresetTypesToLoad(): array

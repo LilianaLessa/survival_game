@@ -10,14 +10,14 @@ use App\Engine\Component\Player;
 use App\Engine\Entity\EntityManager;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
-use App\System\Item\ItemManager;
+use App\System\Item\ItemPresetLibrary;
 
 class GiveItemToPlayer implements InvokableCommandInterface
 {
 
     public function __construct(
         private readonly EntityManager $entityManager,
-        private readonly ItemManager $itemManager,
+        private readonly ItemPresetLibrary $itemManager,
         private readonly string $itemInternalName,
         private readonly int $amount,
     ) {
@@ -29,7 +29,7 @@ class GiveItemToPlayer implements InvokableCommandInterface
             Inventory::class,
             Player::class,
         );
-        $itemBluePrint = $this->itemManager->getItemBlueprintByInternalName($this->itemInternalName);
+        $itemBluePrint = $this->itemManager->getPresetByName($this->itemInternalName);
 
         /**
          * @var Inventory $inventory

@@ -9,15 +9,15 @@ use App\Engine\Component\Item\ItemDropper\ItemDropper;
 use App\Engine\Component\Item\ItemDropper\ItemDropperCollection;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
-use App\System\Item\ItemManager;
+use App\System\Item\ItemPresetLibrary;
 
 class Tree implements ComponentInterface
 {
     static public function createTree(
-        EntityManager $entityManager,
-        ItemManager $itemManager,
-        int $x,
-        int $y
+        EntityManager     $entityManager,
+        ItemPresetLibrary $itemManager,
+        int               $x,
+        int               $y
     ): Entity {
         return $entityManager->createEntity(
             new Tree(),
@@ -27,63 +27,63 @@ class Tree implements ComponentInterface
             new HitPoints(5,5),
             new ItemDropperCollection(
                 new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('wood'),
+                    $itemManager->getPresetByName('wood'),
                     DropOn::DIE,
                     3,
                     5,
                     1
                 ),
                 new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('treeLeaves'),
+                    $itemManager->getPresetByName('treeLeaves'),
                     DropOn::DIE,
                     5,
                     10,
                     1
                 ),
                 new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('treeSeed'),
+                    $itemManager->getPresetByName('treeSeed'),
                     DropOn::DIE,
                     1,
                     1,
                     0.4
                 ),
                 new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('rottenTwig'),
+                    $itemManager->getPresetByName('rottenTwig'),
                     DropOn::DIE,
                     1,
                     2,
                     0.8
                 ),
                 new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('insectCarcass'),
+                    $itemManager->getPresetByName('insectCarcass'),
                     DropOn::DIE,
                     1,
                     2,
                     0.7
                 ),
                 new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('honey'),
+                    $itemManager->getPresetByName('honey'),
                     DropOn::DIE,
                     1,
                     1,
                     0.05
                 ),
                 new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('enchantedFruit'),
+                    $itemManager->getPresetByName('enchantedFruit'),
                     DropOn::DIE,
                     1,
                     1,
                     0.01
                 ),
                 new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('eternalSap'),
+                    $itemManager->getPresetByName('eternalSap'),
                     DropOn::DIE,
                     1,
                     1,
                     0.005
                 ),
                 new ItemDropper(
-                    $itemManager->getItemBlueprintByInternalName('sylvanHeart'),
+                    $itemManager->getPresetByName('sylvanHeart'),
                     DropOn::DIE,
                     1,
                     1,

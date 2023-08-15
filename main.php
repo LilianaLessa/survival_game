@@ -13,45 +13,52 @@ use App\Engine\System\MonsterSpawner;
 use App\Engine\System\MovementApplier;
 use App\Engine\System\PhysicsSystemInterface;
 use App\Engine\System\PlayerController;
+use App\Engine\System\TreeSpawner;
 use App\Engine\System\WorldActionApplier;
 use App\Engine\System\WorldController;
 use App\Engine\System\WorldSystemInterface;
 use App\System\AI\BehaviorPresetLibrary;
-use App\System\Item\ItemManager;
+use App\System\Item\ItemPresetLibrary;
 use App\System\Kernel;
 use App\System\Monster\MonsterPresetLibrary;
+use App\System\Player\PlayerPresetLibrary;
 use App\System\Screen\ScreenUpdater;
 use App\System\TCP\TCPServer;
 use App\System\World\WorldManager;
-use App\System\World\WorldPreset;
 use App\System\World\WorldPresetLibrary;
 use function Amp\delay;
 
 require_once 'vendor/autoload.php';
 
-$aiBehaviorManager = Kernel::getContainer()->get(BehaviorPresetLibrary::class);
+/** @var PlayerPresetLibrary $playerPresetLibrary */
+$playerPresetLibrary = Kernel::getContainer()->get(PlayerPresetLibrary::class);
+$behaviorPresetLibrary = Kernel::getContainer()->get(BehaviorPresetLibrary::class);
 $monsterPresetLibrary = Kernel::getContainer()->get(MonsterPresetLibrary::class);
 /** @var WorldPresetLibrary $worldPresetLibrary */
 $worldPresetLibrary = Kernel::getContainer()->get(WorldPresetLibrary::class);
-$itemManager = new ItemManager();
+$itemPresetLibrary =  Kernel::getContainer()->get(ItemPresetLibrary::class);
 
-$aiBehaviorManager->load('./data/Entity/AI/Behavior');
+$behaviorPresetLibrary->load('./data/Entity/AI/Behavior');
 $monsterPresetLibrary->load('./data/Entity/Monster');
 $worldPresetLibrary->load('./data/World');
-$itemManager->loadItems('./data/Item/items.json');
+$playerPresetLibrary->load('./data/Player');
+$itemPresetLibrary->load('./data/Item');
 
+/** @var EntityManager $entityManager */
 $entityManager = Kernel::getContainer()->get(EntityManager::class);
 
 $worldPreset = $worldPresetLibrary->getDefaultWorldPreset();
-
 $worldWidth = $worldPreset->getMapWidth();
 $worldHeight = $worldPreset->getMapHeight();
-$initialViewportWidth = 50;
-$initialViewportHeight = 50;
 
-Player::createPlayer($entityManager, rand(0,$worldWidth-1),rand(0,$worldHeight-1));
+$playerPreset = $playerPresetLibrary->getDefaultPlayerPreset();
+$initialViewportWidth = $playerPreset->getInitialViewportWidth();
+$initialViewportHeight = $playerPreset->getInitialViewportHeight();
 
-$world = new WorldManager($entityManager, $worldWidth, $worldHeight, $initialViewportWidth, $initialViewportHeight);
+/** @var WorldManager $world */
+$world = Kernel::getContainer()->get(WorldManager::class);
+
+Player::createPlayer($entityManager, $playerPreset, rand(0,$worldWidth-1),rand(0,$worldHeight-1));
 
 $systems = [
     new WorldActionApplier($world, $entityManager),
@@ -64,16 +71,16 @@ $systems = [
     new EntityBehaviorSystem($entityManager),
     new MonsterSpawner(
         $world,
-        $itemManager,
+        $itemPresetLibrary,
         $entityManager,
         $monsterPresetLibrary,
         (int) ceil(($worldWidth * $worldHeight) * 0.005)
     ),
-    //new TreeSpawner($world, $entityManager, $itemManager, (int) ceil(($worldWidth * $worldHeight) * 0.1)),
+    new TreeSpawner($world, $entityManager, $itemPresetLibrary, (int) ceil(($worldWidth * $worldHeight) * 0.1)),
     //controllers
     //new MonsterController($entityManager),
     //todo this should be attached to the player cli/unblocking cli socket.
-    new PlayerController($world, $entityManager, $itemManager),
+    new PlayerController($world, $entityManager, $itemPresetLibrary),
     new WorldController($world),
 ];
 
@@ -89,7 +96,7 @@ $commandReceiver = new TCPServer('127.0.0.1:1988', $systems);
 //readline('Press enter to start the game server.');
 $commandReceiver->init();
 
-$screenUpdater = new ScreenUpdater($entityManager, $world, 20);
+$screenUpdater = new ScreenUpdater($entityManager, $world, $worldPreset->getScreenUpdaterFps());
 $screenUpdater->intiScreenUpdate();
 
 $tickDurationInSeconds = 0.1;

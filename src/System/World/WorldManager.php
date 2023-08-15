@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\System\World;
 
+use App\Engine\Component\Collideable;
 use App\Engine\Component\DrawableInterface;
 use App\Engine\Component\MapPosition;
 use App\Engine\Component\MapSymbol;
@@ -11,27 +12,39 @@ use App\Engine\Component\Player;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityCollection;
 use App\Engine\Entity\EntityManager;
+use App\System\Player\PlayerPresetLibrary;
 
 class WorldManager
 {
     private const EMPTY_CELL_SYMBOL = '.';
 
-    /** @var EntityCollection[][]  */
+    /** @var EntityCollection[][] */
     private array $entityMap = [];
 
     private string $drawableClass = MapSymbol::class;
+    private int $width;
+    private int $height;
+    private int $viewportWidth;
+    private int $viewportHeight;
 
     public function __construct(
         private readonly EntityManager $entityManager,
-        private readonly int $width,
-        private readonly int $height,
+        WorldPresetLibrary             $worldPresetLibrary,
         //TODO the viewport should also be a component on an entity, that can be attached to a socket.
         // this way, it's possible to create multiple map clients
         // with each having it's own viewport, attached to the player entity.
-        private int $viewportWidth,
-        private int $viewportHeight,
+        PlayerPresetLibrary            $playerPresetLibrary,
     )
     {
+        $worldPreset = $worldPresetLibrary->getDefaultWorldPreset();
+        $this->width = $worldPreset->getMapWidth();
+        $this->height = $worldPreset->getMapHeight();
+
+        $playerPreset = $playerPresetLibrary->getDefaultPlayerPreset();
+
+        $this->viewportWidth = $playerPreset->getInitialViewportWidth();
+        $this->viewportHeight = $playerPreset->getInitialViewportHeight();
+
         $this->resetEntityMap();
     }
 
@@ -62,12 +75,11 @@ class WorldManager
 
     public function draw(): void
     {
-        [$viewportStart, $viewportEnd] =$this->calculateViewport();
-
+        [$viewportStart, $viewportEnd] = $this->calculateViewport();
 
 
         //show world x coordinates on viewport border.
-        for($i = 0; $i < strlen($this->width . ''); $i++) {
+        for ($i = 0; $i < strlen($this->width . ''); $i++) {
             echo str_pad(
                 '#',
                 strlen((string)$this->height),
@@ -77,7 +89,7 @@ class WorldManager
 
             for ($mapX = $viewportStart['x']; $mapX <= $viewportEnd['x']; $mapX++) {
                 $paddedMapX = str_split(str_pad(
-                    (string) $mapX,
+                    (string)$mapX,
                     strlen((string)$this->width),
                     '0',
                     STR_PAD_LEFT
@@ -92,7 +104,7 @@ class WorldManager
 
             //show world y coordinates on viewport border.
             echo str_pad(
-                (string) $mapY,
+                (string)$mapY,
                 strlen((string)$this->height),
                 '0',
                 STR_PAD_LEFT
@@ -109,7 +121,7 @@ class WorldManager
                 $topEntity = end($drawableEntities);
 
                 /** @var null|DrawableInterface */
-                [ $drawable ] = $topEntity ? $topEntity : [ null ];
+                [$drawable] = $topEntity ? $topEntity : [null];
 
                 $symbol = $drawable?->getSymbol() ?? self::EMPTY_CELL_SYMBOL;
 
@@ -138,17 +150,17 @@ class WorldManager
     public function isOutOfBounds(int $x, int $y): bool
     {
         return
-        $x < 0
-        || $x > $this->getWidth()
-        || $y < 0
-        || $y > $this->getHeight();
+            $x < 0
+            || $x > $this->getWidth()
+            || $y < 0
+            || $y > $this->getHeight();
     }
 
     public function setDrawableClass(?string $drawableClass): void
     {
         $this->drawableClass =
             ($drawableClass && in_array(DrawableInterface::class, class_implements($drawableClass))
-            ? $drawableClass : MapSymbol::class);
+                ? $drawableClass : MapSymbol::class);
     }
 
     public function getViewportWidth(): int
@@ -190,7 +202,7 @@ class WorldManager
                 ($this->viewportWidth / 2) : $viewPortCenter['x'];
 
         $viewPortCenter['x'] =
-            $viewPortCenter['x'] + ($this->viewportWidth / 2) >= $this->width -1 ?
+            $viewPortCenter['x'] + ($this->viewportWidth / 2) >= $this->width - 1 ?
                 $this->width - ($this->viewportWidth / 2) - 1 : $viewPortCenter['x'];
 
         $viewPortCenter['y'] =
@@ -198,8 +210,8 @@ class WorldManager
                 ($this->viewportHeight / 2) : $viewPortCenter['y'];
 
         $viewPortCenter['y'] =
-            $viewPortCenter['y'] + ($this->viewportHeight / 2) >= $this->height - 1?
-                $this->height - ($this->viewportHeight / 2) - 1: $viewPortCenter['y'];
+            $viewPortCenter['y'] + ($this->viewportHeight / 2) >= $this->height - 1 ?
+                $this->height - ($this->viewportHeight / 2) - 1 : $viewPortCenter['y'];
 
         $viewportStart = [
             'x' => max(0, floor($viewPortCenter['x'] - ($this->viewportWidth / 2))),
@@ -215,5 +227,22 @@ class WorldManager
             $viewportStart,
             $viewportEnd
         ];
+    }
+
+    /** float[][] */
+    public function getPathGroundWeights(): array
+    {
+        $groundPathWeights = [];
+
+        for ($mapY = 0; $mapY < $this->getHeight(); $mapY++){
+            for ($mapX = 0; $mapX < $this->getWidth(); $mapX++){
+                $groundPathWeights[$mapX][$mapY] = $this->entityMap[$mapX][$mapY] ?? null
+                    ? count($this->entityMap[$mapX][$mapY]
+                        ->getEntitiesWithComponents(Collideable::class))
+                : 0;
+            }
+        }
+
+        return $groundPathWeights;
     }
 }

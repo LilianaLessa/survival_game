@@ -18,7 +18,7 @@ class MonsterPresetLibrary extends AbstractPresetLibrary
     {
     }
 
-    protected function createPreset(?PresetDataType $presetDataType, mixed $rawPreset): AbstractPreset
+    protected function createPreset(?PresetDataType $presetDataType, object $rawPreset): AbstractPreset
     {
         return new MonsterPreset(
             name: $rawPreset->name,
