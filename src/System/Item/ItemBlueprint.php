@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\System\Item;
 
+//todo maybe it should be called ItemPreset? To follow the convention of the AI's BehaviorPreset
 class ItemBlueprint
 {    private bool $stackable = false;
     private int $stackSize = 1;

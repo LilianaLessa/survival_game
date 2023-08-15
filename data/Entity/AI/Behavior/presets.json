@@ -1,0 +1,85 @@
+[
+  {
+    "type": "preset",
+    "name": "idle",
+    "triggers": {
+      "areActionQueuesEmpty": true,
+      "timeFromLastEffect": 7
+    },
+    "effects": [
+      {
+        "move": {
+          "target": "randomCoordinates",
+          "minDistance": 3,
+          "maxDistance": 5
+        }
+      }
+    ],
+    "transitions" : {
+      "from": [],
+      "to": []
+    }
+  },
+  {
+    "type": "preset_debug",
+    "name": "increaseAggroOnAttacked",
+    "effect": {
+      "increaseAggro": {
+        "target": "triggerEntity"
+      }
+    },
+    "triggers": [
+      {"isTargetOfAttack": true}
+    ],
+    "transitions" : {
+      "from": [],
+      "to": []
+    }
+  },
+  {
+    "type": "preset_debug",
+    "name": "attack",
+    "effect": {
+      "attack": {
+        "target": "aggroEntity"
+      }
+    },
+    "triggers": [
+      {"isAggroQueueEmpty": false}
+    ],
+    "transitions" : {
+      "from": ["idle"],
+      "to": [
+        {
+          "preset": "idle",
+          "triggers": {
+            "isAggroQueueEmpty": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "type": "preset_debug",
+    "name": "returnToSelfBiome",
+    "effect": {
+      "move": {
+        "target": "lastKnownSelfBiomeCoordinates"
+      }
+    },
+    "triggers": [
+      {"inSelfBiome": false}
+    ],
+    "transitions" : {
+      "from": ["idle"],
+      "to": [
+        {
+          "preset": "idle",
+          "triggers": [
+            {"inSelfBiome": true}
+          ]
+        }
+      ]
+    }
+  }
+]

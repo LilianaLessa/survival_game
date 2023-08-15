@@ -1,0 +1,32 @@
+[
+  {
+    "type": "presetGroup_debug",
+    "name": "passiveMonster",
+    "presets": [
+      {"preset": "idle"},
+      {"preset": "increaseAggroOnAttacked"}
+    ]
+  },
+  {
+    "type": "presetGroup_debug",
+    "name": "biomeAwarePassiveMonster",
+    "presets": [
+      {
+        "presetGroup": "passiveMonster"
+      },
+      {"preset": "returnToSelfBiome"},
+      {
+        "preset": "idle",
+        "overrides": {
+          "effect": {
+            "move": {
+              "target": "randomBiomeCoordinates",
+              "max_distance": 5
+            }
+          }
+        }
+      }
+    ]
+  }
+
+]

@@ -8,6 +8,9 @@
     "level": 1,
     "totalHitPoints": 10,
     "symbol": "♞",
+    "behaviors":  [
+      {"presetGroup": "passiveMonster"}
+    ],
     "dropCollection": [
       {
         "internalName": "softFur",
@@ -70,7 +73,6 @@
     ],
     "sightRadius": 5,
     "hearRadius": 4,
-    "behavior": "passive",
     "elements": [
       {
         "element": "nature",
