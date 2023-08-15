@@ -23,16 +23,16 @@ use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
 use App\System\Helpers\Point2D;
 use App\System\Item\ItemManager;
-use App\System\World\World;
+use App\System\World\WorldManager;
 
 class PlayerController implements ReceiverSystemInterface
 {
     use CommandParserTrait;
 
     public function __construct(
-        private readonly World $world,
+        private readonly WorldManager  $world,
         private readonly EntityManager $entityManager,
-        private readonly ItemManager $itemManager,
+        private readonly ItemManager   $itemManager,
     )
     {
     }

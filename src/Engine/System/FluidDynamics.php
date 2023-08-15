@@ -10,13 +10,13 @@ use App\Engine\Component\MapPosition;
 use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
 use App\System\ForceDirection;
-use App\System\World\World;
+use App\System\World\WorldManager;
 
 class FluidDynamics implements PhysicsSystemInterface
 {
     use WorldAwareTrait;
 
-    public function __construct(private readonly World $world, private readonly EntityManager $entityManager)
+    public function __construct(private readonly WorldManager $world, private readonly EntityManager $entityManager)
     {
     }
 

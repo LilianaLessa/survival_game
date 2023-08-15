@@ -6,13 +6,13 @@ namespace App\Engine\Commands;
 
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
-use App\System\World\World;
+use App\System\World\WorldManager;
 
 class SetMapViewport implements InvokableCommandInterface
 {
     public function __construct(
-        private readonly World $world,
-        private readonly array $viewportSize
+        private readonly WorldManager $world,
+        private readonly array        $viewportSize
     ) {
     }
 

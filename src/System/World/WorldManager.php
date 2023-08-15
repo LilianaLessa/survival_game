@@ -12,7 +12,7 @@ use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityCollection;
 use App\Engine\Entity\EntityManager;
 
-class World
+class WorldManager
 {
     private const EMPTY_CELL_SYMBOL = '.';
 

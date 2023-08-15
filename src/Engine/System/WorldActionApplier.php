@@ -12,13 +12,13 @@ use App\Engine\Trait\WorldAwareTrait;
 use App\System\Direction;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
-use App\System\World\World;
+use App\System\World\WorldManager;
 
 class WorldActionApplier implements WorldSystemInterface
 {
     use WorldAwareTrait;
 
-    public function __construct(private readonly World $world, private readonly EntityManager $entityManager)
+    public function __construct(private readonly WorldManager $world, private readonly EntityManager $entityManager)
     {
     }
 

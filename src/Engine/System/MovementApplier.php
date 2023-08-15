@@ -12,13 +12,13 @@ use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
-use App\System\World\World;
+use App\System\World\WorldManager;
 
 class MovementApplier implements PhysicsSystemInterface
 {
     use WorldAwareTrait;
 
-    public function __construct(private readonly World $world, private readonly EntityManager $entityManager)
+    public function __construct(private readonly WorldManager $world, private readonly EntityManager $entityManager)
     {
     }
 

@@ -9,16 +9,16 @@ use App\Engine\Entity\Entity;
 use App\System\Direction;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
-use App\System\World\World;
+use App\System\World\WorldManager;
 
 class InspectCell implements InvokableCommandInterface
 {
     //todo should different types of movement be declared here?
     // for example, climb, swim, walk, run and so on?
     public function __construct(
-        private readonly World $world,
-        private readonly MapPosition $from,
-        private readonly ?Direction $direction,
+        private readonly WorldManager $world,
+        private readonly MapPosition  $from,
+        private readonly ?Direction   $direction,
 
     ) {
     }

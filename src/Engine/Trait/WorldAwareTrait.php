@@ -6,11 +6,11 @@ namespace App\Engine\Trait;
 
 use App\Engine\Component\Collideable;
 use App\Engine\Component\TerrainHeight;
-use App\System\World\World;
+use App\System\World\WorldManager;
 
 trait WorldAwareTrait
 {
-    private readonly World $world;
+    private readonly WorldManager $world;
 
 
     private function canOverlapOnWorld(int $targetX, int $targetY): bool

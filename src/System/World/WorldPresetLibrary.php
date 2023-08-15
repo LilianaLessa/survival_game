@@ -10,6 +10,16 @@ use App\System\PresetLibrary\PresetDataType;
 
 class WorldPresetLibrary extends AbstractPresetLibrary
 {
+    public function getDefaultWorldPreset(): WorldPreset
+    {
+        [ $defaultWorldPreset ] = $this->getPresetByNameAndTypes(
+            'defaultWorldPreset',
+            PresetDataType::WORLD_PRESET
+        );
+
+        return $defaultWorldPreset;
+    }
+
     protected function createPreset(?PresetDataType $presetDataType, mixed $rawPreset): AbstractPreset
     {
         return new WorldPreset(

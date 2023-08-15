@@ -20,15 +20,19 @@ use App\System\AI\Behavior\EffectHandlers\Move\Parameters\TargetCoordinateTypes;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
 use App\System\Helpers\Point2D;
+use App\System\PresetLibrary\PresetDataType;
+use App\System\World\WorldPreset;
+use App\System\World\WorldPresetLibrary;
 use BlackScorp\Astar\Astar;
 use BlackScorp\Astar\Grid;
 
 class Move implements BehaviorEffectHandlerInterface
 {
-    public function __construct(private readonly EntityManager $entityManager)
-    {
+    public function __construct(
+        private readonly EntityManager $entityManager,
+        private readonly WorldPresetLibrary $worldPresetLibrary,
+    ){
     }
-
 
     /**
      *  return a array of strings with the required parameter classes,
@@ -65,8 +69,23 @@ class Move implements BehaviorEffectHandlerInterface
         $movementQueue = $targetEntity->getComponent(MovementQueue::class);
 
         if ($mapPosition && $movementQueue) {
+
             //todo get real info.
-            $mapPassableBlocks = array_fill(0, 10, array_fill(0, 10, 0));
+            /** @var WorldPreset $worldPreset */
+            [ $worldPreset ] = $this->worldPresetLibrary->getPresetByNameAndTypes(
+                'defaultWorldPreset',
+                PresetDataType::WORLD_PRESET
+            );
+
+            $mapPassableBlocks = array_fill(
+                0,
+                $worldPreset->getMapWidth(),
+                array_fill(
+                    0,
+                    $worldPreset->getMapHeight(),
+                    0
+                )
+            );
 
             $startPoint = $mapPosition->get();
             $targetPoint = $movementType->getTargetPoint($startPoint);

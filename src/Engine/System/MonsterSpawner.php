@@ -12,7 +12,7 @@ use App\Engine\Trait\WorldAwareTrait;
 use App\System\Item\ItemManager;
 use App\System\Monster\MonsterPresetLibrary;
 use App\System\PresetLibrary\PresetDataType;
-use App\System\World\World;
+use App\System\World\WorldManager;
 
 //todo this monster spawner can be a component for a entity on map.
 //     then a combination of map area, monster preset holder and spawn rules components would do the rest.
@@ -21,11 +21,11 @@ class MonsterSpawner implements WorldSystemInterface
     use WorldAwareTrait;
 
     public function __construct(
-        private readonly World $world,
-        private readonly ItemManager $itemManager,
-        private readonly EntityManager $entityManager,
+        private readonly WorldManager         $world,
+        private readonly ItemManager          $itemManager,
+        private readonly EntityManager        $entityManager,
         private readonly MonsterPresetLibrary $monsterPresetLibrary,
-        private readonly int $maxMonstersInMap
+        private readonly int                  $maxMonstersInMap
     ) {
     }
 

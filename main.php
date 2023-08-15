@@ -18,22 +18,21 @@ use App\Engine\System\WorldController;
 use App\Engine\System\WorldSystemInterface;
 use App\System\AI\BehaviorPresetLibrary;
 use App\System\Item\ItemManager;
+use App\System\Kernel;
 use App\System\Monster\MonsterPresetLibrary;
-use App\System\PresetLibrary\PresetDataType;
 use App\System\Screen\ScreenUpdater;
 use App\System\TCP\TCPServer;
-use App\System\World\World;
+use App\System\World\WorldManager;
 use App\System\World\WorldPreset;
 use App\System\World\WorldPresetLibrary;
 use function Amp\delay;
 
 require_once 'vendor/autoload.php';
 
-$aiBehaviorManager = new BehaviorPresetLibrary();
-$monsterPresetLibrary = new MonsterPresetLibrary(
-    $aiBehaviorManager
-);
-$worldPresetLibrary = new WorldPresetLibrary();
+$aiBehaviorManager = Kernel::getContainer()->get(BehaviorPresetLibrary::class);
+$monsterPresetLibrary = Kernel::getContainer()->get(MonsterPresetLibrary::class);
+/** @var WorldPresetLibrary $worldPresetLibrary */
+$worldPresetLibrary = Kernel::getContainer()->get(WorldPresetLibrary::class);
 $itemManager = new ItemManager();
 
 $aiBehaviorManager->load('./data/Entity/AI/Behavior');
@@ -41,15 +40,9 @@ $monsterPresetLibrary->load('./data/Entity/Monster');
 $worldPresetLibrary->load('./data/World');
 $itemManager->loadItems('./data/Item/items.json');
 
-$entityManager = new EntityManager();
+$entityManager = Kernel::getContainer()->get(EntityManager::class);
 
-/**
- * @var WorldPreset $worldPreset
- */
-[$worldPreset] = $worldPresetLibrary->getPresetByNameAndTypes(
-    'defaultWorldPreset',
-    PresetDataType::WORLD_PRESET
-);
+$worldPreset = $worldPresetLibrary->getDefaultWorldPreset();
 
 $worldWidth = $worldPreset->getMapWidth();
 $worldHeight = $worldPreset->getMapHeight();
@@ -58,7 +51,7 @@ $initialViewportHeight = 50;
 
 Player::createPlayer($entityManager, rand(0,$worldWidth-1),rand(0,$worldHeight-1));
 
-$world = new World($entityManager,$worldWidth, $worldHeight, $initialViewportWidth, $initialViewportHeight);
+$world = new WorldManager($entityManager, $worldWidth, $worldHeight, $initialViewportWidth, $initialViewportHeight);
 
 $systems = [
     new WorldActionApplier($world, $entityManager),

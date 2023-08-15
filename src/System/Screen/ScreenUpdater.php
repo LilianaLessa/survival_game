@@ -8,7 +8,7 @@ use App\Engine\Component\DrawableInterface;
 use App\Engine\Component\MapPosition;
 use App\Engine\Entity\EntityCollection;
 use App\Engine\Entity\EntityManager;
-use App\System\World\World;
+use App\System\World\WorldManager;
 use function Amp\async;
 use function Amp\delay;
 
@@ -16,8 +16,8 @@ class ScreenUpdater
 {
     public function __construct(
         private readonly EntityManager $entityManager,
-        private readonly World $world,
-        private readonly int $fps
+        private readonly WorldManager  $world,
+        private readonly int           $fps
     ) {
     }
 

@@ -18,6 +18,8 @@
       "ramsey/uuid": "^4.7",
       "amphp/socket": "^2.1",
       "symfony/event-dispatcher": "^6.3",
-      "blackscorp/astar": "^1.2"
+      "blackscorp/astar": "^1.2",
+      "symfony/dependency-injection": "^6.3",
+        "symfony/config": "^6.3"
     }
 }

@@ -10,13 +10,13 @@ use App\Engine\Trait\CommandParserTrait;
 use App\System\CommandPredicate;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
-use App\System\World\World;
+use App\System\World\WorldManager;
 
 class WorldController implements ReceiverSystemInterface
 {
     use CommandParserTrait;
 
-    public function __construct(private readonly World $world)
+    public function __construct(private readonly WorldManager $world)
     {
     }
 

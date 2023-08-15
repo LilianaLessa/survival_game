@@ -16,6 +16,7 @@ use App\System\AI\Behavior\BehaviorPreset;
 use App\System\AI\Behavior\EffectHandlers\BehaviorEffectHandlerInterface;
 use App\System\AI\Behavior\EffectHandlers\BehaviorTriggerType;
 use App\System\AI\TriggerValueEvaluatorWrapper;
+use App\System\Kernel;
 
 class EntityBehaviorSystem implements AISystemInterface
 {
@@ -134,7 +135,7 @@ class EntityBehaviorSystem implements AISystemInterface
 
     private function executeBehaviorEffects(Entity $entityToApplyEffects, BehaviorPreset $triggeredBehavior): void
     {
-        /** @var BehaviorEffectHandlerInterface[] $effectHandlerClasses */
+        /** @var BehaviorEffectHandlerInterface[]|string[] $effectHandlerClasses */
         $effectHandlerClasses = array_filter(
             get_declared_classes(),
             fn ($c) => in_array(BehaviorEffectHandlerInterface::class, class_implements($c))
@@ -146,8 +147,7 @@ class EntityBehaviorSystem implements AISystemInterface
             $effectType = $effect->getBehaviorEffectType();
             foreach ($effectHandlerClasses as $effectHandlerClass) {
                 if ($effectHandlerClass::shouldHandle($effectType)) {
-                    //todo dependency injection would be usefull here.
-                    $handler = new $effectHandlerClass($this->entityManager);
+                    $handler = Kernel::getContainer()->get($effectHandlerClass);
                     //instantiate parameters;
                     $parameterConfigs = $effect->getEffectParameterConfigs();
                     $handler->handle(

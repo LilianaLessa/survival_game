@@ -10,7 +10,7 @@ use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
 use App\System\Item\ItemManager;
-use App\System\World\World;
+use App\System\World\WorldManager;
 
 //todo this monster spawner can be a component for a entity on map.
 //     then a combination of map area, monster preset holder and spawn rules components would do the rest.
@@ -19,10 +19,10 @@ class MonsterSpawner_BKP implements WorldSystemInterface
     use WorldAwareTrait;
 
     public function __construct(
-        private readonly World $world,
-        private readonly ItemManager $itemManager,
+        private readonly WorldManager  $world,
+        private readonly ItemManager   $itemManager,
         private readonly EntityManager $entityManager,
-        private readonly int $maxMonstersInMap
+        private readonly int           $maxMonstersInMap
     ) {
     }
 
