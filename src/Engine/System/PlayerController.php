@@ -23,7 +23,7 @@ use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
 use App\System\Helpers\Point2D;
 use App\System\Item\ItemManager;
-use App\System\World;
+use App\System\World\World;
 
 class PlayerController implements ReceiverSystemInterface
 {

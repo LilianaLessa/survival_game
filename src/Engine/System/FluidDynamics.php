@@ -10,7 +10,7 @@ use App\Engine\Component\MapPosition;
 use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
 use App\System\ForceDirection;
-use App\System\World;
+use App\System\World\World;
 
 class FluidDynamics implements PhysicsSystemInterface
 {

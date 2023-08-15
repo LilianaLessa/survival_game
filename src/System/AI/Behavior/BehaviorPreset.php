@@ -4,25 +4,22 @@ declare(strict_types=1);
 
 namespace App\System\AI\Behavior;
 
-use App\System\AI\Behavior\EffectHandlers\BehaviorEffectHandlerInterface;
+use App\System\PresetLibrary\AbstractPreset;
+use App\System\PresetLibrary\PresetDataType;
 
-class BehaviorPreset
+class BehaviorPreset extends AbstractPreset
 {
     /**
      * @param BehaviorEffectConfig[] $effectConfigs
      * @param BehaviorTrigger[] $triggers
      */
     public function __construct(
-        private readonly string $name,
+        string $name,
         private readonly array $effectConfigs,
         private readonly array $triggers,
         private readonly BehaviorTransitions $transitions
     ) {
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
+        parent::__construct(PresetDataType::BEHAVIOR_PRESET, $name);
     }
 
     /**

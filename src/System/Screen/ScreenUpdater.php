@@ -8,7 +8,7 @@ use App\Engine\Component\DrawableInterface;
 use App\Engine\Component\MapPosition;
 use App\Engine\Entity\EntityCollection;
 use App\Engine\Entity\EntityManager;
-use App\System\World;
+use App\System\World\World;
 use function Amp\async;
 use function Amp\delay;
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\System\Item;
 
+//todo change it also to a preset library
 class ItemManager
 {
 

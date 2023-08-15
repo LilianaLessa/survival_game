@@ -10,7 +10,7 @@ use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
 use App\System\Item\ItemManager;
-use App\System\World;
+use App\System\World\World;
 
 class TreeSpawner implements WorldSystemInterface
 {

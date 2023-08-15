@@ -1,0 +1,6 @@
+{
+  "dataType": "worldConfigPreset",
+  "name": "defaultWorldPreset",
+  "mapWidth": 10,
+  "mapHeight": 10
+}

@@ -1,0 +1,6 @@
+{
+  "dataType": "playerConfigPreset",
+  "name": "playerDefaultConfig",
+  "initialViewportWidth": "15",
+  "initialViewportHeight": "15"
+}

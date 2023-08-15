@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\System;
+namespace App\System\PresetLibrary;
 
 enum PresetDataType: string
 {
@@ -10,4 +10,5 @@ enum PresetDataType: string
     case BEHAVIOR_PRESET_GROUP = 'behaviorPresetGroup';
 
     case MONSTER_PRESET = 'monsterPreset';
+    case WORLD_PRESET = "worldConfigPreset";
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\System\AI\Behavior\EffectHandlers\Move\Parameters;
 
 use App\System\Helpers\Point2D;
-use App\System\World;
 
 class  RandomTargetCoordinates implements TargetCoordinatesInterface
 {

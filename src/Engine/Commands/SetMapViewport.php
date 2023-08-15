@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Engine\Commands;
 
-use App\Engine\Component\MapPosition;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
-use App\System\World;
+use App\System\World\World;
 
 class SetMapViewport implements InvokableCommandInterface
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\System;
+namespace App\System\World;
 
 use App\Engine\Component\DrawableInterface;
 use App\Engine\Component\MapPosition;

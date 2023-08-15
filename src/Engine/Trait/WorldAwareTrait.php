@@ -6,7 +6,7 @@ namespace App\Engine\Trait;
 
 use App\Engine\Component\Collideable;
 use App\Engine\Component\TerrainHeight;
-use App\System\World;
+use App\System\World\World;
 
 trait WorldAwareTrait
 {

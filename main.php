@@ -13,43 +13,46 @@ use App\Engine\System\MonsterSpawner;
 use App\Engine\System\MovementApplier;
 use App\Engine\System\PhysicsSystemInterface;
 use App\Engine\System\PlayerController;
-use App\Engine\System\TreeSpawner;
 use App\Engine\System\WorldActionApplier;
 use App\Engine\System\WorldController;
 use App\Engine\System\WorldSystemInterface;
-use App\System\AI\AiBehaviorManager;
+use App\System\AI\BehaviorPresetLibrary;
 use App\System\Item\ItemManager;
 use App\System\Monster\MonsterPresetLibrary;
+use App\System\PresetLibrary\PresetDataType;
 use App\System\Screen\ScreenUpdater;
 use App\System\TCP\TCPServer;
-use App\System\World;
+use App\System\World\World;
+use App\System\World\WorldPreset;
+use App\System\World\WorldPresetLibrary;
 use function Amp\delay;
 
 require_once 'vendor/autoload.php';
 
-$entityManager = new EntityManager();
-
-$aiBehaviorManager = new AiBehaviorManager(
-    './data/Entity/AI/Behavior',
-);
-
-$aiBehaviorManager->load();
-
+$aiBehaviorManager = new BehaviorPresetLibrary();
 $monsterPresetLibrary = new MonsterPresetLibrary(
     $aiBehaviorManager
 );
-$monsterPresetLibrary->load('./data/Entity/Monster');
-
-//die();
-
-
-
-
+$worldPresetLibrary = new WorldPresetLibrary();
 $itemManager = new ItemManager();
+
+$aiBehaviorManager->load('./data/Entity/AI/Behavior');
+$monsterPresetLibrary->load('./data/Entity/Monster');
+$worldPresetLibrary->load('./data/World');
 $itemManager->loadItems('./data/Item/items.json');
 
-$worldWidth = 10;
-$worldHeight = 10;
+$entityManager = new EntityManager();
+
+/**
+ * @var WorldPreset $worldPreset
+ */
+[$worldPreset] = $worldPresetLibrary->getPresetByNameAndTypes(
+    'defaultWorldPreset',
+    PresetDataType::WORLD_PRESET
+);
+
+$worldWidth = $worldPreset->getMapWidth();
+$worldHeight = $worldPreset->getMapHeight();
 $initialViewportWidth = 50;
 $initialViewportHeight = 50;
 

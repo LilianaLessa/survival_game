@@ -12,7 +12,7 @@ use App\Engine\Trait\WorldAwareTrait;
 use App\System\Direction;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
-use App\System\World;
+use App\System\World\World;
 
 class WorldActionApplier implements WorldSystemInterface
 {

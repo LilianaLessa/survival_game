@@ -10,7 +10,7 @@ use App\Engine\Trait\CommandParserTrait;
 use App\System\CommandPredicate;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
-use App\System\World;
+use App\System\World\World;
 
 class WorldController implements ReceiverSystemInterface
 {
