@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Engine\Component;
 
-class ColorEffect implements \App\Engine\Component\ComponentInterface
+class ColorEffect implements ComponentInterface
 {
     private int $creationTime;
 

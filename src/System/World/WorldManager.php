@@ -6,6 +6,7 @@ namespace App\System\World;
 
 use App\Engine\Component\Collideable;
 use App\Engine\Component\ColorEffect;
+use App\Engine\Component\DefaultColor;
 use App\Engine\Component\DrawableInterface;
 use App\Engine\Component\MapPosition;
 use App\Engine\Component\MapSymbol;
@@ -134,11 +135,12 @@ class WorldManager
                 $symbol = $drawable?->getSymbol() ?? self::EMPTY_CELL_SYMBOL;
 
                 /** @var ?ColorEffect $colorEffect */
-                $colorEffect =  $topEntity ? $topEntity?->getComponent(ColorEffect::class) : null;
+                $colorEffect = $topEntity ? $topEntity?->getComponent(ColorEffect::class) : null;
+                $defaultColor = $topEntity ? $topEntity?->getComponent(DefaultColor::class) : null;
 
-                $colorEffect && $symbol = sprintf(
+                $symbol = sprintf(
                     "%s%s%s",
-                    $colorEffect->getColor(),
+                    $colorEffect?->getColor() ?? $defaultColor?->getColor() ?? ConsoleColor::Color_Off->value,
                     $symbol,
                     ConsoleColor::Color_Off->value
                 );
