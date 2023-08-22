@@ -21,6 +21,8 @@ class Battler implements AISystemInterface
     public function process(): void
     {
         $this->processDeadEntities();
+
+        $this->processAggroQueue();
         // TODO: Implement process() method.
     }
 
@@ -77,5 +79,10 @@ class Battler implements AISystemInterface
                 }
             }
         }
+    }
+
+    private function processAggroQueue(): void
+    {
+        //todo
     }
 }

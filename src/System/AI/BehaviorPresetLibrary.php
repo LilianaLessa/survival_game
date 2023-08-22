@@ -10,6 +10,7 @@ use App\System\AI\Behavior\BehaviorPreset;
 use App\System\AI\Behavior\BehaviorTransitions;
 use App\System\AI\Behavior\BehaviorTrigger;
 use App\System\AI\Behavior\EffectHandlers\BehaviorTriggerType;
+use App\System\AI\Behavior\EffectHandlers\IncreaseAggro\IncreaseAggro;
 use App\System\AI\Behavior\EffectHandlers\Move\Move;
 use App\System\PresetLibrary\AbstractPreset;
 use App\System\PresetLibrary\AbstractPresetLibrary;
@@ -19,12 +20,16 @@ class BehaviorPresetLibrary extends AbstractPresetLibrary
 {
     protected function createPreset(?PresetDataType $presetDataType, object $rawPreset): AbstractPreset
     {
-        return new BehaviorPreset(
+        $behaviorPreset = new BehaviorPreset(
             $rawPreset->name,
             $this->loadEffectConfigs($rawPreset),
             $this->loadEffectTriggers($rawPreset),
             $this->loadBehaviorTransitions($rawPreset),
         );
+
+        $behaviorPreset->setSilent($rawPreset->silent ?? false);
+
+        return $behaviorPreset;
     }
 
     protected function getPresetTypesToLoad(): array
@@ -52,6 +57,7 @@ class BehaviorPresetLibrary extends AbstractPresetLibrary
 
             $effectConfig = match ($effectType) {
                 BehaviorEffectType::MOVE => Move::buildEffectConfig($configData),
+                BehaviorEffectType::INCREASE_AGGRO => IncreaseAggro::buildEffectConfig($configData),
                 default => null,
             };
 
@@ -71,7 +77,12 @@ class BehaviorPresetLibrary extends AbstractPresetLibrary
         $effectTriggers = [];
 
         foreach ($rawTriggers as $name => $value) {
-            $behaviorTriggerType = BehaviorTriggerType::tryFrom($name);
+            try {
+                $behaviorTriggerType = BehaviorTriggerType::tryFrom($name);
+            } catch (\Throwable $e) {
+              $e = $e;
+            }
+
             $behaviorTriggerType && $effectTriggers[] = new BehaviorTrigger(
                 $behaviorTriggerType,
                 $value

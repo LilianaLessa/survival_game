@@ -7,4 +7,5 @@ namespace App\System\AI\Behavior;
 enum BehaviorEffectType: string
 {
     case MOVE = "move";
+    case INCREASE_AGGRO = "increaseAggro";
 }

@@ -74,6 +74,29 @@ class EntityCollection extends \ArrayObject
     /** @return ComponentInterface[] */
     public function getEntitiesWithComponents(string ...$componentClasses): array
     {
+        $entityIds = array_intersect(
+            ...array_map(
+                fn ($c) => array_keys($this->components[$c] ?? []),
+                $componentClasses
+            )
+        );
+
+        $foundEntityComponents = [];
+        foreach ($entityIds as $entityId) {
+            $foundComponents = [];
+            foreach ($componentClasses as $componentClass) {
+                $foundComponents[] = $this->components[$componentClass][$entityId];
+            }
+
+            $foundEntityComponents[$entityId] = $foundComponents;
+        }
+
+        return $foundEntityComponents;
+    }
+
+    /** @return ComponentInterface[] */
+    public function getEntitiesWithComponents_bkp(string ...$componentClasses): array
+    {
         $foundEntityComponents = [];
         foreach ($this as $entityId => $entity) {
             $foundComponents = [];

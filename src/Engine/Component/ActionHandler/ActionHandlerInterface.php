@@ -9,5 +9,5 @@ use App\Engine\Entity\EntityManager;
 
 interface ActionHandlerInterface
 {
-    public function execute(EntityManager $entityManager, Entity $targetEntity): void;
+    public function execute(EntityManager $entityManager, Entity $targetEntity, Entity $actorEntity): void;
 }

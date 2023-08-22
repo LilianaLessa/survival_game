@@ -8,5 +8,6 @@ enum BehaviorTriggerType: string
 {
     case ARE_ACTION_QUEUES_EMPTY = "areActionQueuesEmpty";
 
-    case MS_TIME_FROM_LAST_BEHAVIOR_ACTIVATION = "msTimeFromLastBehaviorActivation";
+    case MS_TIME_FROM_LAST_ACTIVATION = "msTimeFromLastActivation";
+    case IS_TARGET_OF_ATTACK = "isTargetOfAttack";
 }

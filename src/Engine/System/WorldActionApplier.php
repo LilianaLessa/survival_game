@@ -35,8 +35,9 @@ class WorldActionApplier implements WorldSystemInterface
          * @var MapPosition $mapPosition
          * @var ActionHandlerList $actionHandlers
          */
-        foreach ($entities as [$worldActor, $mapPosition, $actionHandlers])
+        foreach ($entities as $actorEntityId => [$worldActor, $mapPosition, $actionHandlers])
         {
+            $actorEntity = $this->entityManager->getEntityById($actorEntityId);
             $actionQueue = $worldActor->getActionQueue();
             foreach ($actionQueue as $action) {
                 $targetCoordinates = $this->calculateTargetCoordinates(
@@ -49,7 +50,7 @@ class WorldActionApplier implements WorldSystemInterface
                     foreach ($targetEntities as $targetEntity) {
                         $actionHandlers->getActionByType(
                             WorldActorActionType::tryFrom($action->getActionType())
-                        )?->execute($this->entityManager, $targetEntity);
+                        )?->execute($this->entityManager, $targetEntity, $actorEntity);
                     }
 
                     Dispatcher::dispatch(

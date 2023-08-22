@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Engine\Component;
 
-class MsTimeFromLastBehaviorActivation implements ComponentInterface
+class MsTimeFromLastActivation implements ComponentInterface
 {
-    public function __construct(private readonly int $msTime)
+    public function __construct(
+        private readonly int $msTime
+    )
     {
     }
 

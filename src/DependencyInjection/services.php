@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Engine\Entity\EntityManager;
+use App\System\AI\Behavior\EffectHandlers\IncreaseAggro\IncreaseAggro;
 use App\System\AI\Behavior\EffectHandlers\Move\Move;
 use App\System\AI\BehaviorPresetLibrary;
 use App\System\Item\ItemPresetLibrary;
@@ -20,6 +21,11 @@ function registerBehaviorEffectHandlers(ServicesConfigurator $services): void
         ->args([
             new Reference(EntityManager::class),
             new Reference(WorldManager::class),
+        ]);
+
+    $services->set(IncreaseAggro::class, IncreaseAggro::class)
+        ->args([
+            new Reference(EntityManager::class),
         ]);
 }
 

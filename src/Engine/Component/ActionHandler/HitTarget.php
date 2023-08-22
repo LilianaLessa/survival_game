@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Engine\Component\ActionHandler;
 
+use App\Engine\Component\HitByEntity;
 use App\Engine\Component\HitPoints;
 use App\Engine\Component\MapPosition;
 use App\Engine\Entity\Entity;
@@ -13,7 +14,7 @@ use App\System\Event\Event\UiMessageEvent;
 
 class HitTarget implements ActionHandlerInterface
 {
-    public function execute(EntityManager $entityManger, Entity $targetEntity): void
+    public function execute(EntityManager $entityManger, Entity $targetEntity, Entity $actorEntity): void
     {
         /** @var ?HitPoints $hitPoints */
         $hitPoints = $targetEntity->getComponent(HitPoints::class);
@@ -30,7 +31,8 @@ class HitTarget implements ActionHandlerInterface
                 new HitPoints(
                     $hitPoints->getCurrent() - 1,
                     $hitPoints->getTotal(),
-                )
+                ),
+                new HitByEntity($actorEntity)
             );
 
             Dispatcher::dispatch(

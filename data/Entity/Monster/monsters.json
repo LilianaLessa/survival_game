@@ -9,7 +9,8 @@
     "totalHitPoints": 10,
     "symbol": "♞",
     "behaviors":  [
-      {"preset": "idle"}
+      {"preset": "idle"},
+      {"preset": "increaseAggroOnAttacked"}
     ],
     "dropCollection": [
       {

@@ -17,8 +17,6 @@ use App\System\AI\Behavior\EffectHandlers\EffectParameterInterface;
 use App\System\AI\Behavior\EffectHandlers\Move\Parameters\RandomTargetCoordinates;
 use App\System\AI\Behavior\EffectHandlers\Move\Parameters\TargetCoordinatesInterface;
 use App\System\AI\Behavior\EffectHandlers\Move\Parameters\TargetCoordinateTypes;
-use App\System\Event\Dispatcher;
-use App\System\Event\Event\UiMessageEvent;
 use App\System\Helpers\Point2D;
 use App\System\Kernel;
 use App\System\World\WorldManager;
@@ -54,8 +52,6 @@ class Move implements BehaviorEffectHandlerInterface
     //     So, it would be up to the caller fill this collection with all types of parameters and their values.
     public function handle(Entity $targetEntity, EffectParameterInterface ...$effectParameter): void
     {
-
-
         /** @var TargetCoordinatesInterface $movementType */
         $movementType = $effectParameter[0];
 

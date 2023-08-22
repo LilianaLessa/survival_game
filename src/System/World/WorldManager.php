@@ -26,6 +26,8 @@ class WorldManager
     private int $height;
     private int $viewportWidth;
     private int $viewportHeight;
+    private ?array $groundPathWeights = null;
+    private $lastDraw = null;
 
     public function __construct(
         private readonly EntityManager $entityManager,
@@ -46,6 +48,7 @@ class WorldManager
         $this->viewportHeight = $playerPreset->getInitialViewportHeight();
 
         $this->resetEntityMap();
+        $this->groundPathWeights = $this->getPathGroundWeights();
     }
 
     public function resetEntityMap(): void
@@ -75,8 +78,8 @@ class WorldManager
 
     public function draw(): void
     {
+        $this->groundPathWeights = null;
         [$viewportStart, $viewportEnd] = $this->calculateViewport();
-
 
         //show world x coordinates on viewport border.
         for ($i = 0; $i < strlen($this->width . ''); $i++) {
@@ -129,6 +132,10 @@ class WorldManager
             }
             echo "\n";
         }
+        if ($this->lastDraw !== null) {
+            echo sprintf("\n%s\n", microtime(true) - $this->lastDraw);
+        }
+        $this->lastDraw = microtime(true);
     }
 
     public function getEntityCollection(int $x, int $y): EntityCollection
@@ -232,17 +239,19 @@ class WorldManager
     /** float[][] */
     public function getPathGroundWeights(): array
     {
-        $groundPathWeights = [];
+        if ($this->groundPathWeights == null) {
+            $this->groundPathWeights = [];
 
-        for ($mapY = 0; $mapY < $this->getHeight(); $mapY++){
-            for ($mapX = 0; $mapX < $this->getWidth(); $mapX++){
-                $groundPathWeights[$mapX][$mapY] = $this->entityMap[$mapX][$mapY] ?? null
-                    ? count($this->entityMap[$mapX][$mapY]
-                        ->getEntitiesWithComponents(Collideable::class))
-                : 0;
+            for ($mapY = 0; $mapY < $this->getHeight(); $mapY++){
+                for ($mapX = 0; $mapX < $this->getWidth(); $mapX++){
+                    $this->groundPathWeights[$mapX][$mapY] = $this->entityMap[$mapX][$mapY] ?? null
+                        ? count($this->entityMap[$mapX][$mapY]
+                            ->getEntitiesWithComponents(Collideable::class))
+                        : 0;
+                }
             }
         }
 
-        return $groundPathWeights;
+        return $this->groundPathWeights;
     }
 }

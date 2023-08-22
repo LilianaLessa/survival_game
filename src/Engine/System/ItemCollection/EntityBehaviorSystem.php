@@ -7,8 +7,9 @@ namespace App\Engine\System\ItemCollection;
 use App\Engine\Component\ActionQueueComponentInterface;
 use App\Engine\Component\BehaviorCollection;
 use App\Engine\Component\CurrentBehavior;
+use App\Engine\Component\HitByEntity;
 use App\Engine\Component\MapPosition;
-use App\Engine\Component\MsTimeFromLastBehaviorActivation;
+use App\Engine\Component\MsTimeFromLastActivation;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\Engine\System\AISystemInterface;
@@ -26,6 +27,7 @@ class EntityBehaviorSystem implements AISystemInterface
 
     public function process(): void
     {
+        //return;
         $behavioralEntities = $this->entityManager->getEntitiesWithComponents(
             BehaviorCollection::class,
             MapPosition::class
@@ -41,17 +43,19 @@ class EntityBehaviorSystem implements AISystemInterface
 
             //todo if multiple triggered, decide which one has priority and trigger it
             foreach ($triggeredBehaviors as $triggeredBehavior) {
-                $this->entityManager->updateEntityComponents(
-                    $entityId,
-                    new MsTimeFromLastBehaviorActivation(
+                $behaviorControlComponents = $triggeredBehavior->isSilent() ? [] : [
+                    new MsTimeFromLastActivation(
                         (int) floor(microtime(true) * 1000)
                     ),
                     new CurrentBehavior($triggeredBehavior)
+                ];
+
+                $this->entityManager->updateEntityComponents(
+                    $entityId,
+                    ...$behaviorControlComponents
                 );
 
                 $this->executeBehaviorEffects($entityToBeEvaluated, $triggeredBehavior);
-
-                break;
             }
         }
     }
@@ -59,6 +63,7 @@ class EntityBehaviorSystem implements AISystemInterface
     /** @return TriggerValueEvaluatorWrapper[] */
     private function loadTriggerEvaluators(BehaviorPreset $behavior): array
     {
+        //todo fix: if the behavior trigger handlers are not defined, it stops all the behavior processing.
         $triggers = $behavior->getTriggers();
         $evaluators = [];
         foreach ($triggers as $trigger) {
@@ -77,15 +82,19 @@ class EntityBehaviorSystem implements AISystemInterface
 
                         return $triggerValue === empty($nonEmptyQueues);
                     },
-                BehaviorTriggerType::MS_TIME_FROM_LAST_BEHAVIOR_ACTIVATION =>
+                BehaviorTriggerType::MS_TIME_FROM_LAST_ACTIVATION =>
                     function (Entity $e) use ($triggerValue) {
-                        /** @var ?MsTimeFromLastBehaviorActivation $component */
-                        $component = $e->getComponent(MsTimeFromLastBehaviorActivation::class);
+                        /** @var ?MsTimeFromLastActivation $component */
+                        $component = $e->getComponent(MsTimeFromLastActivation::class);
                         $lastActivationMsTime = $component?->getMsTime();
                         $currentMsTime = (int) floor(microtime(true) * 1000);
                         return $lastActivationMsTime === null
                             || ($currentMsTime - $lastActivationMsTime >= $triggerValue);
                     },
+                BehaviorTriggerType::IS_TARGET_OF_ATTACK =>
+                function (Entity $e) use ($triggerValue) {
+                    return ((bool)$triggerValue) && $e->getComponent(HitByEntity::class) !== null;
+                },
                 default => null
             };
 
@@ -117,7 +126,6 @@ class EntityBehaviorSystem implements AISystemInterface
                     continue 2;
                 }
             }
-            $t = 1;
 
             //check if transition from the current behavior is possible;
             if (
@@ -154,7 +162,7 @@ class EntityBehaviorSystem implements AISystemInterface
                         $entityToApplyEffects,
                         ...$effectHandlerClass::buildEffectParameters(...$parameterConfigs)
                     );
-                    break;
+                   // break;
                 }
             }
         }

@@ -6,6 +6,7 @@ namespace App\Engine\System;
 
 use App\Engine\Commands\GiveItemToPlayer;
 use App\Engine\Commands\InspectCell;
+use App\Engine\Commands\InspectEntity;
 use App\Engine\Commands\MoveEntity;
 use App\Engine\Commands\SetMapViewport;
 use App\Engine\Commands\ShowInventory;
@@ -143,6 +144,10 @@ class PlayerController implements ReceiverSystemInterface
                 world: $this->world,
                 from: $position,
                 direction: Direction::tryFrom($commandArguments[0] ?? ''),
+            ),
+            CommandPredicate::DEBUG_INSPECT_ENTITY => new InspectEntity(
+                $commandArguments[0] ?? '',
+                $commandArguments[1] ?? '',
             ),
             CommandPredicate::DEBUG_GIVE_ITEM => new GiveItemToPlayer(
                 $this->entityManager,

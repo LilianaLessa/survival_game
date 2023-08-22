@@ -9,6 +9,9 @@ use App\System\PresetLibrary\PresetDataType;
 
 class BehaviorPreset extends AbstractPreset
 {
+
+    private bool $silent = false;
+
     /**
      * @param BehaviorEffectConfig[] $effectConfigs
      * @param BehaviorTrigger[] $triggers
@@ -40,4 +43,14 @@ class BehaviorPreset extends AbstractPreset
         return $this->transitions;
     }
 
+    public function isSilent(): bool
+    {
+        return $this->silent;
+    }
+
+    public function setSilent(bool $silent): self
+    {
+        $this->silent = $silent;
+        return $this;
+    }
 }
