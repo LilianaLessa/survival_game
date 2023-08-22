@@ -1413,5 +1413,57 @@
     "priceG": 0,
     "priceS": 5,
     "priceC": 0
+  },
+  {
+    "dataType": "itemPreset",
+    "name": "yetiFur",
+    "inGameName": "Yeti Fur",
+    "description": "Thick fur obtained from a mountain yeti.",
+    "shortDescription": "Thick yeti fur",
+    "stackable": true,
+    "stackSize": 50,
+    "rarity": "common",
+    "priceG": 0,
+    "priceS": 5,
+    "priceC": 0
+  },
+  {
+    "dataType": "itemPreset",
+    "name": "mountainCrystal",
+    "inGameName": "Mountain Crystal",
+    "description": "A shimmering crystal found within mountain creatures.",
+    "shortDescription": "Shimmering mountain crystal",
+    "stackable": true,
+    "stackSize": 50,
+    "rarity": "common",
+    "priceG": 0,
+    "priceS": 5,
+    "priceC": 0
+  },
+  {
+    "dataType": "itemPreset",
+    "name": "golemCore",
+    "inGameName": "Golem Core",
+    "description": "A core extracted from the heart of a stone golem.",
+    "shortDescription": "Mystical golem core",
+    "stackable": true,
+    "stackSize": 50,
+    "rarity": "common",
+    "priceG": 0,
+    "priceS": 5,
+    "priceC": 0
+  },
+  {
+    "dataType": "itemPreset",
+    "name": "rockFragment",
+    "inGameName": "Rock Fragment",
+    "description": "A sturdy fragment chipped from a stone golem.",
+    "shortDescription": "Sturdy rock fragment",
+    "stackable": true,
+    "stackSize": 50,
+    "rarity": "common",
+    "priceG": 0,
+    "priceS": 5,
+    "priceC": 0
   }
 ]

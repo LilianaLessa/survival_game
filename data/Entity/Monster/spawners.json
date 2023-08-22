@@ -100,13 +100,51 @@
   },
   {
     "dataType": "monsterSpawner",
-    "name": "venomousSerpent_junble",
+    "name": "venomousSerpent_jungle",
     "monster": "venomousSerpent",
     "max": 5,
     "chance": 0.8,
     "biomes": [
       {
         "name": "jungle",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+  {
+    "dataType": "monsterSpawner_mountains_DEBUG_TODO_NOT_SPAWNING!",
+    "name": "stoneGolem_mountains",
+    "monster": "stoneGolem",
+    "max": 5,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "mountains",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "mountainYeti_mountains",
+    "monster": "mountainYeti",
+    "max": 5,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "mountains",
         "chance": 0.7
       }
     ],
