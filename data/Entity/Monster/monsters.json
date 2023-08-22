@@ -165,5 +165,117 @@
     "size": "small",
     "baseMovementSpeed": 0.7,
     "baseAttackSpeed": 1
+  },
+  {
+    "dataType": "monsterPreset",
+    "inGameName": "Sand Viper",
+    "name": "sandViper",
+    "description": "A venomous snake that camouflages perfectly with the desert sands.",
+    "level": 4,
+    "totalHitPoints": 30,
+    "symbol": "⚠",
+    "defaultColor": "sandyBrown",
+    "behaviors":  [
+      {"preset": "idle"},
+      {"preset": "increaseAggroOnAttacked"},
+      {"preset": "attack"}
+    ],
+    "dropCollection": [
+      {
+        "name": "venomousFang",
+        "events": [
+          {
+            "type": "die",
+            "chance": 0.5,
+            "min": 1,
+            "max": 1
+          }
+        ]
+      },
+      {
+        "name": "desertBloom",
+        "events": [
+          {
+            "type": "die",
+            "chance": 0.3,
+            "min": 2,
+            "max": 3
+          }
+        ]
+      }
+    ],
+    "sightRadius": 6,
+    "hearRadius": 4,
+    "behavior": "aggressive",
+    "elements": [
+      {
+        "element": "earth",
+        "level": 3
+      },
+      {
+        "element": "poison",
+        "level": 2
+      }
+    ],
+    "race": "reptile",
+    "size": "medium",
+    "baseMovementSpeed": 3.5,
+    "baseAttackSpeed": 2
+  },
+  {
+    "dataType": "monsterPreset",
+    "inGameName": "Nomadic Spirit",
+    "name": "nomadicSpirit",
+    "description": "An enigmatic spirit wandering the desert, seeking knowledge of the ancient sands.",
+    "level": 7,
+    "totalHitPoints": 20,
+    "symbol": "☥",
+    "defaultColor": "cornsilk1",
+    "behaviors":  [
+      {"preset": "idle"},
+      {"preset": "increaseAggroOnAttacked"},
+      {"preset": "attack"}
+    ],
+    "dropCollection": [
+      {
+        "name": "sandsoulCrystal",
+        "events": [
+          {
+            "type": "die",
+            "chance": 0.4,
+            "min": 1,
+            "max": 1
+          }
+        ]
+      },
+      {
+        "name": "ancientScroll",
+        "events": [
+          {
+            "type": "die",
+            "chance": 0.2,
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ],
+    "sightRadius": 10,
+    "hearRadius": 8,
+    "behavior": "passive",
+    "elements": [
+      {
+        "element": "sand",
+        "level": 4
+      },
+      {
+        "element": "spirit",
+        "level": 3
+      }
+    ],
+    "race": "spirit",
+    "size": "medium",
+    "baseMovementSpeed": 3,
+    "baseAttackSpeed": 4
   }
 ]

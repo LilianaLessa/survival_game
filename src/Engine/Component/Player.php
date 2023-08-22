@@ -21,7 +21,7 @@ class Player implements ComponentInterface
     {
         return $entityManager->createEntity(
             new Player(),
-            new HitPoints(10,10),
+            new HitPoints($playerPreset->getTotalHitPoints(),$playerPreset->getTotalHitPoints()),
             new MapPosition($x,$y),
             new DefaultColor(ConsoleColorPalette::SYSTEM_YELLOW),
             new MapSymbol(sprintf("%s", $playerPreset->getDefaultSymbol())),

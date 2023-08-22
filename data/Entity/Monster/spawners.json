@@ -40,5 +40,43 @@
       "endX": 249,
       "endY": 249
     }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "sandViper_desert",
+    "monster": "sandViper",
+    "max": 5,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "desert",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "nomadicSpirit_desert",
+    "monster": "nomadicSpirit",
+    "max": 2,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "desert",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
   }
 ]

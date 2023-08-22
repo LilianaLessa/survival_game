@@ -43,7 +43,7 @@
     "dataType": "biomePreset",
     "name": "mountains",
     "colors": [
-      "dark_slate_gray2"
+      "rosyBrown"
     ],
     "minHeight": 0.5,
     "minMoisture": 0,
@@ -63,7 +63,7 @@
     "dataType": "biomePreset",
     "name": "tundra",
     "colors": [
-      "light_steel_blue1"
+      "grey84"
     ],
     "minHeight": 0.2,
     "minMoisture": 0,

@@ -29,6 +29,8 @@ class InspectCell implements InvokableCommandInterface
 
         $entities = $this->world->getEntityCollection(...$coords);
 
+        $uiMessage = '';
+
         $uiMessage = sprintf("%d entities found on %d,%d\n\n", count($entities), ...$coords);
         $i = 0;
 
@@ -39,7 +41,30 @@ class InspectCell implements InvokableCommandInterface
                 $uiMessage .= sprintf("\t%s\n", get_class($component));
             }
         }
-        $uiMessage .= "\n";
+        $uiMessage .= "\n\n";
+
+        $biomeInfo = $this->world->getMapBiomeData()[$coords[0]][$coords[1]];
+
+        [
+            $height,
+            $moisture,
+            $heat,
+            $biomePreset
+        ] = array_values($biomeInfo);
+
+        $uiMessage .= "Biome Info:\n";
+
+        $uiMessage .= sprintf(
+            "height: %s\n".
+            "moisture: %s\n".
+            "heat: %s\n".
+            "biomePreset: %s\n" ,
+            $height,
+            $moisture,
+            $heat,
+            $biomePreset->getName()
+        );
+
 
         Dispatcher::getInstance()->dispatch(new UiMessageEvent($uiMessage));
     }

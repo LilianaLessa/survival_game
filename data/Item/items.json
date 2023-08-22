@@ -1309,5 +1309,57 @@
     "priceG": 0,
     "priceS": 1,
     "priceC": 0
+  },
+  {
+    "dataType": "itemPreset",
+    "name": "venomousFang",
+    "inGameName": "Venomous Fang",
+    "description": "A sharp fang dripping with venom from a Sand Viper.",
+    "shortDescription": "Toxic Viper Fang",
+    "stackable": true,
+    "stackSize": 20,
+    "rarity": "common",
+    "priceG": 0,
+    "priceS": 3,
+    "priceC": 0
+  },
+  {
+    "dataType": "itemPreset",
+    "name": "desertBloom",
+    "inGameName": "Desert Bloom",
+    "description": "A delicate desert flower with vibrant colors.",
+    "shortDescription": "Vibrant Flower",
+    "stackable": true,
+    "stackSize": 30,
+    "rarity": "common",
+    "priceG": 0,
+    "priceS": 2,
+    "priceC": 0
+  },
+  {
+    "dataType": "itemPreset",
+    "name": "sandsoulCrystal",
+    "inGameName": "Sandsoul Crystal",
+    "description": "A crystal imbued with the essence of the desert sands, holding mysterious powers.",
+    "shortDescription": "Crystal of desert essence",
+    "stackable": true,
+    "stackSize": 10,
+    "rarity": "uncommon",
+    "priceG": 0,
+    "priceS": 10,
+    "priceC": 0
+  },
+  {
+    "dataType": "itemPreset",
+    "name": "ancientScroll",
+    "inGameName": "Ancient Scroll",
+    "description": "An ancient scroll containing forgotten knowledge of the desert's history and secrets.",
+    "shortDescription": "Mystical ancient scroll",
+    "stackable": true,
+    "stackSize": 1,
+    "rarity": "rare",
+    "priceG": 0,
+    "priceS": 30,
+    "priceC": 0
   }
 ]

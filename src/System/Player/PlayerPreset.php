@@ -14,6 +14,8 @@ class PlayerPreset extends AbstractPreset
 
     private string $defaultSymbol;
 
+    private int $totalHitPoints;
+
     public function __construct(string $name)
     {
         parent::__construct(
@@ -52,6 +54,17 @@ class PlayerPreset extends AbstractPreset
     public function setDefaultSymbol(string $defaultSymbol): self
     {
         $this->defaultSymbol = $defaultSymbol;
+        return $this;
+    }
+
+    public function getTotalHitPoints(): int
+    {
+        return $this->totalHitPoints;
+    }
+
+    public function setTotalHitPoints(int $totalHitPoints): self
+    {
+        $this->totalHitPoints = $totalHitPoints;
         return $this;
     }
 }
