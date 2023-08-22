@@ -14,6 +14,15 @@ use App\System\Monster\MonsterPreset;
 
 class Monster implements ComponentInterface
 {
+    public function __construct(private readonly MonsterPreset $monsterPreset)
+    {
+    }
+
+    public function getMonsterPreset(): MonsterPreset
+    {
+        return $this->monsterPreset;
+    }
+
     static public function createMonster(
         MonsterPreset $monsterPreset,
         ItemPresetLibrary $itemManager,
@@ -24,7 +33,7 @@ class Monster implements ComponentInterface
         return $entityManager->createEntity(
             new MapSymbol($monsterPreset->getSymbol()),
             new BehaviorCollection(...$monsterPreset->getBehaviorCollection()->getBehaviors()),
-            new Monster(),
+            new Monster($monsterPreset),
             new MapPosition($x, $y),
             new Collideable(),
             new MovementQueue($monsterPreset->getBaseMovementSpeed()),

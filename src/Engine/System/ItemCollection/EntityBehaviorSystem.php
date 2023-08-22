@@ -57,9 +57,10 @@ class EntityBehaviorSystem implements AISystemInterface
                 Dispatcher::dispatch(
                     new UiMessageEvent(
                         sprintf(
-                            "%sBehavior triggered: %s\n",
+                            "%sBehavior triggered: %s %s\n",
                             $triggeredBehavior->isSilent() ? 'Silent' : '',
                             $triggeredBehavior->getName(),
+                            $entityId,
                         )
                     )
                 );

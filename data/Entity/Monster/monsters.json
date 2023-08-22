@@ -85,5 +85,93 @@
     "size": "small",
     "baseMovementSpeed": 3,
     "attackSpeed": 0.2
+  },
+  {
+    "dataType": "monsterPreset",
+    "name": "giantSnail",
+    "inGameName": "Giant Snail",
+    "description": "A slow-moving giant snail, carrying its shell as a protective home.",
+    "type": "animal",
+    "level": 2,
+    "totalHitPoints": 15,
+    "symbol": "⚛",
+    "behaviors":  [
+      {"preset": "idle"},
+      {"preset": "increaseAggroOnAttacked"},
+      {"preset": "attack"}
+    ],
+    "dropCollection": [
+      {
+        "internalName": "slimeTrail",
+        "events": [
+          {
+            "type": "die",
+            "chance": 0.5
+          }
+        ]
+      },
+      {
+        "internalName": "snailShell",
+        "events": [
+          {
+            "type": "die",
+            "chance": 0.3
+          },
+          {
+            "type": "harvest",
+            "chance": 0.2
+          }
+        ]
+      },
+      {
+        "internalName": "lettuce",
+        "events": [
+          {
+            "type": "harvest",
+            "chance": 0.4
+          }
+        ]
+      },
+      {
+        "internalName": "waterDroplet",
+        "events": [
+          {
+            "type": "drink",
+            "chance": 0.2
+          }
+        ]
+      }
+    ],
+    "spawnArea": {
+      "startX": 70,
+      "startY": 120,
+      "endX": 90,
+      "endY": 140
+    },
+    "maxInMap": 15,
+    "spawnChance": 0.6,
+    "spawnBiomes": [
+      {
+        "internalName": "forest",
+        "chance": 0.7
+      },
+      {
+        "internalName": "meadow",
+        "chance": 0.3
+      }
+    ],
+    "sightRadius": 3,
+    "hearRadius": 2,
+    "behavior": "passive",
+    "elements": [
+      {
+        "element": "nature",
+        "level": 2
+      }
+    ],
+    "race": "invertebrate",
+    "size": "small",
+    "baseMovementSpeed": 0.7,
+    "attackSpeed": 0.1
   }
 ]

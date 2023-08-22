@@ -18,6 +18,16 @@ class MonsterPresetLibrary extends AbstractPresetLibrary
     {
     }
 
+    public function getMonsterPreset(string $monsterName): ?MonsterPreset
+    {
+        $presets = $this->getPresetByNameAndTypes(
+            $monsterName,
+            PresetDataType::MONSTER_PRESET
+        );
+
+        return $presets[0] ?? null;
+    }
+
     protected function createPreset(?PresetDataType $presetDataType, object $rawPreset): AbstractPreset
     {
         $monsterPreset = new MonsterPreset(

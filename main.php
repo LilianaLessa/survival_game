@@ -74,7 +74,16 @@ $systems = [
         $itemPresetLibrary,
         $entityManager,
         $monsterPresetLibrary,
-        (int) ceil(($worldWidth * $worldHeight) * 0.005)
+        (int) ceil(($worldWidth * $worldHeight) * 0.005),
+        'youngEquine'
+    ),
+    new MonsterSpawner(
+        $world,
+        $itemPresetLibrary,
+        $entityManager,
+        $monsterPresetLibrary,
+        (int) ceil(($worldWidth * $worldHeight) * 0.005),
+        'giantSnail'
     ),
     new TreeSpawner($world, $entityManager, $itemPresetLibrary, (int) ceil(($worldWidth * $worldHeight) * 0.1)),
     //controllers
