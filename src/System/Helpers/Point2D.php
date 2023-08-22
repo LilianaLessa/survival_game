@@ -30,4 +30,13 @@ class Point2D
             $this->getY(),
         ];
     }
+
+    public function isAdjacent(self $target): bool
+    {
+        // Calculate the Manhattan distance between the two points
+        $distance = abs($this->x - $target->x) + abs($this->y - $target->y);
+
+        // Two points are adjacent if their Manhattan distance is 1
+        return $distance === 1;
+    }
 }

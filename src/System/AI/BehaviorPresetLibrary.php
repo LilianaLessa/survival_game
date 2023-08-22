@@ -103,7 +103,7 @@ class BehaviorPresetLibrary extends AbstractPresetLibrary
         $rawTos = $rawPreset->transitions?->to ?? [];
         $to = [];
         foreach ($rawTos as $rawTo) {
-            $name = $rawTo->preset ?? null;
+            $targetBehaviorName = $rawTo->preset ?? null;
             $rawTriggers = $rawTo->triggers ?? [];
             $transitionTriggers = [];
             foreach ($rawTriggers as $name => $value) {
@@ -119,12 +119,11 @@ class BehaviorPresetLibrary extends AbstractPresetLibrary
                 );
             }
 
-            if ($name) {
+            if ($targetBehaviorName && count($transitionTriggers)) {
                 $to[] = new BehaviorTransition(
-                    $name,
+                    $targetBehaviorName,
                     ... $transitionTriggers
-
-            );
+                );
             }
         }
 

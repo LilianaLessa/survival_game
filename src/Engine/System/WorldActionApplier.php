@@ -64,9 +64,8 @@ class WorldActionApplier implements WorldSystemInterface
                     );
                 }
             }
+            $worldActor->clear();
         }
-
-        $worldActor->clear();
     }
 
     private function calculateTargetCoordinates(?Direction $direction, MapPosition $from): array

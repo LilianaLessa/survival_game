@@ -11,6 +11,9 @@ use App\System\PresetLibrary\PresetDataType;
 class MonsterPreset extends AbstractPreset
 {
     private float $baseMovementSpeed = 0;
+    private float $baseAttackSpeed = 0;
+
+    private int $totalHitPoints = 1;
 
     public function __construct(
         string $name,
@@ -40,6 +43,28 @@ class MonsterPreset extends AbstractPreset
     public function setBaseMovementSpeed(float $baseMovementSpeed): self
     {
         $this->baseMovementSpeed = max($baseMovementSpeed, 0);
+        return $this;
+    }
+
+    public function getBaseAttackSpeed(): float
+    {
+        return max($this->baseAttackSpeed ?? 0, 0);
+    }
+
+    public function setBaseAttackSpeed(float $baseAttackSpeed): self
+    {
+        $this->baseAttackSpeed = max($baseAttackSpeed, 0);
+        return $this;
+    }
+
+    public function getTotalHitPoints(): int
+    {
+        return max($this->totalHitPoints ?? 1, 1);
+    }
+
+    public function setTotalHitPoints(int $totalHitPoints): self
+    {
+        $this->totalHitPoints = max(1, $totalHitPoints);
         return $this;
     }
 }

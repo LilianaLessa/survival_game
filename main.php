@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Engine\Component\Player;
 use App\Engine\Entity\EntityManager;
 use App\Engine\System\AISystemInterface;
-use App\Engine\System\Battler;
+use App\Engine\System\BattleSystem;
 use App\Engine\System\FluidDynamics;
 use App\Engine\System\ItemCollection\CollectItems;
 use App\Engine\System\ItemCollection\EntityBehaviorSystem;
@@ -13,6 +13,7 @@ use App\Engine\System\MonsterSpawner;
 use App\Engine\System\MovementApplier;
 use App\Engine\System\PhysicsSystemInterface;
 use App\Engine\System\PlayerController;
+use App\Engine\System\PlayerSpawner;
 use App\Engine\System\TreeSpawner;
 use App\Engine\System\WorldActionApplier;
 use App\Engine\System\WorldController;
@@ -58,13 +59,11 @@ $initialViewportHeight = $playerPreset->getInitialViewportHeight();
 /** @var WorldManager $world */
 $world = Kernel::getContainer()->get(WorldManager::class);
 
-Player::createPlayer($entityManager, $playerPreset, rand(0,$worldWidth-1),rand(0,$worldHeight-1));
-
 $systems = [
     new WorldActionApplier($world, $entityManager),
     new CollectItems($world, $entityManager),
     new MovementApplier($world, $entityManager),
-    Kernel::getContainer()->get(Battler::class),
+    Kernel::getContainer()->get(BattleSystem::class),
     new FluidDynamics($world, $entityManager),
     //new FireDynamics($world, $entityManager),
     //new SoundDynamics($world, $entityManager),
@@ -85,6 +84,7 @@ $systems = [
         (int) ceil(($worldWidth * $worldHeight) * 0.005),
         'giantSnail'
     ),
+    Kernel::getContainer()->get(PlayerSpawner::class),
     new TreeSpawner($world, $entityManager, $itemPresetLibrary, (int) ceil(($worldWidth * $worldHeight) * 0.1)),
     //controllers
     //new MonsterController($entityManager),

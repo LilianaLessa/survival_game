@@ -19,6 +19,7 @@ class Player implements ComponentInterface
     {
         return $entityManager->createEntity(
             new Player(),
+            new HitPoints(10,10),
             new MapPosition($x,$y),
             new MapSymbol(sprintf("\033[1;33m%s\033[0m", $playerPreset->getDefaultSymbol())),
             new Collideable(),

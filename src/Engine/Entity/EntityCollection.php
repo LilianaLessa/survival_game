@@ -122,8 +122,10 @@ class EntityCollection extends \ArrayObject
 
     private function getComponentClasses(ComponentInterface|string $componentOrClassName): array
     {
+        $targetClass = is_string($componentOrClassName) ? $componentOrClassName: get_class($componentOrClassName);
+
         return [
-            get_class($componentOrClassName),
+            $targetClass,
             ...class_parents($componentOrClassName),
             ...class_parents($componentOrClassName),
             ...array_filter(class_implements($componentOrClassName), fn($c) => $c !== ComponentInterface::class),

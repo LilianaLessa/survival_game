@@ -5,19 +5,26 @@ declare(strict_types=1);
 namespace App\Engine\System;
 
 use App\Engine\Commands\MoveEntity;
+use App\Engine\Component\AggroQueue;
+use App\Engine\Component\Battler;
 use App\Engine\Component\AttackTarget;
+use App\Engine\Component\HitByEntity;
 use App\Engine\Component\HitPoints;
 use App\Engine\Component\Item\ItemDropper\DropOn;
 use App\Engine\Component\Item\ItemDropper\ItemDropper;
 use App\Engine\Component\Item\ItemDropper\ItemDropperCollection;
 use App\Engine\Component\Item\ItemOnGround;
 use App\Engine\Component\MapPosition;
+use App\Engine\Component\Monster;
 use App\Engine\Component\MovementQueue;
+use App\Engine\Component\MsTimeFromLastAttack;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
+use App\System\Event\Dispatcher;
+use App\System\Event\Event\UiMessageEvent;
 use App\System\Helpers\RouteService;
 
-class Battler implements AISystemInterface
+class BattleSystem implements AISystemInterface
 {
     public function __construct(
         private readonly EntityManager $entityManager,
@@ -105,8 +112,8 @@ class Battler implements AISystemInterface
             /** @var MapPosition $targetPosition */
             $targetPosition = $target->getEntityToAttack()->getComponent(MapPosition::class);
             if ($targetPosition) {
-                if ($this->isInAttackRange($attacker, $targetPosition)) {
-                    //todo attack
+                if ($this->isInAttackRange($selfPosition, $targetPosition)) {
+                    $this->attack($attacker, $target->getEntityToAttack());
                 } else {
                     /** @var ?MovementQueue $movementQueue */
                     $movementQueue = $attacker->getComponent(MovementQueue::class);
@@ -125,17 +132,107 @@ class Battler implements AISystemInterface
 
                             $this->entityManager->updateEntityComponents(
                                 $attacker->getId(),
-                                $movementQueue
+                                $movementQueue,
+                                new MsTimeFromLastAttack((int)floor(microtime(true) * 1000))
                             );
                         }
                     }
                 }
+            } else { //target not found in map
+                //remove target from aggro queue
+                /** @var ?AggroQueue $aggroQueue */
+                $aggroQueue = $attacker->getComponent(AggroQueue::class);
+
+                $aggroQueue->cleanAggro($target->getEntityToAttack()->getId());
+
+                //remove attack target
+                $this->entityManager->removeComponentsFromEntity($entityId, AttackTarget::class);
             }
         }
     }
 
-    private function isInAttackRange(Entity $attacker, MapPosition $targetPosition): bool
+    private function isInAttackRange(MapPosition $attackerPosition, MapPosition $targetPosition): bool
     {
-        return false; //todo
+        $attackerPoint = $attackerPosition->get();
+        $targetPoint = $targetPosition->get();
+
+        return $attackerPoint->isAdjacent($targetPoint);
+    }
+
+    private function attack(Entity $attacker, Entity $getEntityToAttack): void
+    {
+        $currentMs = (int)floor(microtime(true) * 1000);
+
+        $msFromLastAttack = $attacker->getComponent(MsTimeFromLastAttack::class) ??
+            new MsTimeFromLastAttack($currentMs);
+
+        $delta = $currentMs - $msFromLastAttack->getMsTime();
+        /** @var Battler $battler */
+        $battler = $attacker->getComponent(Battler::class);
+
+        $updateLastAttack = false;
+        if ($delta > 1 && $battler) {
+            $deltaS = ($delta) / 1000;
+
+            $attackSpeed = $battler->getBaseAttackSpeed();
+
+            $dueAttacks = (int)($attackSpeed > 0 ? floor($deltaS * $attackSpeed) : 0);
+
+            for ($i = 0; $i < $dueAttacks; $i++) {
+                $this->singleAttack($attacker, $getEntityToAttack, $battler);
+                $msFromLastAttack = new MsTimeFromLastAttack($currentMs);
+                $updateLastAttack = true;
+            }
+        } else {
+            $updateLastAttack = true;
+        }
+
+        if ($updateLastAttack) {
+            $this->entityManager->updateEntityComponents(
+                $attacker->getId(),
+                $msFromLastAttack
+            );
+        }
+    }
+
+    private function singleAttack(Entity $attacker, Entity $targetEntity, Battler $battler): void
+    {
+        /** @var Monster $monster */
+        $monster = $attacker->getComponent(Monster::class);
+
+        $monsterName = $monster->getMonsterPreset()->getName();
+
+        $targetName = 'player'; //$targetEntity->getId();
+
+        /** @var ?HitPoints $hitPoints */
+        $hitPoints = $targetEntity->getComponent(HitPoints::class);
+
+        $hitMessage = sprintf("%s attacks %s\n", $monsterName, $targetName);
+
+        if ($hitPoints) {
+            $damage = 1;
+            $newHitPoints = new HitPoints(
+                $hitPoints->getCurrent() - $damage,
+                $hitPoints->getTotal(),
+            );
+            $this->entityManager->updateEntityComponents(
+                $targetEntity->getId(),
+                $newHitPoints,
+                new HitByEntity($attacker)
+            );
+
+            $hitMessage .= sprintf(
+                "\tCaused %d damage. HP: %d/%d\n",
+                $damage,
+                $newHitPoints->getCurrent(),
+                $newHitPoints->getTotal(),
+            );
+        }
+
+        Dispatcher::dispatch(
+            new UiMessageEvent(
+                $hitMessage
+            )
+        );
     }
 }

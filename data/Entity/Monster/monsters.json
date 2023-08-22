@@ -84,7 +84,7 @@
     "race": "beast",
     "size": "small",
     "baseMovementSpeed": 3,
-    "attackSpeed": 0.2
+    "baseAttackSpeed": 2
   },
   {
     "dataType": "monsterPreset",
@@ -172,6 +172,6 @@
     "race": "invertebrate",
     "size": "small",
     "baseMovementSpeed": 0.7,
-    "attackSpeed": 0.1
+    "baseAttackSpeed": 1
   }
 ]

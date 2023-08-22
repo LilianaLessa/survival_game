@@ -19,8 +19,6 @@ use App\System\AI\Behavior\BehaviorTrigger;
 use App\System\AI\Behavior\EffectHandlers\BehaviorEffectHandlerInterface;
 use App\System\AI\Behavior\EffectHandlers\BehaviorTriggerType;
 use App\System\AI\TriggerValueEvaluatorWrapper;
-use App\System\Event\Dispatcher;
-use App\System\Event\Event\UiMessageEvent;
 use App\System\Kernel;
 
 class EntityBehaviorSystem implements AISystemInterface
@@ -54,16 +52,16 @@ class EntityBehaviorSystem implements AISystemInterface
                     new CurrentBehavior($triggeredBehavior)
                 ];
 
-                Dispatcher::dispatch(
-                    new UiMessageEvent(
-                        sprintf(
-                            "%sBehavior triggered: %s %s\n",
-                            $triggeredBehavior->isSilent() ? 'Silent' : '',
-                            $triggeredBehavior->getName(),
-                            $entityId,
-                        )
-                    )
-                );
+//                Dispatcher::dispatch(
+//                    new UiMessageEvent(
+//                        sprintf(
+//                            "%sBehavior triggered: %s %s\n",
+//                            $triggeredBehavior->isSilent() ? 'Silent' : '',
+//                            $triggeredBehavior->getName(),
+//                            $entityId,
+//                        )
+//                    )
+//                );
 
                 $this->entityManager->updateEntityComponents(
                     $entityId,

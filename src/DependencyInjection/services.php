@@ -3,7 +3,8 @@
 declare(strict_types=1);
 
 use App\Engine\Entity\EntityManager;
-use App\Engine\System\Battler;
+use App\Engine\System\BattleSystem;
+use App\Engine\System\PlayerSpawner;
 use App\System\AI\Behavior\EffectHandlers\Attack\Attack;
 use App\System\AI\Behavior\EffectHandlers\IncreaseAggro\IncreaseAggro;
 use App\System\AI\Behavior\EffectHandlers\Move\Move;
@@ -76,10 +77,17 @@ function registerHelpers(ServicesConfigurator $services)
 
 function registerEngineServices(ServicesConfigurator $services)
 {
-    $services->set(Battler::class, Battler::class)
+    $services->set(BattleSystem::class, BattleSystem::class)
         ->args([
             new Reference(EntityManager::class),
             new Reference(RouteService::class),
+        ]);
+
+    $services->set(PlayerSpawner::class, PlayerSpawner::class)
+        ->args([
+            new Reference(WorldManager::class),
+            new Reference(PlayerPresetLibrary::class),
+            new Reference(EntityManager::class),
         ]);
 }
 

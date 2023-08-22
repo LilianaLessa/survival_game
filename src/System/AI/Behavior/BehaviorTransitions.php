@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+
 namespace App\System\AI\Behavior;
 
 use App\Engine\Component\ComponentInterface;
@@ -41,7 +42,7 @@ class BehaviorTransitions
 
     public function canTransitionFrom(?BehaviorPreset $previousBehavior): bool
     {
-        return empty($this->from) || in_array($previousBehavior->getName(), $this->from);
+        return $previousBehavior === null || empty($this->from) || in_array($previousBehavior->getName(), $this->from);
     }
 
     public function canTransitionTo(?BehaviorPreset $targetBehavior): bool

@@ -30,14 +30,16 @@ class Monster implements ComponentInterface
         int $x,
         int $y
     ): Entity {
+        $totalHitPoints = $monsterPreset->getTotalHitPoints();
         return $entityManager->createEntity(
             new MapSymbol($monsterPreset->getSymbol()),
             new BehaviorCollection(...$monsterPreset->getBehaviorCollection()->getBehaviors()),
             new Monster($monsterPreset),
+            new Battler($monsterPreset->getBaseAttackSpeed()),
             new MapPosition($x, $y),
             new Collideable(),
             new MovementQueue($monsterPreset->getBaseMovementSpeed()),
-            new HitPoints(10, 10),
+            new HitPoints($totalHitPoints, $totalHitPoints),
             new ItemDropperCollection(
                 new ItemDropper(
                     $itemManager->getPresetByName('tatteredCloth'),
