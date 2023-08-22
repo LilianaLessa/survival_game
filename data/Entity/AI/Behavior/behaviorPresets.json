@@ -23,6 +23,28 @@
   },
   {
     "dataType": "behaviorPreset",
+    "name": "idleOnBiome",
+    "silent": false,
+    "triggers": {
+      "areActionQueuesEmpty": true,
+      "msTimeFromLastActivation": 1500
+    },
+    "effects": [
+      {
+        "move": {
+          "target": "randomBiomaCoordinates",
+          "minDistance": 1,
+          "maxDistance": 3
+        }
+      }
+    ],
+    "transitions" : {
+      "from": ["idleOnBiome"],
+      "to": []
+    }
+  },
+  {
+    "dataType": "behaviorPreset",
     "name": "increaseAggroOnAttacked",
     "silent": true,
     "triggers": {

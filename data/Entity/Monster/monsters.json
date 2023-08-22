@@ -96,7 +96,7 @@
     "symbol": "⚛",
     "defaultColor": "dark_violet",
     "behaviors":  [
-      {"preset": "idle"},
+      {"preset": "idleOnBiome"},
       {"preset": "increaseAggroOnAttacked"},
       {"preset": "attack"}
     ],
@@ -176,7 +176,7 @@
     "symbol": "⚠",
     "defaultColor": "sandyBrown",
     "behaviors":  [
-      {"preset": "idle"},
+      {"preset": "idleOnBiome"},
       {"preset": "increaseAggroOnAttacked"},
       {"preset": "attack"}
     ],
@@ -232,7 +232,7 @@
     "symbol": "☥",
     "defaultColor": "cornsilk1",
     "behaviors":  [
-      {"preset": "idle"},
+      {"preset": "idleOnBiome"},
       {"preset": "increaseAggroOnAttacked"},
       {"preset": "attack"}
     ],

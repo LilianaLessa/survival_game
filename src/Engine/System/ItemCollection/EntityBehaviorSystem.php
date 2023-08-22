@@ -20,10 +20,14 @@ use App\System\AI\Behavior\EffectHandlers\BehaviorEffectHandlerInterface;
 use App\System\AI\Behavior\EffectHandlers\BehaviorTriggerType;
 use App\System\AI\TriggerValueEvaluatorWrapper;
 use App\System\Kernel;
+use App\System\World\WorldManager;
 
 class EntityBehaviorSystem implements AISystemInterface
 {
-    public function __construct(private readonly EntityManager $entityManager)
+    public function __construct(
+        private readonly EntityManager $entityManager,
+        private readonly WorldManager $worldManager,
+    )
     {
     }
 
@@ -199,7 +203,7 @@ class EntityBehaviorSystem implements AISystemInterface
                     $parameterConfigs = $effect->getEffectParameterConfigs();
                     $handler->handle(
                         $entityToApplyEffects,
-                        ...$effectHandlerClass::buildEffectParameters(...$parameterConfigs)
+                        ...$effectHandlerClass::buildEffectParameters($this->worldManager, ...$parameterConfigs)
                     );
                    // break;
                 }

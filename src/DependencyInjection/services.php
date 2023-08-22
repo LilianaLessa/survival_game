@@ -144,6 +144,7 @@ function registerEngineServices(ServicesConfigurator $services)
     $services->set(EntityBehaviorSystem::class, EntityBehaviorSystem::class)
         ->args([
             new Reference(EntityManager::class),
+            new Reference(WorldManager::class),
         ]);
 
     $services->set(PlayerController::class, PlayerController::class)

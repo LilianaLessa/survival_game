@@ -14,11 +14,13 @@ use App\System\AI\Behavior\BehaviorEffectParameterConfig;
 use App\System\AI\Behavior\BehaviorEffectType;
 use App\System\AI\Behavior\EffectHandlers\BehaviorEffectHandlerInterface;
 use App\System\AI\Behavior\EffectHandlers\EffectParameterInterface;
+use App\System\AI\Behavior\EffectHandlers\Move\Parameters\RandomTargetBiomaCoordinates;
 use App\System\AI\Behavior\EffectHandlers\Move\Parameters\RandomTargetCoordinates;
 use App\System\AI\Behavior\EffectHandlers\Move\Parameters\TargetCoordinatesInterface;
 use App\System\AI\Behavior\EffectHandlers\Move\Parameters\TargetCoordinateTypes;
 use App\System\Helpers\RouteService;
 use App\System\Kernel;
+use App\System\World\WorldManager;
 use App\System\World\WorldPreset;
 use App\System\World\WorldPresetLibrary;
 
@@ -60,7 +62,7 @@ class Move implements BehaviorEffectHandlerInterface
         if ($mapPosition && $movementQueue) {
 
             $startPoint = $mapPosition->get();
-            $targetPoint = $movementType->getTargetPoint($startPoint);
+            $targetPoint = $movementType->getTargetPoint($startPoint, $targetEntity);
 
             $route = $this->routeService->calculateRoute(
                 $startPoint,
@@ -109,8 +111,10 @@ class Move implements BehaviorEffectHandlerInterface
     }
 
     /** @return EffectParameterInterface[] */
-    public static function buildEffectParameters(BehaviorEffectParameterConfig ...$effectParameterConfigs): array
-    {
+    public static function buildEffectParameters(
+        WorldManager $worldManager,
+        BehaviorEffectParameterConfig ...$effectParameterConfigs
+    ): array {
         $resultArray = [];
 
         foreach ($effectParameterConfigs as $effectParameterConfig) {
@@ -126,6 +130,13 @@ class Move implements BehaviorEffectHandlerInterface
         return [
             match ($target) {
                 TargetCoordinateTypes::RANDOM_COORDINATES => new RandomTargetCoordinates(
+                    $worldPreset->getMapWidth(),
+                    $worldPreset->getMapHeight(),
+                    $resultArray['minDistance'] ?? 2,
+                    $resultArray['maxDistance'] ?? 2
+                ),
+                TargetCoordinateTypes::RANDOM_BIOMA_COORDINATES => new RandomTargetBiomaCoordinates(
+                    $worldManager,
                     $worldPreset->getMapWidth(),
                     $worldPreset->getMapHeight(),
                     $resultArray['minDistance'] ?? 2,

@@ -15,6 +15,7 @@ use App\System\AI\Behavior\EffectHandlers\Attack\Parameters\AttackTargetType;
 use App\System\AI\Behavior\EffectHandlers\Attack\Parameters\AttackTopAggroEntity;
 use App\System\AI\Behavior\EffectHandlers\BehaviorEffectHandlerInterface;
 use App\System\AI\Behavior\EffectHandlers\EffectParameterInterface;
+use App\System\World\WorldManager;
 
 class Attack implements BehaviorEffectHandlerInterface
 {
@@ -55,7 +56,7 @@ class Attack implements BehaviorEffectHandlerInterface
         );
     }
 
-    public static function buildEffectParameters(BehaviorEffectParameterConfig ...$effectParameterConfigs): array
+    public static function buildEffectParameters(WorldManager $worldManager, BehaviorEffectParameterConfig ...$effectParameterConfigs): array
     {
         $resultArray = [];
 

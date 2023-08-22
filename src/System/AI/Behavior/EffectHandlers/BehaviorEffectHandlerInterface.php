@@ -8,6 +8,7 @@ use App\Engine\Entity\Entity;
 use App\System\AI\Behavior\BehaviorEffectConfig;
 use App\System\AI\Behavior\BehaviorEffectParameterConfig;
 use App\System\AI\Behavior\BehaviorEffectType;
+use App\System\World\WorldManager;
 
 interface BehaviorEffectHandlerInterface
 {
@@ -17,5 +18,8 @@ interface BehaviorEffectHandlerInterface
     public static function buildEffectConfig(object $rawConfigData): BehaviorEffectConfig;
 
     /** @return EffectParameterInterface[] */
-    public static function buildEffectParameters(BehaviorEffectParameterConfig ...$effectParameterConfigs): array;
+    public static function buildEffectParameters(
+        WorldManager $worldManager,
+        BehaviorEffectParameterConfig ...$effectParameterConfigs
+    ): array;
 }

@@ -7,6 +7,7 @@ namespace App\System\AI\Behavior\EffectHandlers\Move\Parameters;
 enum TargetCoordinateTypes: string
 {
     case RANDOM_COORDINATES = 'randomCoordinates';
+    case RANDOM_BIOMA_COORDINATES = 'randomBiomaCoordinates';
     case LAST_KNOWN_SELF_BIOME_COORDINATES = 'lastKnownSelfBiomeCoordinates';
 
     public function getParameterClassName(): string

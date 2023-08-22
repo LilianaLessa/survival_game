@@ -15,6 +15,7 @@ use App\System\AI\Behavior\EffectHandlers\BehaviorEffectHandlerInterface;
 use App\System\AI\Behavior\EffectHandlers\EffectParameterInterface;
 use App\System\AI\Behavior\EffectHandlers\IncreaseAggro\Parameters\AggroTargetTriggerEntity;
 use App\System\AI\Behavior\EffectHandlers\IncreaseAggro\Parameters\AggroTargetType;
+use App\System\World\WorldManager;
 
 class IncreaseAggro implements BehaviorEffectHandlerInterface
 {
@@ -59,7 +60,7 @@ class IncreaseAggro implements BehaviorEffectHandlerInterface
         );
     }
 
-    public static function buildEffectParameters(BehaviorEffectParameterConfig ...$effectParameterConfigs): array
+    public static function buildEffectParameters(WorldManager $worldManager, BehaviorEffectParameterConfig ...$effectParameterConfigs): array
     {
         $resultArray = [];
 

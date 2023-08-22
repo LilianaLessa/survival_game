@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace App\System\AI\Behavior\EffectHandlers\Move\Parameters;
 
+use App\Engine\Entity\Entity;
 use App\System\Helpers\Point2D;
 
 class  RandomTargetCoordinates implements TargetCoordinatesInterface
 {
     public function __construct(
-        private readonly int $mapWidth,
-        private readonly int $mapHeight,
-        private readonly int $minDistance,
-        private readonly int $maxDistance
+        protected readonly int $mapWidth,
+        protected readonly int $mapHeight,
+        protected readonly int $minDistance,
+        protected readonly int $maxDistance
     ) {
     }
 
-    public function getTargetPoint(Point2D $from): Point2D
+    public function getTargetPoint(Point2D $from, Entity $targetEntity): Point2D
     {
         $optionList = [];
 
@@ -37,7 +38,7 @@ class  RandomTargetCoordinates implements TargetCoordinatesInterface
         return new Point2D(...$optionList[array_rand($optionList)]);
     }
 
-    private function getSurroundings(Point2D $from, int $currentRadius): array
+    protected function getSurroundings(Point2D $from, int $currentRadius): array
     {
         return [
             [
@@ -75,7 +76,7 @@ class  RandomTargetCoordinates implements TargetCoordinatesInterface
         ];
     }
 
-    public function isOutOfBounds(int $x, int $y): bool
+    protected function isOutOfBounds(int $x, int $y): bool
     {
         return
             $x < 0
