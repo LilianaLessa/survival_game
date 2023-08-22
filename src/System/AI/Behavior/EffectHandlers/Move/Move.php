@@ -17,19 +17,16 @@ use App\System\AI\Behavior\EffectHandlers\EffectParameterInterface;
 use App\System\AI\Behavior\EffectHandlers\Move\Parameters\RandomTargetCoordinates;
 use App\System\AI\Behavior\EffectHandlers\Move\Parameters\TargetCoordinatesInterface;
 use App\System\AI\Behavior\EffectHandlers\Move\Parameters\TargetCoordinateTypes;
-use App\System\Helpers\Point2D;
+use App\System\Helpers\RouteService;
 use App\System\Kernel;
-use App\System\World\WorldManager;
 use App\System\World\WorldPreset;
 use App\System\World\WorldPresetLibrary;
-use BlackScorp\Astar\Astar;
-use BlackScorp\Astar\Grid;
 
 class Move implements BehaviorEffectHandlerInterface
 {
     public function __construct(
         private readonly EntityManager $entityManager,
-        private readonly WorldManager $worldManager,
+        private readonly RouteService $routeService,
     ){
     }
 
@@ -61,15 +58,13 @@ class Move implements BehaviorEffectHandlerInterface
         $movementQueue = $targetEntity->getComponent(MovementQueue::class);
 
         if ($mapPosition && $movementQueue) {
-            $mapPassableBlocks = $this->worldManager->getPathGroundWeights();
 
             $startPoint = $mapPosition->get();
             $targetPoint = $movementType->getTargetPoint($startPoint);
 
-            $route = $this->calculateRoute(
+            $route = $this->routeService->calculateRoute(
                 $startPoint,
-                $targetPoint,
-                $mapPassableBlocks
+                $targetPoint
             );
 
             if (count($route) > 0) {
@@ -138,22 +133,5 @@ class Move implements BehaviorEffectHandlerInterface
                 )
             }
         ];
-    }
-
-    /**
-     * @return Point2D[]
-     */
-    private function calculateRoute(Point2D $start, Point2D $end, array $map): array
-    {
-        $grid = new Grid($map);
-
-        $startPosition = $grid->getPoint($start->getY(), $start->getX());
-        $endPosition = $grid->getPoint($end->getY(), $end->getX());
-        $aStar = new Astar($grid);
-
-        $nodes = $aStar->search($startPosition, $endPosition);
-        array_shift($nodes);
-
-        return array_map(fn ($n) => new Point2D($n->getX(), $n->getY()), $nodes);
     }
 }

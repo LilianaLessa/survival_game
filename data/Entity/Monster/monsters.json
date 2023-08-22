@@ -10,7 +10,8 @@
     "symbol": "♞",
     "behaviors":  [
       {"preset": "idle"},
-      {"preset": "increaseAggroOnAttacked"}
+      {"preset": "increaseAggroOnAttacked"},
+      {"preset": "attack"}
     ],
     "dropCollection": [
       {

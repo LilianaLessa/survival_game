@@ -10,4 +10,5 @@ enum BehaviorTriggerType: string
 
     case MS_TIME_FROM_LAST_ACTIVATION = "msTimeFromLastActivation";
     case IS_TARGET_OF_ATTACK = "isTargetOfAttack";
+    case IS_AGGRO_QUEUE_EMPTY = "isAggroQueueEmpty";
 }

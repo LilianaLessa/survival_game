@@ -4,17 +4,25 @@ declare(strict_types=1);
 
 namespace App\Engine\System;
 
+use App\Engine\Commands\MoveEntity;
+use App\Engine\Component\AttackTarget;
 use App\Engine\Component\HitPoints;
 use App\Engine\Component\Item\ItemDropper\DropOn;
 use App\Engine\Component\Item\ItemDropper\ItemDropper;
 use App\Engine\Component\Item\ItemDropper\ItemDropperCollection;
 use App\Engine\Component\Item\ItemOnGround;
 use App\Engine\Component\MapPosition;
+use App\Engine\Component\MovementQueue;
+use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
+use App\System\Helpers\RouteService;
 
 class Battler implements AISystemInterface
 {
-    public function __construct(private readonly EntityManager $entityManager)
+    public function __construct(
+        private readonly EntityManager $entityManager,
+        private readonly RouteService $routeService
+    )
     {
     }
 
@@ -22,7 +30,7 @@ class Battler implements AISystemInterface
     {
         $this->processDeadEntities();
 
-        $this->processAggroQueue();
+        $this->processAttackTargets();
         // TODO: Implement process() method.
     }
 
@@ -81,8 +89,53 @@ class Battler implements AISystemInterface
         }
     }
 
-    private function processAggroQueue(): void
+    private function processAttackTargets(): void
     {
-        //todo
+        $entitiesWithAttackTargets = $this->entityManager->getEntitiesWithComponents(
+            AttackTarget::class,
+            MapPosition::class
+        );
+
+        /**
+         * @var AttackTarget $target
+         * @var MapPosition $selfPosition
+         */
+        foreach ($entitiesWithAttackTargets as $entityId => [$target, $selfPosition]) {
+            $attacker = $this->entityManager->getEntityById($entityId);
+            /** @var MapPosition $targetPosition */
+            $targetPosition = $target->getEntityToAttack()->getComponent(MapPosition::class);
+            if ($targetPosition) {
+                if ($this->isInAttackRange($attacker, $targetPosition)) {
+                    //todo attack
+                } else {
+                    /** @var ?MovementQueue $movementQueue */
+                    $movementQueue = $attacker->getComponent(MovementQueue::class);
+                    if ($movementQueue) {
+                        $route = $this->routeService->calculateRoute(
+                            $selfPosition->get(),
+                            $targetPosition->get()
+                        );
+
+                        if (count($route) > 0) {
+                            $movementQueue->clear();
+
+                            forEach ($route as $coordinates) {
+                                $movementQueue->add(new MoveEntity($coordinates));
+                            }
+
+                            $this->entityManager->updateEntityComponents(
+                                $attacker->getId(),
+                                $movementQueue
+                            );
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private function isInAttackRange(Entity $attacker, MapPosition $targetPosition): bool
+    {
+        return false; //todo
     }
 }

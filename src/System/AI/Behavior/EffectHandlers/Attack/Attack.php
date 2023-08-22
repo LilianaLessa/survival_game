@@ -2,60 +2,56 @@
 
 declare(strict_types=1);
 
-namespace App\System\AI\Behavior\EffectHandlers\IncreaseAggro;
+namespace App\System\AI\Behavior\EffectHandlers\Attack;
 
 use App\Engine\Component\AggroQueue;
-use App\Engine\Component\HitByEntity;
+use App\Engine\Component\AttackTarget;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\System\AI\Behavior\BehaviorEffectConfig;
 use App\System\AI\Behavior\BehaviorEffectParameterConfig;
 use App\System\AI\Behavior\BehaviorEffectType;
+use App\System\AI\Behavior\EffectHandlers\Attack\Parameters\AttackTargetType;
+use App\System\AI\Behavior\EffectHandlers\Attack\Parameters\AttackTopAggroEntity;
 use App\System\AI\Behavior\EffectHandlers\BehaviorEffectHandlerInterface;
 use App\System\AI\Behavior\EffectHandlers\EffectParameterInterface;
-use App\System\AI\Behavior\EffectHandlers\IncreaseAggro\Parameters\AggroTargetTriggerEntity;
-use App\System\AI\Behavior\EffectHandlers\IncreaseAggro\Parameters\AggroTargetType;
 
-class IncreaseAggro implements BehaviorEffectHandlerInterface
+class Attack implements BehaviorEffectHandlerInterface
 {
-
     public function __construct(private readonly EntityManager $entityManager)
     {
     }
 
     public function handle(Entity $targetEntity, EffectParameterInterface ...$effectParameters): void
     {
-        /** @var ?HitByEntity $hitByEntity */ //todo this component should depend on the type of target.
-        $hitByEntity = $targetEntity->getComponent(HitByEntity::class);
-
-        if ($hitByEntity !== null) {
-            /** @var AggroQueue $hitByEntity */
-            $aggroList = $targetEntity->getComponent(AggroQueue::class) ?? new AggroQueue();
-
-            $aggroList->addAggro($hitByEntity->getEntity()->getId(), 0.1);
-
-            $targetEntity->removeComponent(HitByEntity::class);
-
+        /** @var ?AggroQueue $aggroQueue */
+        $aggroQueue = $targetEntity->getComponent(AggroQueue::class);
+        $targetId = $aggroQueue?->getAggroListTop() ?? '';
+        $entityToAttack = $this->entityManager->getEntityById($targetId);
+        if ($entityToAttack) {
+            //add attack target to entity, so the battler can take care of the AI.
             $this->entityManager->updateEntityComponents(
                 $targetEntity->getId(),
-                $aggroList
+                new AttackTarget($entityToAttack)
             );
         }
+
+
     }
 
     public static function shouldHandle(BehaviorEffectType $effectType): bool
     {
-        return $effectType === BehaviorEffectType::INCREASE_AGGRO;
+        return $effectType === BehaviorEffectType::ATTACK;
     }
 
     public static function buildEffectConfig(object $rawConfigData): BehaviorEffectConfig
     {
         return new BehaviorEffectConfig(
-            BehaviorEffectType::INCREASE_AGGRO,
+            BehaviorEffectType::ATTACK,
             new BehaviorEffectParameterConfig(
                 'target',
-                AggroTargetType::tryFrom($rawConfigData->target ?? '')
-            )
+                AttackTargetType::tryFrom($rawConfigData->target ?? '')
+            ),
         );
     }
 
@@ -67,11 +63,11 @@ class IncreaseAggro implements BehaviorEffectHandlerInterface
             $resultArray[$effectParameterConfig->getName()] = $effectParameterConfig->getValue();
         }
 
-        $target = $resultArray['target'] ?? AggroTargetType::TRIGGER_ENTITY;
+        $target = $resultArray['target'] ?? AttackTargetType::TOP_AGGRO_ENTITY;
 
         return [
             match ($target) {
-                AggroTargetType::TRIGGER_ENTITY => new AggroTargetTriggerEntity()
+                AttackTargetType::TOP_AGGRO_ENTITY => new AttackTopAggroEntity()
             }
         ];
     }

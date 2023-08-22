@@ -3,9 +3,12 @@
 declare(strict_types=1);
 
 use App\Engine\Entity\EntityManager;
+use App\Engine\System\Battler;
+use App\System\AI\Behavior\EffectHandlers\Attack\Attack;
 use App\System\AI\Behavior\EffectHandlers\IncreaseAggro\IncreaseAggro;
 use App\System\AI\Behavior\EffectHandlers\Move\Move;
 use App\System\AI\BehaviorPresetLibrary;
+use App\System\Helpers\RouteService;
 use App\System\Item\ItemPresetLibrary;
 use App\System\Monster\MonsterPresetLibrary;
 use App\System\Player\PlayerPresetLibrary;
@@ -20,10 +23,16 @@ function registerBehaviorEffectHandlers(ServicesConfigurator $services): void
     $services->set(Move::class, Move::class)
         ->args([
             new Reference(EntityManager::class),
-            new Reference(WorldManager::class),
+            new Reference(RouteService::class),
         ]);
 
     $services->set(IncreaseAggro::class, IncreaseAggro::class)
+        ->args([
+            new Reference(EntityManager::class),
+        ]);
+
+
+    $services->set(Attack::class, Attack::class)
         ->args([
             new Reference(EntityManager::class),
         ]);
@@ -56,6 +65,24 @@ function registerManagers(ServicesConfigurator $services): void
     ;
 }
 
+function registerHelpers(ServicesConfigurator $services)
+{
+    $services->set(RouteService::class, RouteService::class)
+        ->args([
+            new Reference(WorldManager::class)
+        ]);
+}
+
+
+function registerEngineServices(ServicesConfigurator $services)
+{
+    $services->set(Battler::class, Battler::class)
+        ->args([
+            new Reference(EntityManager::class),
+            new Reference(RouteService::class),
+        ]);
+}
+
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
 
@@ -63,4 +90,6 @@ return static function (ContainerConfigurator $container): void {
 
     registerPresetLibraries($services);
     registerBehaviorEffectHandlers($services);
+    registerHelpers($services);
+    registerEngineServices($services);
 };

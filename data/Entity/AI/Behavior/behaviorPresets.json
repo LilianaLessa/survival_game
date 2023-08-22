@@ -43,6 +43,7 @@
   {
     "dataType": "behaviorPreset",
     "name": "attack",
+    "silent": false,
     "effects": [
       {
         "attack": {

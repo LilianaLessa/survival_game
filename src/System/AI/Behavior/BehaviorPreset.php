@@ -9,7 +9,6 @@ use App\System\PresetLibrary\PresetDataType;
 
 class BehaviorPreset extends AbstractPreset
 {
-
     private bool $silent = false;
 
     /**

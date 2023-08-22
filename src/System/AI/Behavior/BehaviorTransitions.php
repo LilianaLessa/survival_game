@@ -9,14 +9,18 @@ use App\Engine\Component\ComponentInterface;
 class BehaviorTransitions
 {
     /** @var string[] */
-    private array $from;
+    private array $from = [];
+
+    /** @var BehaviorTransition[] */
+    private array $to = [];
 
     /**
      * @param string[] $from;
      */
-    public function __construct(array $from)
+    public function __construct(array $from, array $to)
     {
         $this->from = $from;
+        $this->to = $to;
     }
 
     /**
@@ -27,14 +31,28 @@ class BehaviorTransitions
         return $this->from;
     }
 
-    public function canTransitionFrom(?BehaviorPreset $getBehaviorPreset): bool
+    /** @return BehaviorTransition[] */
+    public function getTo(): array
     {
-        return empty($this->from) || in_array($getBehaviorPreset->getName(), $this->from);
+        return $this->to;
     }
 
-    public function canTransitionTo(?BehaviorPreset $getBehaviorPreset): bool
+
+
+    public function canTransitionFrom(?BehaviorPreset $previousBehavior): bool
+    {
+        return empty($this->from) || in_array($previousBehavior->getName(), $this->from);
+    }
+
+    public function canTransitionTo(?BehaviorPreset $targetBehavior): bool
     {
         //todo implement
+        $silent = $targetBehavior->isSilent();
+        //todo any non silent behavior should be in the list to be triggered.
+
+
         return true;
     }
+
+
 }

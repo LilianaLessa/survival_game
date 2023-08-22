@@ -64,7 +64,7 @@ $systems = [
     new WorldActionApplier($world, $entityManager),
     new CollectItems($world, $entityManager),
     new MovementApplier($world, $entityManager),
-    new Battler($entityManager),
+    Kernel::getContainer()->get(Battler::class),
     new FluidDynamics($world, $entityManager),
     //new FireDynamics($world, $entityManager),
     //new SoundDynamics($world, $entityManager),

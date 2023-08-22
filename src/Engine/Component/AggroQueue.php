@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Engine\Component;
 
-class AggroList implements ComponentInterface
+class AggroQueue implements ComponentInterface
 {
     private array $aggroByEntityId = [];
 
@@ -35,8 +35,14 @@ class AggroList implements ComponentInterface
 
     public function getAggroListTop(): ?string
     {
-        $last = end($this->aggroByEntityId);
+        $keys = array_keys($this->aggroByEntityId);
+        $last = end($keys);
 
         return $last === false ? null : $last;
+    }
+
+    public function isEmpty(): bool
+    {
+        return empty($this->aggroByEntityId);
     }
 }

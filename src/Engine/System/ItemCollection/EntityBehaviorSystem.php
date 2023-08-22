@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Engine\System\ItemCollection;
 
 use App\Engine\Component\ActionQueueComponentInterface;
+use App\Engine\Component\AggroQueue;
 use App\Engine\Component\BehaviorCollection;
 use App\Engine\Component\CurrentBehavior;
 use App\Engine\Component\HitByEntity;
@@ -14,9 +15,12 @@ use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\Engine\System\AISystemInterface;
 use App\System\AI\Behavior\BehaviorPreset;
+use App\System\AI\Behavior\BehaviorTrigger;
 use App\System\AI\Behavior\EffectHandlers\BehaviorEffectHandlerInterface;
 use App\System\AI\Behavior\EffectHandlers\BehaviorTriggerType;
 use App\System\AI\TriggerValueEvaluatorWrapper;
+use App\System\Event\Dispatcher;
+use App\System\Event\Event\UiMessageEvent;
 use App\System\Kernel;
 
 class EntityBehaviorSystem implements AISystemInterface
@@ -50,6 +54,16 @@ class EntityBehaviorSystem implements AISystemInterface
                     new CurrentBehavior($triggeredBehavior)
                 ];
 
+                Dispatcher::dispatch(
+                    new UiMessageEvent(
+                        sprintf(
+                            "%sBehavior triggered: %s\n",
+                            $triggeredBehavior->isSilent() ? 'Silent' : '',
+                            $triggeredBehavior->getName(),
+                        )
+                    )
+                );
+
                 $this->entityManager->updateEntityComponents(
                     $entityId,
                     ...$behaviorControlComponents
@@ -61,10 +75,9 @@ class EntityBehaviorSystem implements AISystemInterface
     }
 
     /** @return TriggerValueEvaluatorWrapper[] */
-    private function loadTriggerEvaluators(BehaviorPreset $behavior): array
+    private function loadTriggerEvaluators(BehaviorTrigger ...$triggers): array
     {
         //todo fix: if the behavior trigger handlers are not defined, it stops all the behavior processing.
-        $triggers = $behavior->getTriggers();
         $evaluators = [];
         foreach ($triggers as $trigger) {
             $triggerType = $trigger->getName();
@@ -92,8 +105,15 @@ class EntityBehaviorSystem implements AISystemInterface
                             || ($currentMsTime - $lastActivationMsTime >= $triggerValue);
                     },
                 BehaviorTriggerType::IS_TARGET_OF_ATTACK =>
+                    function (Entity $e) use ($triggerValue) {
+                        return ((bool)$triggerValue) && $e->getComponent(HitByEntity::class) !== null;
+                    },
+                BehaviorTriggerType::IS_AGGRO_QUEUE_EMPTY =>
                 function (Entity $e) use ($triggerValue) {
-                    return ((bool)$triggerValue) && $e->getComponent(HitByEntity::class) !== null;
+                    /** @var ?AggroQueue $aggroQueue */
+                    $aggroQueue = $e->getComponent(AggroQueue::class);
+
+                    return ($aggroQueue?->isEmpty() ?? true) === (bool)$triggerValue;
                 },
                 default => null
             };
@@ -111,16 +131,36 @@ class EntityBehaviorSystem implements AISystemInterface
     {
         /** @var ?CurrentBehavior $currentEntityBehavior */
         $currentEntityBehavior = $entityToBeEvaluated->getComponent(CurrentBehavior::class);
+
+        //check first if any transition is possible from the current behavior.
+        if ($currentEntityBehavior) {
+            $possibleTransitions = $currentEntityBehavior->getBehaviorPreset()->getTransitions()->getTo();
+            if (count($possibleTransitions)) {
+               foreach ($possibleTransitions as $possibleTransition) {
+                   $triggerValueEvaluators = $this->loadTriggerEvaluators(...$possibleTransition->getTriggers());
+                   foreach ($triggerValueEvaluators as $evaluator) {
+                       if (!$evaluator->evaluateTrigger($entityToBeEvaluated)) {
+                           continue 2;
+                       }
+                   }
+
+                   $triggered = array_filter(
+                       $behaviorCollection->getBehaviors(),
+                       fn ($b) => $b->getName() === $possibleTransition->getBehaviorName()
+                   );
+
+                   return $triggered;
+               }
+            }
+        }
+
+        //if not, check all the collection.
+
         $triggeredBehaviors = [];
         foreach ($behaviorCollection->getBehaviors() as $behavior) {
-            /* TODO
-                //check current entity behavior and check if any transition is possible based on its triggers.
-                //if there is a transition possible, do transition to the state and
-                //   stop the evaluation for the current entity.
-             */
 
-            //if not, check the triggers for $behavior
-            $triggerValueEvaluators = $this->loadTriggerEvaluators($behavior);
+            //check the triggers for $behavior
+            $triggerValueEvaluators = $this->loadTriggerEvaluators(...$behavior->getTriggers());
             foreach ($triggerValueEvaluators as $evaluator) {
                 if (!$evaluator->evaluateTrigger($entityToBeEvaluated)) {
                     continue 2;
