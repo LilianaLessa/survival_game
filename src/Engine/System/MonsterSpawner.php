@@ -21,7 +21,7 @@ class MonsterSpawner implements WorldSystemInterface
 
     public function __construct(
         private readonly WorldManager $world,
-        private readonly ItemPresetLibrary $itemManager,
+        private readonly ItemPresetLibrary $itemPresetLibrary,
         private readonly EntityManager $entityManager,
         private readonly MonsterPresetLibrary $monsterPresetLibrary,
         private readonly int $maxMonstersInMap,
@@ -29,7 +29,6 @@ class MonsterSpawner implements WorldSystemInterface
     ) {
     }
 
-    /** @param Entity[] $entityCollection */
     public function process(): void
     {
         $monsterInMapCount = $this->getMonstersCount();
@@ -61,7 +60,7 @@ class MonsterSpawner implements WorldSystemInterface
 
         $monsterPreset && Monster::createMonster(
             $monsterPreset,
-            $this->itemManager,
+            $this->itemPresetLibrary,
             $this->entityManager,
             $targetX,
             $targetY

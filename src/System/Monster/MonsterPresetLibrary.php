@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\System\Monster;
 
 use App\Engine\Component\BehaviorCollection;
+use App\Engine\Component\Item\ItemDropper\DropOn;
 use App\System\AI\BehaviorPresetLibrary;
 use App\System\PresetLibrary\AbstractPreset;
 use App\System\PresetLibrary\AbstractPresetLibrary;
@@ -40,6 +41,8 @@ class MonsterPresetLibrary extends AbstractPresetLibrary
         $monsterPreset->setBaseAttackSpeed($rawPreset->baseAttackSpeed ?? 0);
         $monsterPreset->setTotalHitPoints($rawPreset->totalHitPoints ?? 1);
 
+        $monsterPreset->setDropCollection(...$this->generateMonsterDropCollection($rawPreset));
+
         return $monsterPreset;
     }
 
@@ -74,5 +77,34 @@ class MonsterPresetLibrary extends AbstractPresetLibrary
         return [
             PresetDataType::MONSTER_PRESET
         ];
+    }
+
+    /** @return MonsterDropPreset[] */
+    private function generateMonsterDropCollection(object $rawPreset): array
+    {
+        $rawDropCollection = $rawPreset->dropCollection ?? [];
+        $dropCollection = [];
+
+        foreach ($rawDropCollection as $rawDrop) {
+            $rawEvents = $rawDrop->events ?? [];
+            $events = [];
+            foreach ($rawEvents as $rawEvent) {
+                $events[] = new MonsterDropEvent(
+                    DropOn::tryFrom($rawEvent->type ?? 'die') ?? DropOn::DIE,
+                    $rawEvent->chance ?? 0,
+                    $rawEvent->min ?? 1,
+                    $rawEvent->max ?? 1,
+                );
+            }
+            $itemPresetName = $rawDrop->name ?? null;
+            if ($itemPresetName) {
+                $dropCollection[] = new MonsterDropPreset(
+                    $itemPresetName,
+                    ...$events
+                );
+            }
+        }
+
+        return $dropCollection;
     }
 }

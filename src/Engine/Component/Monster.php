@@ -10,6 +10,7 @@ use App\Engine\Component\Item\ItemDropper\ItemDropperCollection;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\System\Item\ItemPresetLibrary;
+use App\System\Monster\MonsterDropPreset;
 use App\System\Monster\MonsterPreset;
 
 class Monster implements ComponentInterface
@@ -25,7 +26,7 @@ class Monster implements ComponentInterface
 
     static public function createMonster(
         MonsterPreset $monsterPreset,
-        ItemPresetLibrary $itemManager,
+        ItemPresetLibrary $itemPresetLibrary,
         EntityManager $entityManager,
         int $x,
         int $y
@@ -41,70 +42,31 @@ class Monster implements ComponentInterface
             new MovementQueue($monsterPreset->getBaseMovementSpeed()),
             new HitPoints($totalHitPoints, $totalHitPoints),
             new ItemDropperCollection(
-                new ItemDropper(
-                    $itemManager->getPresetByName('tatteredCloth'),
-                    DropOn::DIE,
-                    1,
-                    1,
-                    0.8
-                ),
-                new ItemDropper(
-                    $itemManager->getPresetByName('rustyDagger'),
-                    DropOn::DIE,
-                    1,
-                    1,
-                    0.7
-                ),
-                new ItemDropper(
-                    $itemManager->getPresetByName('monsterHide'),
-                    DropOn::DIE,
-                    1,
-                    1,
-                    0.6
-                ),
-                new ItemDropper(
-                    $itemManager->getPresetByName('shimmeringScale'),
-                    DropOn::DIE,
-                    1,
-                    1,
-                    0.3
-                ),
-                new ItemDropper(
-                    $itemManager->getPresetByName('crackedCrystal'),
-                    DropOn::DIE,
-                    1,
-                    1,
-                    0.25
-                ),
-                new ItemDropper(
-                    $itemManager->getPresetByName('enchantedInk'),
-                    DropOn::DIE,
-                    1,
-                    1,
-                    0.2
-                ),
-                new ItemDropper(
-                    $itemManager->getPresetByName('ancientRelic'),
-                    DropOn::DIE,
-                    1,
-                    1,
-                    0.05
-                ),
-                new ItemDropper(
-                    $itemManager->getPresetByName('mangledFur'),
-                    DropOn::DIE,
-                    1,
-                    1,
-                    0.9
-                ),
-                new ItemDropper(
-                    $itemManager->getPresetByName('slimyGoo'),
-                    DropOn::DIE,
-                    1,
-                    1,
-                    0.9
-                ),
+                ...self::createItemDroppers($monsterPreset->getDropCollection(), $itemPresetLibrary)
             )
         );
+    }
+
+    /**
+     * @param MonsterDropPreset[] $dropCollection
+     * @return ItemDropper[]
+     */
+    private static function createItemDroppers(array $dropCollection, ItemPresetLibrary $itemPresetLibrary): array
+    {
+        $droppers = [];
+
+        foreach ($dropCollection as $dropPreset) {
+            foreach ($dropPreset->getEvents() as $event) {
+                $droppers[] = new ItemDropper(
+                    $itemPresetLibrary->getPresetByName($dropPreset->getName()),
+                    $event->getDropOn(),
+                    $event->getMinAmount(),
+                    $event->getMaxAmount(),
+                    $event->getChance(),
+                );
+            }
+        }
+
+        return $droppers;
     }
 }

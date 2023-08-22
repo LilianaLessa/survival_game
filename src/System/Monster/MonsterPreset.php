@@ -15,6 +15,10 @@ class MonsterPreset extends AbstractPreset
 
     private int $totalHitPoints = 1;
 
+
+    /** @var MonsterDropPreset[] */
+    private array $dropCollection;
+
     public function __construct(
         string $name,
         private readonly ?string $symbol,
@@ -65,6 +69,18 @@ class MonsterPreset extends AbstractPreset
     public function setTotalHitPoints(int $totalHitPoints): self
     {
         $this->totalHitPoints = max(1, $totalHitPoints);
+        return $this;
+    }
+
+    /** @return MonsterDropPreset[] */
+    public function getDropCollection(): array
+    {
+        return $this->dropCollection;
+    }
+
+    public function setDropCollection(MonsterDropPreset ...$dropCollection): self
+    {
+        $this->dropCollection = $dropCollection;
         return $this;
     }
 }

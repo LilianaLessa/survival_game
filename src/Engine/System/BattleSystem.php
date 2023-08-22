@@ -84,7 +84,7 @@ class BattleSystem implements AISystemInterface
                 $dice = mt_rand() / mt_getrandmax();
                 if ($dice <= $chance) { //success on drop.
                     $amount = rand($itemDropper->getMinAmount(), $itemDropper->getMaxAmount());
-                    $itemBluePrint = $itemDropper->getItemBlueprint();
+                    $itemBluePrint = $itemDropper->getItemPreset();
 
                     ItemOnGround::createItemOnGround(
                         $this->entityManager,

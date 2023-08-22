@@ -1,7 +1,6 @@
 [
   {
     "dataType": "itemPreset",
-    "id": "7bf45812-24a9-4e4c-986f-7a27b12a6f01",
     "name": "ironOre",
     "inGameName": "Iron Ore",
     "description": "A common ore containing iron that can be smelted into metal.",
@@ -15,7 +14,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "e8f21a9f-05c2-4a09-a14d-2dbf50a8939e",
     "name": "copperOre",
     "inGameName": "Copper Ore",
     "description": "A raw material containing copper, useful for crafting and trading.",
@@ -29,7 +27,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "13db5e47-4bf1-4e89-a1e0-2cbb3763fb9f",
     "name": "lumber",
     "inGameName": "Lumber",
     "description": "Wooden logs processed into planks, essential for construction.",
@@ -43,7 +40,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "7367d076-108a-4a76-b4b2-948c15da829d",
     "name": "stone",
     "inGameName": "Stone",
     "description": "Basic building material often used in construction and crafting.",
@@ -57,7 +53,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "b47f28e3-3c9f-4a95-94c3-96c64a01f3e2",
     "name": "wildBerries",
     "inGameName": "Wild Berries",
     "description": "Edible berries found in the wild, suitable for simple recipes.",
@@ -71,7 +66,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "941a9a6e-4f09-4b72-bb6c-70876a89a9db",
     "name": "herbs",
     "inGameName": "Herbs",
     "description": "Various medicinal and culinary plants used for potions and cooking.",
@@ -85,7 +79,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "e4ebe5e3-49d1-41c7-86c9-ef6c2f0d1e9d",
     "name": "goldNugget",
     "inGameName": "Gold Nugget",
     "description": "A small piece of pure gold, valuable and often used for currency.",
@@ -99,7 +92,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "87fc8d26-85b0-4e68-9e79-0e06785c29f1",
     "name": "clay",
     "inGameName": "Clay",
     "description": "Malleable material used in pottery, construction, and crafting.",
@@ -113,7 +105,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "8fa943d0-3d62-4a8e-9d57-5f09794a8112",
     "name": "wool",
     "inGameName": "Wool",
     "description": "Fiber obtained from sheep, used for textiles and crafting.",
@@ -127,7 +118,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "c62c9c76-4f72-4b76-9091-c050c92d6b84",
     "name": "fish",
     "inGameName": "Fish",
     "description": "Edible aquatic creature, a common food source for many cultures.",
@@ -141,7 +131,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "d1b3aa4d-3a47-4969-8c6d-394e4f02f819",
     "name": "coal",
     "inGameName": "Coal",
     "description": "Carbon-rich mineral used as fuel and for smelting metal ores.",
@@ -155,7 +144,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "efb4ec38-487d-4c0f-86cd-99bdf8f4c6c9",
     "name": "crystalShard",
     "inGameName": "Crystal Shard",
     "description": "Fragment of a larger crystal, often used in magical or mystical rituals.",
@@ -169,7 +157,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "cc03255d-23b3-4bf7-9a9c-81c6a30f76ab",
     "name": "honey",
     "inGameName": "Honey",
     "description": "Sweet and viscous substance produced by bees, a natural sweetener.",
@@ -183,7 +170,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "cdad9983-53ea-4f91-9670-97d489d68f4c",
     "name": "obsidian",
     "inGameName": "Obsidian",
     "description": "Volcanic glass with sharp edges, used for tools, weapons, and jewelry.",
@@ -197,7 +183,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "edabed2a-35cc-4be5-ba1e-9649a76c066d",
     "name": "silk",
     "inGameName": "Silk",
     "description": "Luxurious and fine thread produced by silkworms, used for textiles.",
@@ -211,7 +196,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "3ad146b0-3523-41e4-9a47-6e5b8b9e3e0f",
     "name": "uranium",
     "inGameName": "Uranium",
     "description": "Radioactive element used as a power source or in advanced technologies.",
@@ -225,7 +209,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "fe9a3635-5e0a-41fc-92c1-4b2edc6e5b71",
     "name": "diamond",
     "inGameName": "Diamond",
     "description": "Precious gemstone valued for its brilliance and used in jewelry.",
@@ -239,7 +222,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "901fe6c7-7e7e-44c0-bad2-14289384ea76",
     "name": "salt",
     "inGameName": "Salt",
     "description": "Crystalline mineral used to season food and preserve ingredients.",
@@ -253,7 +235,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "64b2cf31-bd06-4e7a-b4e7-4b965c52f6f0",
     "name": "amber",
     "inGameName": "Amber",
     "description": "Fossilized resin, often used for crafting and decorative purposes.",
@@ -267,7 +248,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "63c52e0a-5109-4a4d-b7fc-7755a6937c1f",
     "name": "quartz",
     "inGameName": "Quartz",
     "description": "Common crystal with various uses in technology, magic, and decoration.",
@@ -281,7 +261,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "61d39a72-8f72-4e1a-8d81-6fc20ee09a2f",
     "name": "wood",
     "inGameName": "Wood",
     "description": "Basic material obtained from trees, used for construction and crafting.",
@@ -295,7 +274,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "45a6f74a-04f5-4e69-8df3-6df88493517b",
     "name": "stone",
     "inGameName": "Stone",
     "description": "Basic building material often used in construction and crafting.",
@@ -309,7 +287,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "86db624f-4c05-49da-95a7-48dd5603b6a6",
     "name": "berries",
     "inGameName": "Berries",
     "description": "Edible fruits found in nature, often used for simple dishes.",
@@ -323,7 +300,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "d2399c26-8293-4d6d-b73e-3cf75fbca444",
     "name": "copper",
     "inGameName": "Copper",
     "description": "Malleable metal, essential for crafting and technological advancements.",
@@ -337,7 +313,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "c1c58d5a-4b15-4aaf-8e23-614ed5df9eaa",
     "name": "fiber",
     "inGameName": "Fiber",
     "description": "Plant-based material used for crafting textiles and basic items.",
@@ -351,7 +326,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "1aa67f58-53df-4a97-93c7-b68901e9f77a",
     "name": "clay",
     "inGameName": "Clay",
     "description": "Malleable material used in pottery, construction, and crafting.",
@@ -365,7 +339,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "d8b0894c-6b8f-4ae1-98d0-9717a6c0c08b",
     "name": "fish",
     "inGameName": "Fish",
     "description": "Edible aquatic creature, a common food source for many cultures.",
@@ -379,7 +352,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "2a0aa31b-33e6-4a13-a381-903e9c554aa6",
     "name": "coal",
     "inGameName": "Coal",
     "description": "Carbon-rich mineral used as fuel and for smelting metal ores.",
@@ -393,7 +365,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "d860eef6-00ab-4e84-92d9-6c6a0a9ec7f3",
     "name": "water",
     "inGameName": "Water",
     "description": "Essential liquid for hydration, cooking, and various processes.",
@@ -407,7 +378,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "d52264ec-9be7-4c53-9259-85f3e3c16319",
     "name": "mushroom",
     "inGameName": "Mushroom",
     "description": "Fungal growth with various culinary and medicinal uses.",
@@ -421,7 +391,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "f45a7df6-77f1-4c2e-95c8-78e6e8e9032a",
     "name": "monsterHide",
     "inGameName": "Monster Hide",
     "description": "Durable hide obtained from defeated monsters, used for crafting.",
@@ -435,7 +404,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "a8b403c3-4a7e-4d0f-8277-56ad2a5b28a2",
     "name": "fang",
     "inGameName": "Fang",
     "description": "Sharp tooth or pointed organ extracted from creatures, often used in weaponry.",
@@ -449,7 +417,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "c614867f-21f1-4e61-aa4f-18d7717a4346",
     "name": "claw",
     "inGameName": "Claw",
     "description": "Sharp and sturdy appendage from animals, useful for crafting and combat.",
@@ -463,7 +430,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "6db605a9-51e2-4b7a-bfe5-0ebed6e8fb3e",
     "name": "bone",
     "inGameName": "Bone",
     "description": "Hard skeletal structure of creatures, utilized in crafting and tools.",
@@ -477,7 +443,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "a1b4e2e8-7242-4d9a-9cc2-989b18e752f5",
     "name": "slime",
     "inGameName": "Slime",
     "description": "Viscous and gooey substance with various magical and practical applications.",
@@ -491,7 +456,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "ca642983-83f7-4e13-9a0f-b59aae32f7d0",
     "name": "crackedCrystal",
     "inGameName": "Cracked Crystal",
     "description": "Flawed crystal with reduced mystical properties, still valuable for certain crafts.",
@@ -505,7 +469,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "3bda88dd-7cc1-4a6d-a7a5-85807349c677",
     "name": "ratTail",
     "inGameName": "Rat Tail",
     "description": "Long and slender tail from rodents, used in potion making and alchemy.",
@@ -519,7 +482,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "dcfcf916-6331-4d42-b58f-10e1d20e1191",
     "name": "insectAntenna",
     "inGameName": "Insect Antenna",
     "description": "Sensitive sensory organ of insects, sometimes used for magical purposes.",
@@ -533,7 +495,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "3a7e92b4-2554-437b-9b22-62d3000a547a",
     "name": "feather",
     "inGameName": "Feather",
     "description": "Lightweight and pliable feather, commonly used in crafts and ornamental designs.",
@@ -547,7 +508,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "2c8fbff1-e5ef-4ed4-b6e1-7c862f96dbac",
     "name": "chitin",
     "inGameName": "Chitin",
     "description": "Strong and lightweight exoskeleton material from insects, used for armor and tools.",
@@ -561,7 +521,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "aed9fc68-1ed7-4e67-9447-48e7c1ac2371",
     "name": "treeBark",
     "inGameName": "Tree Bark",
     "description": "Tough outer layer of the tree, used for crafting and tanning.",
@@ -575,7 +534,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "fa8642b1-904e-4d5c-8e1c-9c9b35d7e2af",
     "name": "treeResin",
     "inGameName": "Tree Resin",
     "description": "Sticky sap collected from the tree, used in crafting and alchemy.",
@@ -589,7 +547,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "46ba6a7c-1796-4c60-a933-3c5e9feda510",
     "name": "treeSeed",
     "inGameName": "Tree Seed",
     "description": "A viable seed that can be planted to grow a new tree.",
@@ -603,7 +560,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "c5d2eaa6-90b0-4db3-8a17-1f8e9b37c61f",
     "name": "woodenStump",
     "inGameName": "Wooden Stump",
     "description": "Remnant of the tree trunk, used as a crafting material or fuel.",
@@ -617,7 +573,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "b9e18a30-3dd9-4649-98f3-4f5b17a9c1fb",
     "name": "treeLeaves",
     "inGameName": "Tree Leaves",
     "description": "Foliage from the tree, can be used for composting or as crafting material.",
@@ -631,7 +586,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "0a283d94-5579-42d0-9c2b-2378e77939af",
     "name": "ancientBark",
     "inGameName": "Ancient Bark",
     "description": "Mystical bark imbued with ancient energy, prized for its magical properties.",
@@ -645,7 +599,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "36eae972-7b11-4c54-aaab-7e86241a1d72",
     "name": "enchantedFruit",
     "inGameName": "Enchanted Fruit",
     "description": "A rare fruit with magical properties, known for its potent effects.",
@@ -659,7 +612,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "b5920e86-14d7-4a50-af81-d3ee82bfb5d9",
     "name": "spiritwoodLog",
     "inGameName": "Spiritwood Log",
     "description": "Wood infused with ethereal energy, sought after for its ghostly properties.",
@@ -673,7 +625,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "dab21ae2-c9a6-4d95-951c-6b4ab352b11b",
     "name": "moonlitLeaves",
     "inGameName": "Moonlit Leaves",
     "description": "Leaves that shimmer with the light of the moon, prized for their nocturnal magic.",
@@ -687,7 +638,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "d2bbd24b-4b0d-41f3-b715-4ac5d8a5f244",
     "name": "goldenAcorn",
     "inGameName": "Golden Acorn",
     "description": "An acorn made of pure gold, believed to bring prosperity and luck.",
@@ -701,7 +651,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "48f79249-9b1c-40a9-9782-7c7b2f83d29f",
     "name": "crystalFruit",
     "inGameName": "Crystal Fruit",
     "description": "Fruit with crystalline structure, valued for its use in magic and alchemy.",
@@ -715,7 +664,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "1ef55f90-e268-4da4-a190-2e0d0d0b5323",
     "name": "rottenTwig",
     "inGameName": "Rotten Twig",
     "description": "Decayed and useless twig, no practical value.",
@@ -729,7 +677,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "b34e4a1c-3f27-472a-b7d3-805e13f30f0c",
     "name": "insectCarcass",
     "inGameName": "Insect Carcass",
     "description": "Remains of a squashed insect, unappealing and discarded.",
@@ -743,7 +690,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "98e8d656-eed0-4eab-bf4e-b9025f7828fe",
     "name": "brokenBranch",
     "inGameName": "Broken Branch",
     "description": "Splintered and useless branch, beyond repair.",
@@ -757,7 +703,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "89489be1-e99e-4e53-8de2-5f56ca3d62b2",
     "name": "moldyLeaf",
     "inGameName": "Moldy Leaf",
     "description": "Leaf covered in mold and mildew, unsuitable for any use.",
@@ -771,7 +716,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "02e37379-0181-4f3d-9d7f-0a5b4d2d72cd",
     "name": "wornTwig",
     "inGameName": "Worn Twig",
     "description": "A twig worn down by weather and age, no practical purpose.",
@@ -785,7 +729,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "a7228d20-55c2-42c3-8542-e33b10c6b46b",
     "name": "bugRemains",
     "inGameName": "Bug Remains",
     "description": "Bits and pieces of crushed bugs, not worth keeping.",
@@ -799,7 +742,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "7c0e4ccf-209e-48d3-9b5f-41a0ff98aa47",
     "name": "eternalSap",
     "inGameName": "Eternal Sap",
     "description": "Sap with eternal life force, sought after for its incredible magical properties.",
@@ -813,7 +755,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "a5d2c1e5-e27a-4e6b-b28a-8d7d5644f018",
     "name": "celestialBlossom",
     "inGameName": "Celestial Blossom",
     "description": "A flower that blooms under celestial alignment, radiating cosmic energy.",
@@ -827,7 +768,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "1ec1f622-cdfc-47d2-9e72-cb932de03b0d",
     "name": "enchantedWood",
     "inGameName": "Enchanted Wood",
     "description": "Wood enchanted by mystical forces, holds unique properties for crafting.",
@@ -841,7 +781,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "b5b5e50b-92eb-45ff-97b2-83d010ca497c",
     "name": "dreamersLeaf",
     "inGameName": "Dreamer's Leaf",
     "description": "Leaf that induces vivid dreams and visions, a favorite of mystics.",
@@ -855,7 +794,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "4e509c0e-94ea-4fb9-b32f-d54b8324b789",
     "name": "phoenixFeather",
     "inGameName": "Phoenix Feather",
     "description": "A feather from a mythical phoenix, believed to contain its rebirth magic.",
@@ -869,7 +807,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "d9ea5582-3435-4e29-8f21-1a4932c9e1a3",
     "name": "astralFruit",
     "inGameName": "Astral Fruit",
     "description": "Fruit that grows on the astral plane, bestows otherworldly insights when consumed.",
@@ -883,7 +820,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "cf1a9171-d816-4e1e-95b0-2e9938f8f8ce",
     "name": "sylvanHeart",
     "inGameName": "Sylvan Heart",
     "description": "A heart-shaped gemstone infused with the essence of the ancient forest.",
@@ -897,7 +833,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "9d28c4e9-743d-4f64-9bea-2e26b05c1320",
     "name": "druidicBark",
     "inGameName": "Druidic Bark",
     "description": "Bark with symbols of druidic magic, holds the wisdom of the natural world.",
@@ -911,7 +846,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "0f564aef-65c5-4e4e-88b1-9c20be07cd76",
     "name": "arcaneLeaf",
     "inGameName": "Arcane Leaf",
     "description": "Leaf etched with arcane runes, a key ingredient for spellcraft and enchantments.",
@@ -925,7 +859,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "880b7fb3-ee10-4142-8742-0f6f4637720f",
     "name": "starlightNectar",
     "inGameName": "Starlight Nectar",
     "description": "Nectar collected under a starlit sky, said to grant visions of distant realms.",
@@ -939,7 +872,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "de71b33b-32e5-474d-80c3-4f0a0980a02b",
     "name": "dragonscaleLeaf",
     "inGameName": "Dragonscale Leaf",
     "description": "Leaf patterned like a dragon's scale, carries a fraction of draconic power.",
@@ -953,7 +885,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "d8256c1e-45bf-4a9f-bb87-ae5b86e5956c",
     "name": "etherealFruit",
     "inGameName": "Ethereal Fruit",
     "description": "Fruit that exists between realms, grants a fleeting connection to the ethereal.",
@@ -967,7 +898,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "8a2f4457-37bb-4f7d-9d94-96aa5db77952",
     "name": "worldshaperAcorn",
     "inGameName": "Worldshaper Acorn",
     "description": "An acorn said to possess the power to shape landscapes and alter reality.",
@@ -981,7 +911,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "a60e5919-983f-4b76-9915-ba6b8c972dca",
     "name": "timebloomPetal",
     "inGameName": "Timebloom Petal",
     "description": "A petal that holds the essence of time, granting glimpses into past and future.",
@@ -995,7 +924,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "2e7d2d19-9c4d-4e0b-bf18-23f27664721f",
     "name": "starforgedWood",
     "inGameName": "Starforged Wood",
     "description": "Wood infused with starlight, capable of holding cosmic energy and enchantments.",
@@ -1009,7 +937,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "719c29e1-b007-48d9-86b7-d8c90e3965f1",
     "name": "dreamweaverLeaf",
     "inGameName": "Dreamweaver Leaf",
     "description": "Leaf woven with dreams, allows the bearer to enter a realm of their own making.",
@@ -1023,7 +950,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "db13f17a-1a81-44d3-a167-1ff6a8680660",
     "name": "phoenixTear",
     "inGameName": "Phoenix Tear",
     "description": "A tear shed by a phoenix, capable of healing wounds and reviving life.",
@@ -1037,7 +963,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "4b5e365d-b408-4b52-bb3a-0a3fc382f960",
     "name": "voidfruit",
     "inGameName": "Voidfruit",
     "description": "Fruit from the abyss, grants a glimpse into the unfathomable void.",
@@ -1051,7 +976,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "b2da1b4d-0de2-43bf-9d08-8211e925f3a1",
     "name": "celestialSeed",
     "inGameName": "Celestial Seed",
     "description": "A seed gifted by celestial beings, holds the potential to create new worlds.",
@@ -1065,7 +989,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "f7c3b2f7-5f67-4f2e-a102-381ac8cb7257",
     "name": "essenceOfCreation",
     "inGameName": "Essence of Creation",
     "description": "The pure essence of creation itself, capable of reshaping reality.",
@@ -1079,7 +1002,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "5aeeb97c-b7c1-4f92-8f13-27bb063ef29b",
     "name": "astralBranch",
     "inGameName": "Astral Branch",
     "description": "A branch that extends into the astral realm, connects mortal and divine.",
@@ -1093,7 +1015,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "d840d5c5-0dab-4ed7-857b-259d17218d66",
     "name": "harmonyLeaf",
     "inGameName": "Harmony Leaf",
     "description": "Leaf resonating with divine harmony, brings balance and tranquility.",
@@ -1107,7 +1028,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "e4f35036-e6d9-44c0-8d05-484dbb15587d",
     "name": "soulbloomPetal",
     "inGameName": "Soulbloom Petal",
     "description": "Petal infused with the essence of souls, grants connection to the afterlife.",
@@ -1121,7 +1041,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "96c141b1-5c81-4a61-9f3c-b2a7df9658c7",
     "name": "etherealNectar",
     "inGameName": "Ethereal Nectar",
     "description": "Nectar from the realm of spirits, grants a glimpse into the divine plane.",
@@ -1135,7 +1054,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "ec3c8b8d-e062-4b22-87aa-120d35df887a",
     "name": "tatteredCloth",
     "inGameName": "Tattered Cloth",
     "description": "Worn and torn piece of cloth, barely usable for anything.",
@@ -1150,7 +1068,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "9b202a0d-46a0-4e72-bc51-04ce1a06ff10",
     "name": "rustyDagger",
     "inGameName": "Rusty Dagger",
     "description": "A dull and rusty dagger, barely suitable for self-defense.",
@@ -1165,7 +1082,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "9f0b04d6-e47a-42da-b251-61a5a0414372",
     "name": "shimmeringScale",
     "inGameName": "Shimmering Scale",
     "description": "A scale that glimmers with a faint, otherworldly light.",
@@ -1180,7 +1096,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "399d1b7e-b3a5-46fe-96de-0dbb7d930a18",
     "name": "enchantedInk",
     "inGameName": "Enchanted Ink",
     "description": "Ink infused with magical essence, prized by spellcasters and scribes.",
@@ -1195,7 +1110,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "2f4b79cc-5f92-4d18-89d6-40d2874f47da",
     "name": "ancientRelic",
     "inGameName": "Ancient Relic",
     "description": "An ancient artifact of unknown origin, exuding an aura of mystery.",
@@ -1210,7 +1124,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "7d5b19f2-36ed-4d26-bd35-5e029f947132",
     "name": "mangledFur",
     "inGameName": "Mangled Fur",
     "description": "Torn and bloodied fur from a defeated monster, not suitable for use.",
@@ -1225,7 +1138,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "6b6eb20e-079c-4427-87ca-8627c7ac5a4d",
     "name": "rottingClaw",
     "inGameName": "Rotting Claw",
     "description": "A decayed and foul-smelling claw, not useful for anything.",
@@ -1240,7 +1152,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "b345ce32-6184-451f-bdd1-e1ee6a7d7043",
     "name": "slimyGoo",
     "inGameName": "Slimy Goo",
     "description": "A slimy and unpleasant substance, best left untouched.",
@@ -1255,7 +1166,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "e3eb0f46-9ecf-47a1-b9fe-12f5dbb81a97",
     "name": "brokenTooth",
     "inGameName": "Broken Tooth",
     "description": "A shattered and jagged tooth, not fit for any practical purpose.",
@@ -1270,7 +1180,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "3c0a2b60-5c51-43b1-b7d7-efdc9c632bcd",
     "name": "noxiousGland",
     "inGameName": "Noxious Gland",
     "description": "A gland that emits a foul odor and toxic fumes, best to avoid.",
@@ -1285,7 +1194,6 @@
   },
   {
     "dataType": "itemPreset",
-    "id": "fdab9ea4-2c4b-408a-9649-6c8a8981000c",
     "name": "oozingPus",
     "inGameName": "Oozing Pus",
     "description": "A disgusting and disease-ridden substance, avoid contact at all costs.",
@@ -1297,5 +1205,109 @@
     "priceG": 0,
     "priceS": 0,
     "priceC": 1
+  },
+  {
+    "dataType": "itemPreset",
+    "name": "softFur",
+    "inGameName": "Soft Fur",
+    "description": "Fluffy fur from a Young Equine, suitable for crafting warm garments.",
+    "shortDescription": "Fluffy fur for crafting",
+    "stackable": true,
+    "stackSize": 30,
+    "rarity": "common",
+    "priceG": 0,
+    "priceS": 2,
+    "priceC": 0
+  },
+  {
+    "dataType": "itemPreset",
+    "name": "hoofShard",
+    "inGameName": "Hoof Shard",
+    "description": "A sturdy shard from the hoof of a Young Equine, useful for crafting various tools.",
+    "shortDescription": "Sturdy shard for crafting",
+    "stackable": true,
+    "stackSize": 40,
+    "rarity": "common",
+    "priceG": 0,
+    "priceS": 3,
+    "priceC": 0
+  },
+  {
+    "dataType": "itemPreset",
+    "name": "apple",
+    "inGameName": "Apple",
+    "description": "A fresh apple, harvested from the surroundings. It's a nutritious snack.",
+    "shortDescription": "Nutritious fresh fruit",
+    "stackable": true,
+    "stackSize": 20,
+    "rarity": "common",
+    "priceG": 0,
+    "priceS": 1,
+    "priceC": 0
+  },
+  {
+    "dataType": "itemPreset",
+    "name": "carrot",
+    "inGameName": "Carrot",
+    "description": "A crunchy carrot, perfect for munching on. A staple in any adventurer's diet.",
+    "shortDescription": "Crunchy and delicious",
+    "stackable": true,
+    "stackSize": 20,
+    "rarity": "common",
+    "priceG": 0,
+    "priceS": 1,
+    "priceC": 0
+  },
+  {
+    "dataType": "itemPreset",
+    "name": "slimeTrail",
+    "inGameName": "Slime Trail",
+    "description": "A trail of slimy secretion left behind by the Giant Snail. Valuable for alchemical purposes.",
+    "shortDescription": "Slimy trail for alchemy",
+    "stackable": true,
+    "stackSize": 50,
+    "rarity": "common",
+    "priceG": 0,
+    "priceS": 2,
+    "priceC": 0
+  },
+  {
+    "dataType": "itemPreset",
+    "name": "snailShell",
+    "inGameName": "Snail Shell",
+    "description": "The protective shell of the Giant Snail. Can be used for crafting and protection.",
+    "shortDescription": "Protective shell",
+    "stackable": true,
+    "stackSize": 20,
+    "rarity": "uncommon",
+    "priceG": 0,
+    "priceS": 10,
+    "priceC": 0
+  },
+  {
+    "dataType": "itemPreset",
+    "name": "lettuce",
+    "inGameName": "Lettuce",
+    "description": "A fresh head of lettuce, a favorite snack for the Giant Snail and adventurers alike.",
+    "shortDescription": "Fresh lettuce",
+    "stackable": true,
+    "stackSize": 20,
+    "rarity": "common",
+    "priceG": 0,
+    "priceS": 3,
+    "priceC": 0
+  },
+  {
+    "dataType": "itemPreset",
+    "name": "waterDroplet",
+    "inGameName": "Water Droplet",
+    "description": "A small droplet of water collected from the Giant Snail's habitat. Refreshing and invigorating.",
+    "shortDescription": "Refreshing water droplet",
+    "stackable": true,
+    "stackSize": 100,
+    "rarity": "common",
+    "priceG": 0,
+    "priceS": 1,
+    "priceC": 0
   }
 ]

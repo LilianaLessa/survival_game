@@ -10,7 +10,7 @@ use App\System\Item\ItemPreset;
 class ItemDropper implements ComponentInterface
 {
     public function __construct(
-        private readonly ItemPreset $itemBlueprint,
+        private readonly ItemPreset $itemPreset,
         private readonly DropOn $dropOn,
         private readonly int $minAmount,
         private readonly int $maxAmount,
@@ -18,9 +18,9 @@ class ItemDropper implements ComponentInterface
     ) {
     }
 
-    public function getItemBlueprint(): ItemPreset
+    public function getItemPreset(): ItemPreset
     {
-        return $this->itemBlueprint;
+        return $this->itemPreset;
     }
 
     public function getDropOn(): DropOn

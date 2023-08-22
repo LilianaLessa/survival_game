@@ -15,46 +15,58 @@
     ],
     "dropCollection": [
       {
-        "internalName": "softFur",
+        "name": "softFur",
         "events": [
           {
             "type": "die",
-            "chance": 0.1
+            "chance": 0.1,
+            "min":1,
+            "max":1
           },
           {
             "type": "pet",
-            "chance": 0.4
+            "chance": 0.4,
+            "min": 1,
+            "max": 1
           }
         ]
       },
       {
-        "internalName": "hoofShard",
+        "name": "hoofShard",
         "events": [
           {
             "type": "die",
-            "chance": 0.2
+            "chance": 0.2,
+            "min": 1,
+            "max": 1
           },
           {
             "type": "harvest",
-            "chance": 0.3
+            "chance": 0.3,
+            "min": 1,
+            "max": 1
           }
         ]
       },
       {
-        "internalName": "apple",
+        "name": "apple",
         "events": [
           {
             "type": "harvest",
-            "chance": 0.4
+            "chance": 0.4,
+            "min": 1,
+            "max": 1
           }
         ]
       },
       {
-        "internalName": "carrot",
+        "name": "carrot",
         "events": [
           {
             "type": "harvest",
-            "chance": 0.2
+            "chance": 0.2,
+            "min": 1,
+            "max": 1
           }
         ]
       }
@@ -69,7 +81,7 @@
     "spawnChance": 0.8,
     "spawnBiomes": [
       {
-        "internalName": "meadow",
+        "name": "meadow",
         "chance": 1.0
       }
     ],
@@ -102,42 +114,52 @@
     ],
     "dropCollection": [
       {
-        "internalName": "slimeTrail",
+        "name": "slimeTrail",
         "events": [
           {
             "type": "die",
-            "chance": 0.5
+            "chance": 0.5,
+            "min": 1,
+            "max": 1
           }
         ]
       },
       {
-        "internalName": "snailShell",
+        "name": "snailShell",
         "events": [
           {
             "type": "die",
-            "chance": 0.3
+            "chance": 0.3,
+            "min": 1,
+            "max": 1
           },
           {
             "type": "harvest",
-            "chance": 0.2
+            "chance": 0.2,
+            "min": 1,
+            "max": 1
           }
         ]
       },
       {
-        "internalName": "lettuce",
+        "name": "lettuce",
         "events": [
           {
             "type": "harvest",
-            "chance": 0.4
+            "chance": 0.4,
+            "min": 1,
+            "max": 1
           }
         ]
       },
       {
-        "internalName": "waterDroplet",
+        "name": "waterDroplet",
         "events": [
           {
             "type": "drink",
-            "chance": 0.2
+            "chance": 0.2,
+            "min": 1,
+            "max": 1
           }
         ]
       }
@@ -152,11 +174,11 @@
     "spawnChance": 0.6,
     "spawnBiomes": [
       {
-        "internalName": "forest",
+        "name": "forest",
         "chance": 0.7
       },
       {
-        "internalName": "meadow",
+        "name": "meadow",
         "chance": 0.3
       }
     ],
