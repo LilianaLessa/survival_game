@@ -16,6 +16,7 @@ use App\Engine\Entity\EntityCollection;
 use App\Engine\Entity\EntityManager;
 use App\System\ConsoleColor;
 use App\System\Player\PlayerPresetLibrary;
+use PHP_Parallel_Lint\PhpConsoleColor\ConsoleColor as ConsoleColorManager;
 
 class WorldManager
 {
@@ -132,7 +133,7 @@ class WorldManager
                 /** @var null|DrawableInterface */
                 $drawable = $topEntity?->getComponent($this->drawableClass);
 
-                $symbol = $drawable?->getSymbol() ?? self::EMPTY_CELL_SYMBOL;
+                $symbol = $drawable?->getSymbol() ?? $this->getEmptySymbolTest((int)$mapX, (int)$mapY);
 
                 /** @var ?ColorEffect $colorEffect */
                 $colorEffect = $topEntity ? $topEntity?->getComponent(ColorEffect::class) : null;
@@ -274,5 +275,16 @@ class WorldManager
         }
 
         return $this->groundPathWeights;
+    }
+
+    private function getEmptySymbolTest(int $mapX, int $mapY): string
+    {
+//        $consoleColor = new ConsoleColorManager();
+//
+//        if ($mapX % 2 === 0) {
+//            return $consoleColor->apply(['bg_light_blue','red'], self::EMPTY_CELL_SYMBOL);
+//        }
+
+        return self::EMPTY_CELL_SYMBOL;
     }
 }
