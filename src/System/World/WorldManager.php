@@ -16,6 +16,7 @@ use App\Engine\Entity\EntityCollection;
 use App\Engine\Entity\EntityManager;
 use App\System\Biome\BiomePreset;
 use App\System\Helpers\ConsoleColorPalette;
+use App\System\Helpers\Point2D;
 use App\System\Player\PlayerPresetLibrary;
 use PHP_Parallel_Lint\PhpConsoleColor\ConsoleColor;
 
@@ -35,6 +36,8 @@ class WorldManager
     private $lastDraw = null;
 
     private $mapBiomeData = [];
+
+    private $linearBiomeData = [];
 
     public function __construct(
         private readonly EntityManager $entityManager,
@@ -285,8 +288,22 @@ class WorldManager
 
     public function setMapBiomeData(array $mapBiomeData): self
     {
+        $this->linearBiomeData = [];
+
+        foreach ($mapBiomeData as $x => $column) {
+            foreach ($column as $y => $data) {
+                $this->linearBiomeData[$data['preset']->getName()][] = new Point2D($x, $y);
+            }
+        }
+
         $this->mapBiomeData = $mapBiomeData;
         return $this;
+    }
+
+    /** @return Point2D[] */
+    public function getLinearBiomeData(string $biomeName): array
+    {
+        return $this->linearBiomeData[$biomeName] ?? [];
     }
 
     private function getBackgroudColor(int $x, int $y): ConsoleColorPalette

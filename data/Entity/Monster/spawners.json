@@ -3,7 +3,7 @@
     "dataType": "monsterSpawner",
     "name": "youngEquine_meadow",
     "monster": "youngEquine",
-    "max": 5,
+    "max": 15,
     "chance": 0.8,
     "biomes": [
       {
@@ -22,7 +22,7 @@
     "dataType": "monsterSpawner",
     "name": "giantSnail_forest_meadow",
     "monster": "giantSnail",
-    "max": 2,
+    "max": 10,
     "chance": 0.8,
     "biomes": [
       {

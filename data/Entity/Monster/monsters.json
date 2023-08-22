@@ -8,6 +8,7 @@
     "level": 1,
     "totalHitPoints": 10,
     "symbol": "♞",
+    "defaultColor": "dark_orange3",
     "behaviors":  [
       {"preset": "idle"},
       {"preset": "increaseAggroOnAttacked"},
@@ -93,6 +94,7 @@
     "level": 2,
     "totalHitPoints": 15,
     "symbol": "⚛",
+    "defaultColor": "dark_violet",
     "behaviors":  [
       {"preset": "idle"},
       {"preset": "increaseAggroOnAttacked"},

@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\Engine\System;
 
-use App\Engine\Component\MapPosition;
 use App\Engine\Component\Monster;
 use App\Engine\Component\ParentSpawner;
-use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
+use App\System\Biome\BiomePresetLibrary;
 use App\System\Item\ItemPresetLibrary;
 use App\System\Monster\MonsterPresetLibrary;
 use App\System\Monster\Spawner\MonsterSpawnerLibrary;
@@ -28,6 +27,7 @@ class MonsterSpawner implements WorldSystemInterface
         private readonly EntityManager $entityManager,
         private readonly MonsterPresetLibrary $monsterPresetLibrary,
         private readonly MonsterSpawnerLibrary $monsterSpawnerLibrary,
+        private readonly BiomePresetLibrary $biomePresetLibrary,
     ) {
     }
 
@@ -48,13 +48,22 @@ class MonsterSpawner implements WorldSystemInterface
         );
 
         $inMapCount = count($children);
+        $biomes = array_filter(
+            array_map(
+                fn ($bn) => $this->biomePresetLibrary->getBiomeByName($bn),
+                $spawner->getBiomes()
+            )
+        );
+
+
+
 
         if ($inMapCount < $spawner->getMaxAmount()) {
             //30% of spawning a new monster
             if (rand(0, 100) < $spawner->getChance() * 100) {
                 do {
-                    $targetX = rand(0, $this->world->getWidth() -1);
-                    $targetY = rand(0, $this->world->getHeight() -1);
+
+                    [$targetX, $targetY] = $this->getTargetPoint($biomes);
 
                     if (!$this->canOverlapOnWorld($targetX, $targetY)) { //target not empty.
                         continue;
@@ -85,5 +94,25 @@ class MonsterSpawner implements WorldSystemInterface
             $targetX,
             $targetY
         );
+    }
+
+    private function getTargetPoint(array $biomes): array
+    {
+        $targetX = rand(0, $this->world->getWidth() - 1);
+        $targetY = rand(0, $this->world->getHeight() - 1);
+
+        $randomBiome = $biomes[rand(0, count($biomes) - 1)] ?? '';
+
+        $biomeCoordinates = $this->world->getLinearBiomeData($randomBiome->getName());
+
+        $randomBiomePoint = $biomeCoordinates[rand(0, count($biomeCoordinates) - 1)] ?? null;
+
+
+        if ($randomBiomePoint) {
+            $targetX = $randomBiomePoint->getX();
+            $targetY = $randomBiomePoint->getY();
+        }
+
+        return array($targetX, $targetY);
     }
 }

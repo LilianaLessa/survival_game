@@ -7,6 +7,7 @@ namespace App\System\Monster;
 use App\Engine\Component\BehaviorCollection;
 use App\Engine\Component\Item\ItemDropper\DropOn;
 use App\System\AI\BehaviorPresetLibrary;
+use App\System\Helpers\ConsoleColorPalette;
 use App\System\PresetLibrary\AbstractPreset;
 use App\System\PresetLibrary\AbstractPresetLibrary;
 use App\System\PresetLibrary\PresetDataType;
@@ -42,6 +43,11 @@ class MonsterPresetLibrary extends AbstractPresetLibrary
         $monsterPreset->setTotalHitPoints($rawPreset->totalHitPoints ?? 1);
 
         $monsterPreset->setDropCollection(...$this->generateMonsterDropCollection($rawPreset));
+        $monsterPreset->setDefaultColor(
+            ConsoleColorPalette::tryFrom(
+                $rawPreset->defaultColor ?? ''
+            ) ?? ConsoleColorPalette::default()
+        );
 
         return $monsterPreset;
     }

@@ -39,6 +39,7 @@ class Monster implements ComponentInterface
             new MapSymbol($monsterPreset->getSymbol()),
             new BehaviorCollection(...$monsterPreset->getBehaviorCollection()->getBehaviors()),
             new Monster($monsterPreset),
+            new DefaultColor($monsterPreset->getDefaultColor()),
             new Battler($monsterPreset->getBaseAttackSpeed()),
             new MapPosition($x, $y),
             new Collideable(),

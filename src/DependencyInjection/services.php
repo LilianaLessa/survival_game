@@ -165,6 +165,7 @@ function registerEngineServices(ServicesConfigurator $services)
             new Reference(EntityManager::class),
             new Reference(MonsterPresetLibrary::class),
             new Reference(MonsterSpawnerLibrary::class),
+            new Reference(BiomePresetLibrary::class),
         ]);
 }
 

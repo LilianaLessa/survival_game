@@ -9,14 +9,21 @@ use App\System\PresetLibrary\PresetDataType;
 
 class MonsterSpawnerPreset extends AbstractPreset
 {
+    /* @var string[] */
+    private array $biomes;
+
+
     public function __construct(
         string $name,
         private readonly string $monsterPresetName,
         private readonly int $maxAmount,
         private readonly float $chance,
+        string ...$biomes,
     )
     {
         parent::__construct(PresetDataType::MONSTER_SPAWNER, $name);
+
+        $this->biomes = $biomes;
     }
 
     public function getMonsterPresetName(): string
@@ -32,5 +39,13 @@ class MonsterSpawnerPreset extends AbstractPreset
     public function getChance(): float
     {
         return $this->chance;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getBiomes(): array
+    {
+        return $this->biomes;
     }
 }

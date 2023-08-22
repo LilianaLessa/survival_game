@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\System\Monster;
 
 use App\Engine\Component\BehaviorCollection;
+use App\System\Helpers\ConsoleColorPalette;
 use App\System\PresetLibrary\AbstractPreset;
 use App\System\PresetLibrary\PresetDataType;
 
@@ -19,6 +20,8 @@ class MonsterPreset extends AbstractPreset
     /** @var MonsterDropPreset[] */
     private array $dropCollection;
 
+    private ConsoleColorPalette $defaultColor;
+
     public function __construct(
         string $name,
         private readonly ?string $symbol,
@@ -27,6 +30,8 @@ class MonsterPreset extends AbstractPreset
         private readonly BehaviorCollection $behaviorCollection,
     ) {
         parent::__construct(PresetDataType::MONSTER_PRESET, $name);
+
+        $this->defaultColor = ConsoleColorPalette::default();
     }
 
     public function getSymbol(): string
@@ -81,6 +86,17 @@ class MonsterPreset extends AbstractPreset
     public function setDropCollection(MonsterDropPreset ...$dropCollection): self
     {
         $this->dropCollection = $dropCollection;
+        return $this;
+    }
+
+    public function getDefaultColor(): ConsoleColorPalette
+    {
+        return $this->defaultColor;
+    }
+
+    public function setDefaultColor(ConsoleColorPalette $defaultColor): self
+    {
+        $this->defaultColor = $defaultColor;
         return $this;
     }
 }

@@ -25,6 +25,7 @@ class MonsterSpawnerLibrary extends AbstractPresetLibrary
             $rawPreset->monster,
             $rawPreset->max ?? 0,
             $rawPreset->chance ?? 0,
+            ...array_filter(array_map(fn($o) => $o->name ?? null, $rawPreset->biomes ?? []))
         );
     }
 
