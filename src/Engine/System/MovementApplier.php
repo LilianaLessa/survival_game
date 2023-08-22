@@ -18,7 +18,10 @@ class MovementApplier implements PhysicsSystemInterface
 {
     use WorldAwareTrait;
 
-    public function __construct(private readonly WorldManager $world, private readonly EntityManager $entityManager)
+    public function __construct(
+        private readonly WorldManager $world,
+        private readonly EntityManager $entityManager
+    )
     {
     }
 
@@ -31,36 +34,38 @@ class MovementApplier implements PhysicsSystemInterface
 
         //process all move commands for each entity. fulfill only one. if one is fulfilled, remove others.
         /**
-         * @var MovementQueue $movable
+         * @var MovementQueue $movementQueue
          * @var MapPosition $position
          */
-        foreach ($movableEntities as $entityId => [$movable, $position]) {
-            $next = $movable->dequeue();
-            if (!$next) {
-                continue;
+        foreach ($movableEntities as $entityId => [$movementQueue, $position]) {
+            //calculate how many steps this entity should walk
+            $currentMs = (int) floor(microtime(true) * 1000);
+            $msLastMovement = $movementQueue->getMsLastMovement() ?? $currentMs - 1000;
+            $dueSteps = $movementQueue->getMsLastMovement() ? null : 1;
+
+            $deltaS = ($currentMs - $msLastMovement) / 1000;
+
+            $movementSpeed = $movementQueue->getBaseMovementSpeed(); //speed in cells p/ second
+
+            $dueSteps === null && $dueSteps = (int)($movementSpeed > 0 ? floor($deltaS * $movementSpeed) : 0);
+
+//            if ($dueSteps > 0 && !$movementQueue->isQueueEmpty()) {
+//                Dispatcher::dispatch(
+//                    new UiMessageEvent(
+//                        sprintf(
+//                            "Triggered %d steps. %f - %s\n",
+//                            $dueSteps,
+//                            $deltaS,
+//                            $entityId
+//                        )
+//                    )
+//                );
+//            }
+
+            for ($i = 0; $i < $dueSteps; $i++) {
+                $this->step($entityId, $movementQueue, $position);
             }
-
-            [$targetX, $targetY] = $next->getCoordinates()->toArray();
-
-            if ($this->validateMovement($position->getX(), $position->getY(), $targetX, $targetY)) {
-                $this->entityManager->updateEntityComponents(
-                    $entityId,
-                    new MapPosition($targetX, $targetY)
-                );
-            } else {
-                if($this->entityManager->entityHasComponent($entityId,Player::class)) {
-                    Dispatcher::getInstance()->dispatch(
-                        new UiMessageEvent("Can't move in this direction.\n")
-                    );
-                }
-                $movable->clear();
-                continue;
-            }
-
-            $this->entityManager->updateEntityComponents($entityId, $movable);
         }
-
-        //$moved && $movable->clear();
 
     }
 
@@ -86,5 +91,34 @@ class MovementApplier implements PhysicsSystemInterface
         }
 
         return true;
+    }
+
+    private function step(int|string $entityId, MovementQueue $movementQueue, MapPosition $position): void
+    {
+        $next = $movementQueue->dequeue();
+        if (!$next) {
+            return;
+        }
+
+        [$targetX, $targetY] = $next->getCoordinates()->toArray();
+
+        if ($this->validateMovement($position->getX(), $position->getY(), $targetX, $targetY)) {
+            $this->entityManager->updateEntityComponents(
+                $entityId,
+                new MapPosition($targetX, $targetY)
+            );
+        } else {
+            if($this->entityManager->entityHasComponent($entityId,Player::class)) {
+                Dispatcher::getInstance()->dispatch(
+                    new UiMessageEvent("Can't move in this direction.\n")
+                );
+            }
+            $movementQueue->clear();
+            return;
+        }
+
+        $movementQueue->setMsLastMovement((int) floor(microtime(true) * 1000));
+
+        $this->entityManager->updateEntityComponents($entityId, $movementQueue);
     }
 }

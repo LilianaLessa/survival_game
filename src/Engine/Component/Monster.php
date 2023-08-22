@@ -27,7 +27,7 @@ class Monster implements ComponentInterface
             new Monster(),
             new MapPosition($x, $y),
             new Collideable(),
-            new MovementQueue(),
+            new MovementQueue($monsterPreset->getBaseMovementSpeed()),
             new HitPoints(10, 10),
             new ItemDropperCollection(
                 new ItemDropper(

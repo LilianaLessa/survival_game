@@ -22,7 +22,7 @@ class Player implements ComponentInterface
             new MapPosition($x,$y),
             new MapSymbol(sprintf("\033[1;33m%s\033[0m", $playerPreset->getDefaultSymbol())),
             new Collideable(),
-            new MovementQueue(),
+            new MovementQueue(10),
             new WorldActor(),
             new ActionHandlerList(
                 [

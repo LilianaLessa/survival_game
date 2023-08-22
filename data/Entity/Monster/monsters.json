@@ -83,7 +83,7 @@
     ],
     "race": "beast",
     "size": "small",
-    "movementSpeed": 0.5,
+    "baseMovementSpeed": 3,
     "attackSpeed": 0.2
   }
 ]

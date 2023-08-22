@@ -8,6 +8,13 @@ use App\Engine\Commands\MoveEntity;
 
 class MovementQueue implements ActionQueueComponentInterface
 {
+    private ?int $msLastMovement;
+
+    public function __construct(private readonly float $baseMovementSpeed)
+    {
+        $this->msLastMovement = null;
+    }
+
     /** @var MoveEntity[]  */
     private array $movementQueue = [];
 
@@ -36,5 +43,21 @@ class MovementQueue implements ActionQueueComponentInterface
     public function isQueueEmpty(): bool
     {
         return empty($this->movementQueue);
+    }
+
+    public function getBaseMovementSpeed(): float
+    {
+        return $this->baseMovementSpeed;
+    }
+
+    public function getMsLastMovement(): ?int
+    {
+        return $this->msLastMovement;
+    }
+
+    public function setMsLastMovement(int $msLastMovement): self
+    {
+        $this->msLastMovement = $msLastMovement;
+        return $this;
     }
 }

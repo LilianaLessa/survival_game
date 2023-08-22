@@ -99,7 +99,13 @@ $commandReceiver->init();
 $screenUpdater = new ScreenUpdater($entityManager, $world, $worldPreset->getScreenUpdaterFps());
 $screenUpdater->intiScreenUpdate();
 
-$tickDurationInSeconds = 0.1;
+function gameTick(): void
+{
+    $tickDurationInSeconds = 0.1;
+
+    delay($tickDurationInSeconds); //tick
+}
+
 do { //game loop
 
     //steps, in order:
@@ -126,5 +132,5 @@ do { //game loop
         }
     }
 
-    delay($tickDurationInSeconds); //tick
+    gameTick();
 } while(1);

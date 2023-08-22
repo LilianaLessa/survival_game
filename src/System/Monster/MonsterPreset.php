@@ -10,6 +10,8 @@ use App\System\PresetLibrary\PresetDataType;
 
 class MonsterPreset extends AbstractPreset
 {
+    private float $baseMovementSpeed = 0;
+
     public function __construct(
         string $name,
         private readonly ?string $symbol,
@@ -28,5 +30,16 @@ class MonsterPreset extends AbstractPreset
     public function getBehaviorCollection(): BehaviorCollection
     {
         return $this->behaviorCollection;
+    }
+
+    public function getBaseMovementSpeed(): float
+    {
+        return max($this->baseMovementSpeed ?? 0, 0);
+    }
+
+    public function setBaseMovementSpeed(float $baseMovementSpeed): self
+    {
+        $this->baseMovementSpeed = max($baseMovementSpeed, 0);
+        return $this;
     }
 }

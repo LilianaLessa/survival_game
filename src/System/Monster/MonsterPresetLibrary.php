@@ -20,11 +20,15 @@ class MonsterPresetLibrary extends AbstractPresetLibrary
 
     protected function createPreset(?PresetDataType $presetDataType, object $rawPreset): AbstractPreset
     {
-        return new MonsterPreset(
+        $monsterPreset = new MonsterPreset(
             name: $rawPreset->name,
             symbol: $rawPreset->symbol ?? null,
             behaviorCollection: $this->loadBehaviorCollection($rawPreset)
         );
+
+        $monsterPreset->setBaseMovementSpeed($rawPreset->baseMovementSpeed ?? 0);
+
+        return $monsterPreset;
     }
 
     private function loadBehaviorCollection(object $rawPreset): BehaviorCollection
