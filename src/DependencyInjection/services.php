@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Engine\Entity\EntityManager;
 use App\Engine\System\BattleSystem;
+use App\Engine\System\ColorEffectsSystem;
 use App\Engine\System\PlayerSpawner;
 use App\System\AI\Behavior\EffectHandlers\Attack\Attack;
 use App\System\AI\Behavior\EffectHandlers\IncreaseAggro\IncreaseAggro;
@@ -87,6 +88,11 @@ function registerEngineServices(ServicesConfigurator $services)
         ->args([
             new Reference(WorldManager::class),
             new Reference(PlayerPresetLibrary::class),
+            new Reference(EntityManager::class),
+        ]);
+
+    $services->set(ColorEffectsSystem::class, ColorEffectsSystem::class)
+        ->args([
             new Reference(EntityManager::class),
         ]);
 }

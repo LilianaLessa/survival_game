@@ -6,7 +6,7 @@ namespace App\Engine\System;
 
 use App\Engine\Entity\Entity;
 
-interface ProcessorSystemInterface
+interface GameSystemInterface
 {
     /** @param Entity[] $entityCollection */
     public function process(): void;

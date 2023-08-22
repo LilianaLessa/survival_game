@@ -17,6 +17,7 @@ class EntityManager
         $this->entityCollection = new EntityCollection();
     }
 
+    /** @return Entity[] */
     public function getEntityCollection(): EntityCollection
     {
         return $this->entityCollection;

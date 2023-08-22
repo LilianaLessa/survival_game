@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Engine\Component\ActionHandler;
 
+use App\Engine\Component\ColorEffect;
 use App\Engine\Component\HitByEntity;
 use App\Engine\Component\HitPoints;
 use App\Engine\Component\MapPosition;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
+use App\System\ConsoleColor;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
 
@@ -26,13 +28,20 @@ class HitTarget implements ActionHandlerInterface
         ];
 
         if ($hitPoints) {
-            $entityManger->updateEntityComponents(
-                $targetEntity->getId(),
+            $components = [
                 new HitPoints(
                     $hitPoints->getCurrent() - 1,
                     $hitPoints->getTotal(),
                 ),
-                new HitByEntity($actorEntity)
+                new HitByEntity($actorEntity),
+            ];
+
+            $colorEffect = $targetEntity->getComponent(ColorEffect::class);
+            !$colorEffect && $components[] = new ColorEffect(50, ConsoleColor::Red->value);
+
+            $entityManger->updateEntityComponents(
+                $targetEntity->getId(),
+                ...$components,
             );
 
             Dispatcher::dispatch(

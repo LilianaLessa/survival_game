@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\System\World;
 
 use App\Engine\Component\Collideable;
+use App\Engine\Component\ColorEffect;
 use App\Engine\Component\DrawableInterface;
 use App\Engine\Component\MapPosition;
 use App\Engine\Component\MapSymbol;
@@ -12,6 +13,7 @@ use App\Engine\Component\Player;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityCollection;
 use App\Engine\Entity\EntityManager;
+use App\System\ConsoleColor;
 use App\System\Player\PlayerPresetLibrary;
 
 class WorldManager
@@ -120,13 +122,26 @@ class WorldManager
                     $this->drawableClass
                 );
 
-                /* @var bool|Entity $topEntity */
-                $topEntity = end($drawableEntities);
+                $entityIds = array_keys($drawableEntities);
+                $topEntityId = end($entityIds);
+                $topEntityId = $topEntityId ? $topEntityId : '';
+                /* @var ?Entity $topEntity */
+                $topEntity = $this->entityManager->getEntityById($topEntityId) ?? null;
 
                 /** @var null|DrawableInterface */
-                [$drawable] = $topEntity ? $topEntity : [null];
+                $drawable = $topEntity?->getComponent($this->drawableClass);
 
                 $symbol = $drawable?->getSymbol() ?? self::EMPTY_CELL_SYMBOL;
+
+                /** @var ?ColorEffect $colorEffect */
+                $colorEffect =  $topEntity ? $topEntity?->getComponent(ColorEffect::class) : null;
+
+                $colorEffect && $symbol = sprintf(
+                    "%s%s%s",
+                    $colorEffect->getColor(),
+                    $symbol,
+                    ConsoleColor::Color_Off->value
+                );
 
                 echo sprintf(" %s", $symbol);
             }

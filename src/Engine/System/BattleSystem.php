@@ -8,6 +8,7 @@ use App\Engine\Commands\MoveEntity;
 use App\Engine\Component\AggroQueue;
 use App\Engine\Component\Battler;
 use App\Engine\Component\AttackTarget;
+use App\Engine\Component\ColorEffect;
 use App\Engine\Component\HitByEntity;
 use App\Engine\Component\HitPoints;
 use App\Engine\Component\Item\ItemDropper\DropOn;
@@ -20,6 +21,7 @@ use App\Engine\Component\MovementQueue;
 use App\Engine\Component\MsTimeFromLastAttack;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
+use App\System\ConsoleColor;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
 use App\System\Helpers\RouteService;
@@ -215,10 +217,18 @@ class BattleSystem implements AISystemInterface
                 $hitPoints->getCurrent() - $damage,
                 $hitPoints->getTotal(),
             );
-            $this->entityManager->updateEntityComponents(
-                $targetEntity->getId(),
+
+            $components = [
                 $newHitPoints,
                 new HitByEntity($attacker)
+            ];
+
+            $colorEffect = $targetEntity->getComponent(ColorEffect::class);
+            !$colorEffect && $components[] = new ColorEffect(50, ConsoleColor::Red->value);
+
+            $this->entityManager->updateEntityComponents(
+                $targetEntity->getId(),
+                ...$components
             );
 
             $hitMessage .= sprintf(

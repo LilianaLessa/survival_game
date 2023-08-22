@@ -22,7 +22,8 @@ class Tree implements ComponentInterface
         return $entityManager->createEntity(
             new Tree(),
             new MapPosition($x, $y),
-            new MapSymbol("\033[32m♣\033[0m"),
+           // new MapSymbol("\033[32m♣\033[0m"),
+            new MapSymbol("♣"),
             new Collideable(),
             new HitPoints(5,5),
             new ItemDropperCollection(
