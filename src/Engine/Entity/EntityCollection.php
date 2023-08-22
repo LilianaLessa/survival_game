@@ -94,27 +94,6 @@ class EntityCollection extends \ArrayObject
         return $foundEntityComponents;
     }
 
-    /** @return ComponentInterface[] */
-    public function getEntitiesWithComponents_bkp(string ...$componentClasses): array
-    {
-        $foundEntityComponents = [];
-        foreach ($this as $entityId => $entity) {
-            $foundComponents = [];
-            foreach ($componentClasses as $componentClass) {
-                $component = $this->components[$componentClass][$entityId] ?? null;
-                if ($component === null) {
-                    continue 2;
-                }
-
-                $foundComponents[] = $component;
-            }
-
-            $foundEntityComponents[$entityId] = $foundComponents;
-        }
-
-        return $foundEntityComponents;
-    }
-
     public function entityHasComponent(string $entityId, string $componentClass): bool
     {
         return ($this->components[$componentClass][$entityId] ?? null) !== null;

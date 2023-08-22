@@ -150,7 +150,11 @@ class WorldManager
             echo "\n";
         }
         if ($this->lastDraw !== null) {
-            echo sprintf("\n%s\n", microtime(true) - $this->lastDraw);
+            echo sprintf(
+                "\n%s\n%d\n",
+                microtime(true) - $this->lastDraw,
+                count($this->entityManager->getEntityCollection())
+            );
         }
         $this->lastDraw = microtime(true);
     }

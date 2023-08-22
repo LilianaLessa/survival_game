@@ -3,5 +3,5 @@
   "name": "defaultWorldPreset",
   "mapWidth": 30,
   "mapHeight": 30,
-  "screenUpdaterFps": 25
+  "screenUpdaterFps": 10
 }
