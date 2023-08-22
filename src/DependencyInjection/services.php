@@ -5,7 +5,14 @@ declare(strict_types=1);
 use App\Engine\Entity\EntityManager;
 use App\Engine\System\BattleSystem;
 use App\Engine\System\ColorEffectsSystem;
+use App\Engine\System\ItemCollection\CollectItems;
+use App\Engine\System\ItemCollection\EntityBehaviorSystem;
+use App\Engine\System\MonsterSpawner;
+use App\Engine\System\MovementApplier;
+use App\Engine\System\PlayerController;
 use App\Engine\System\PlayerSpawner;
+use App\Engine\System\WorldActionApplier;
+use App\Engine\System\WorldController;
 use App\System\AI\Behavior\EffectHandlers\Attack\Attack;
 use App\System\AI\Behavior\EffectHandlers\IncreaseAggro\IncreaseAggro;
 use App\System\AI\Behavior\EffectHandlers\Move\Move;
@@ -13,6 +20,7 @@ use App\System\AI\BehaviorPresetLibrary;
 use App\System\Helpers\RouteService;
 use App\System\Item\ItemPresetLibrary;
 use App\System\Monster\MonsterPresetLibrary;
+use App\System\Monster\Spawner\MonsterSpawnerLibrary;
 use App\System\Player\PlayerPresetLibrary;
 use App\System\World\WorldManager;
 use App\System\World\WorldPresetLibrary;
@@ -46,6 +54,7 @@ function registerPresetLibraries(ServicesConfigurator $services): void
     $services->set(ItemPresetLibrary::class, ItemPresetLibrary::class);
     $services->set(WorldPresetLibrary::class, WorldPresetLibrary::class);
     $services->set(BehaviorPresetLibrary::class, BehaviorPresetLibrary::class);
+    $services->set(MonsterSpawnerLibrary::class, MonsterSpawnerLibrary::class);
     $services->set(MonsterPresetLibrary::class, MonsterPresetLibrary::class)
         ->args([
             new Reference(BehaviorPresetLibrary::class)
@@ -94,6 +103,51 @@ function registerEngineServices(ServicesConfigurator $services)
     $services->set(ColorEffectsSystem::class, ColorEffectsSystem::class)
         ->args([
             new Reference(EntityManager::class),
+        ]);
+
+    $services->set(WorldActionApplier::class, WorldActionApplier::class)
+        ->args([
+            new Reference(WorldManager::class),
+            new Reference(EntityManager::class),
+        ]);
+
+
+    $services->set(CollectItems::class, CollectItems::class)
+        ->args([
+            new Reference(WorldManager::class),
+            new Reference(EntityManager::class),
+        ]);
+
+    $services->set(MovementApplier::class, MovementApplier::class)
+        ->args([
+            new Reference(WorldManager::class),
+            new Reference(EntityManager::class),
+        ]);
+
+    $services->set(EntityBehaviorSystem::class, EntityBehaviorSystem::class)
+        ->args([
+            new Reference(EntityManager::class),
+        ]);
+
+    $services->set(PlayerController::class, PlayerController::class)
+        ->args([
+            new Reference(WorldManager::class),
+            new Reference(EntityManager::class),
+            new Reference(ItemPresetLibrary::class),
+        ]);
+
+    $services->set(WorldController::class, WorldController::class)
+        ->args([
+            new Reference(WorldManager::class),
+        ]);
+
+    $services->set(MonsterSpawner::class, MonsterSpawner::class)
+        ->args([
+            new Reference(WorldManager::class),
+            new Reference(ItemPresetLibrary::class),
+            new Reference(EntityManager::class),
+            new Reference(MonsterPresetLibrary::class),
+            new Reference(MonsterSpawnerLibrary::class),
         ]);
 }
 

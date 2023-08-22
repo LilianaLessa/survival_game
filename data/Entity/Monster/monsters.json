@@ -71,20 +71,6 @@
         ]
       }
     ],
-    "spawnArea": {
-      "startX": 0,
-      "startY": 0,
-      "endX": 249,
-      "endY": 249
-    },
-    "maxInMap": 25,
-    "spawnChance": 0.8,
-    "spawnBiomes": [
-      {
-        "name": "meadow",
-        "chance": 1.0
-      }
-    ],
     "sightRadius": 5,
     "hearRadius": 4,
     "elements": [
@@ -162,24 +148,6 @@
             "max": 1
           }
         ]
-      }
-    ],
-    "spawnArea": {
-      "startX": 70,
-      "startY": 120,
-      "endX": 90,
-      "endY": 140
-    },
-    "maxInMap": 15,
-    "spawnChance": 0.6,
-    "spawnBiomes": [
-      {
-        "name": "forest",
-        "chance": 0.7
-      },
-      {
-        "name": "meadow",
-        "chance": 0.3
       }
     ],
     "sightRadius": 3,

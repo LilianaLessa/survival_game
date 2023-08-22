@@ -1,0 +1,44 @@
+[
+  {
+    "dataType": "monsterSpawner",
+    "name": "youngEquine_meadow",
+    "monster": "youngEquine",
+    "max": 5,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "meadow",
+        "chance": 1.0
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "giantSnail_forest_meadow",
+    "monster": "giantSnail",
+    "max": 2,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "forest",
+        "chance": 0.7
+      },
+      {
+        "name": "meadow",
+        "chance": 0.3
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  }
+]

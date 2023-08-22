@@ -6,11 +6,14 @@ namespace App\Engine\System;
 
 use App\Engine\Component\MapPosition;
 use App\Engine\Component\Monster;
+use App\Engine\Component\ParentSpawner;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
 use App\System\Item\ItemPresetLibrary;
 use App\System\Monster\MonsterPresetLibrary;
+use App\System\Monster\Spawner\MonsterSpawnerLibrary;
+use App\System\Monster\Spawner\MonsterSpawnerPreset;
 use App\System\World\WorldManager;
 
 //todo this monster spawner can be a component for a entity on map.
@@ -24,20 +27,31 @@ class MonsterSpawner implements WorldSystemInterface
         private readonly ItemPresetLibrary $itemPresetLibrary,
         private readonly EntityManager $entityManager,
         private readonly MonsterPresetLibrary $monsterPresetLibrary,
-        private readonly int $maxMonstersInMap,
-        private readonly string $monsterName,
+        private readonly MonsterSpawnerLibrary $monsterSpawnerLibrary,
     ) {
     }
 
     public function process(): void
     {
-        $monsterInMapCount = $this->getMonstersCount();
+        $spawners = $this->monsterSpawnerLibrary->getAll();
 
-        $maxMonsterInMap = $this->maxMonstersInMap;
+        foreach ($spawners as $spawner) {
+            $this->spawn($spawner);
+        }
+    }
 
-        if ($monsterInMapCount < $maxMonsterInMap) {
+    private function spawn(MonsterSpawnerPreset $spawner): void
+    {
+        $children = array_filter(
+            $this->entityManager->getEntitiesWithComponents(ParentSpawner::class),
+            fn ($c) => $c[0]->getParentSpawner()->getName() === $spawner->getName()
+        );
+
+        $inMapCount = count($children);
+
+        if ($inMapCount < $spawner->getMaxAmount()) {
             //30% of spawning a new monster
-            if (rand(0, 100) < 30) {
+            if (rand(0, 100) < $spawner->getChance() * 100) {
                 do {
                     $targetX = rand(0, $this->world->getWidth() -1);
                     $targetY = rand(0, $this->world->getHeight() -1);
@@ -46,7 +60,7 @@ class MonsterSpawner implements WorldSystemInterface
                         continue;
                     }
 
-                    $this->spawnMonster($targetX, $targetY, $this->monsterName);
+                    $this->spawnMonster($spawner, $targetX, $targetY);
 
                     break;
                 } while (true);
@@ -54,32 +68,22 @@ class MonsterSpawner implements WorldSystemInterface
         }
     }
 
-    private function spawnMonster(int $targetX, int $targetY, string $monsterName): void
-    {
-        $monsterPreset = $this->monsterPresetLibrary->getMonsterPreset($monsterName);
+    private function spawnMonster(
+        MonsterSpawnerPreset $parentSpawner,
+        int $targetX,
+        int $targetY,
+    ): void {
+        $monsterPreset = $this->monsterPresetLibrary->getMonsterPreset(
+            $parentSpawner->getMonsterPresetName()
+        );
 
         $monsterPreset && Monster::createMonster(
+            $parentSpawner,
             $monsterPreset,
             $this->itemPresetLibrary,
             $this->entityManager,
             $targetX,
             $targetY
         );
-    }
-
-    private function getMonstersCount(): int
-    {
-
-        $monsterInMap = $this->entityManager->getEntitiesWithComponents(
-            Monster::class,
-            MapPosition::class
-        );
-        /** @var Monster $m */
-        $monsterInMap = array_filter(
-            $monsterInMap,
-            fn ($m) => $m[0]->getMonsterPreset()->getName() === $this->monsterName
-        );
-
-        return count($monsterInMap);
     }
 }

@@ -1,0 +1,36 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\System\Monster\Spawner;
+
+use App\System\PresetLibrary\AbstractPreset;
+use App\System\PresetLibrary\PresetDataType;
+
+class MonsterSpawnerPreset extends AbstractPreset
+{
+    public function __construct(
+        string $name,
+        private readonly string $monsterPresetName,
+        private readonly int $maxAmount,
+        private readonly float $chance,
+    )
+    {
+        parent::__construct(PresetDataType::MONSTER_SPAWNER, $name);
+    }
+
+    public function getMonsterPresetName(): string
+    {
+        return $this->monsterPresetName;
+    }
+
+    public function getMaxAmount(): int
+    {
+        return $this->maxAmount;
+    }
+
+    public function getChance(): float
+    {
+        return $this->chance;
+    }
+}

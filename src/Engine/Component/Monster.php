@@ -12,6 +12,7 @@ use App\Engine\Entity\EntityManager;
 use App\System\Item\ItemPresetLibrary;
 use App\System\Monster\MonsterDropPreset;
 use App\System\Monster\MonsterPreset;
+use App\System\Monster\Spawner\MonsterSpawnerPreset;
 
 class Monster implements ComponentInterface
 {
@@ -25,6 +26,7 @@ class Monster implements ComponentInterface
     }
 
     static public function createMonster(
+        MonsterSpawnerPreset $parentSpawner,
         MonsterPreset $monsterPreset,
         ItemPresetLibrary $itemPresetLibrary,
         EntityManager $entityManager,
@@ -33,6 +35,7 @@ class Monster implements ComponentInterface
     ): Entity {
         $totalHitPoints = $monsterPreset->getTotalHitPoints();
         return $entityManager->createEntity(
+            new ParentSpawner($parentSpawner),
             new MapSymbol($monsterPreset->getSymbol()),
             new BehaviorCollection(...$monsterPreset->getBehaviorCollection()->getBehaviors()),
             new Monster($monsterPreset),

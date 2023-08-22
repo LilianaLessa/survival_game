@@ -2,12 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Engine\Component\Player;
 use App\Engine\Entity\EntityManager;
 use App\Engine\System\AISystemInterface;
 use App\Engine\System\BattleSystem;
 use App\Engine\System\ColorEffectsSystem;
-use App\Engine\System\FluidDynamics;
 use App\Engine\System\ItemCollection\CollectItems;
 use App\Engine\System\ItemCollection\EntityBehaviorSystem;
 use App\Engine\System\MonsterSpawner;
@@ -23,6 +21,7 @@ use App\System\AI\BehaviorPresetLibrary;
 use App\System\Item\ItemPresetLibrary;
 use App\System\Kernel;
 use App\System\Monster\MonsterPresetLibrary;
+use App\System\Monster\Spawner\MonsterSpawnerLibrary;
 use App\System\Player\PlayerPresetLibrary;
 use App\System\Screen\ScreenUpdater;
 use App\System\TCP\TCPServer;
@@ -36,12 +35,14 @@ require_once 'vendor/autoload.php';
 $playerPresetLibrary = Kernel::getContainer()->get(PlayerPresetLibrary::class);
 $behaviorPresetLibrary = Kernel::getContainer()->get(BehaviorPresetLibrary::class);
 $monsterPresetLibrary = Kernel::getContainer()->get(MonsterPresetLibrary::class);
+$monsterSpawnerLibrary = Kernel::getContainer()->get(MonsterSpawnerLibrary::class);
 /** @var WorldPresetLibrary $worldPresetLibrary */
 $worldPresetLibrary = Kernel::getContainer()->get(WorldPresetLibrary::class);
 $itemPresetLibrary =  Kernel::getContainer()->get(ItemPresetLibrary::class);
 
 $behaviorPresetLibrary->load('./data/Entity/AI/Behavior');
 $monsterPresetLibrary->load('./data/Entity/Monster');
+$monsterSpawnerLibrary->load('./data/Entity/Monster');
 $worldPresetLibrary->load('./data/World');
 $playerPresetLibrary->load('./data/Player');
 $itemPresetLibrary->load('./data/Item');
@@ -60,42 +61,29 @@ $initialViewportHeight = $playerPreset->getInitialViewportHeight();
 /** @var WorldManager $world */
 $world = Kernel::getContainer()->get(WorldManager::class);
 
+$screenUpdater = new ScreenUpdater($entityManager, $world, $worldPreset->getScreenUpdaterFps());
+
 $systems = [
     ///...Kernel::getRegisteredGameSystemInstances(),
-    new WorldActionApplier($world, $entityManager),
-    new CollectItems($world, $entityManager),
-    new MovementApplier($world, $entityManager),
+    Kernel::getContainer()->get(WorldActionApplier::class),
+    Kernel::getContainer()->get(CollectItems::class),
+    Kernel::getContainer()->get(MovementApplier::class),
     Kernel::getContainer()->get(BattleSystem::class),
     Kernel::getContainer()->get(ColorEffectsSystem::class),
     Kernel::getContainer()->get(PlayerSpawner::class),
-    new FluidDynamics($world, $entityManager),
-    //new FireDynamics($world, $entityManager),
-    //new SoundDynamics($world, $entityManager),
-    new EntityBehaviorSystem($entityManager),
-    new MonsterSpawner(
-        $world,
-        $itemPresetLibrary,
-        $entityManager,
-        $monsterPresetLibrary,
-        (int) ceil(($worldWidth * $worldHeight) * 0.005),
-        'youngEquine'
-    ),
-    new MonsterSpawner(
-        $world,
-        $itemPresetLibrary,
-        $entityManager,
-        $monsterPresetLibrary,
-        (int) ceil(($worldWidth * $worldHeight) * 0.005),
-        'giantSnail'
-    ),
+    Kernel::getContainer()->get(EntityBehaviorSystem::class),
+    Kernel::getContainer()->get(PlayerController::class),
+    Kernel::getContainer()->get(WorldController::class),
+    Kernel::getContainer()->get(MonsterSpawner::class),
 
     new TreeSpawner($world, $entityManager, $itemPresetLibrary, (int) ceil(($worldWidth * $worldHeight) * 0.1)),
     //controllers
     //new MonsterController($entityManager),
     //todo this should be attached to the player cli/unblocking cli socket.
-    new PlayerController($world, $entityManager, $itemPresetLibrary),
-    new WorldController($world),
+
 ];
+
+$commandReceiver = new TCPServer('127.0.0.1:1988', $systems);
 
 /**
  * todo
@@ -105,11 +93,8 @@ $systems = [
  *  multiple instances of the map renderer can be created, and connected to a single player input.
  *
  */
-$commandReceiver = new TCPServer('127.0.0.1:1988', $systems);
-//readline('Press enter to start the game server.');
-$commandReceiver->init();
 
-$screenUpdater = new ScreenUpdater($entityManager, $world, $worldPreset->getScreenUpdaterFps());
+$commandReceiver->init();
 $screenUpdater->intiScreenUpdate();
 
 function gameTick(): void

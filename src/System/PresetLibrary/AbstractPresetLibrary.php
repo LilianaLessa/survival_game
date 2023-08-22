@@ -9,7 +9,7 @@ abstract class AbstractPresetLibrary
     /**
      * @var AbstractPreset[][]
      */
-    private array $presetsByTypeAndName = [];
+    protected array $presetsByTypeAndName = [];
 
     public function load(string $presetDataDirectory): void
     {
