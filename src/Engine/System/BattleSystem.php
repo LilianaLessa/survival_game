@@ -21,9 +21,10 @@ use App\Engine\Component\MovementQueue;
 use App\Engine\Component\MsTimeFromLastAttack;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
-use App\System\ConsoleColor;
+use App\System\ConsoleColorCode;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
+use App\System\Helpers\ConsoleColorPalette;
 use App\System\Helpers\RouteService;
 
 class BattleSystem implements AISystemInterface
@@ -224,7 +225,7 @@ class BattleSystem implements AISystemInterface
             ];
 
             $colorEffect = $targetEntity->getComponent(ColorEffect::class);
-            !$colorEffect && $components[] = new ColorEffect(50, ConsoleColor::Red->value);
+            !$colorEffect && $components[] = new ColorEffect(50, ConsoleColorPalette::SYSTEM_RED);
 
             $this->entityManager->updateEntityComponents(
                 $targetEntity->getId(),

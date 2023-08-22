@@ -10,9 +10,10 @@ use App\Engine\Component\HitPoints;
 use App\Engine\Component\MapPosition;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
-use App\System\ConsoleColor;
+use App\System\ConsoleColorCode;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
+use App\System\Helpers\ConsoleColorPalette;
 
 class HitTarget implements ActionHandlerInterface
 {
@@ -37,7 +38,7 @@ class HitTarget implements ActionHandlerInterface
             ];
 
             $colorEffect = $targetEntity->getComponent(ColorEffect::class);
-            !$colorEffect && $components[] = new ColorEffect(50, ConsoleColor::Red->value);
+            !$colorEffect && $components[] = new ColorEffect(50, ConsoleColorPalette::SYSTEM_RED);
 
             $entityManger->updateEntityComponents(
                 $targetEntity->getId(),

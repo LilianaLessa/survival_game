@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\System;
 
-enum ConsoleColor: string
+enum ConsoleColorCode: string
 {
     case Color_Off = "\033[0m"; // Text Reset
 

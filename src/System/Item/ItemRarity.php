@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\System\Item;
 
-use App\System\ConsoleColor;
+use App\System\ConsoleColorCode;
 
 enum ItemRarity: string
 {
@@ -19,14 +19,14 @@ enum ItemRarity: string
 
     public function getColorCode(): string {
         return (match ($this) {
-            self::TRASH => ConsoleColor::Color_Off,
-            self::COMMON => ConsoleColor::Green,
-            self::UNCOMMON => ConsoleColor::Blue,
-            self::RARE => ConsoleColor::BYellow,
-            self::EPIC => ConsoleColor::BPurple,
-            self::MYTHICAL => ConsoleColor::BIRed,
-            self::LEGENDARY => ConsoleColor::BIGreen,
-            self::DIVINE => ConsoleColor::BICyan,
+            self::TRASH => ConsoleColorCode::Color_Off,
+            self::COMMON => ConsoleColorCode::Green,
+            self::UNCOMMON => ConsoleColorCode::Blue,
+            self::RARE => ConsoleColorCode::BYellow,
+            self::EPIC => ConsoleColorCode::BPurple,
+            self::MYTHICAL => ConsoleColorCode::BIRed,
+            self::LEGENDARY => ConsoleColorCode::BIGreen,
+            self::DIVINE => ConsoleColorCode::BICyan,
         })->value;
     }
 }

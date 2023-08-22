@@ -11,7 +11,8 @@ use App\Engine\Component\Item\ItemCollector;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\Engine\System\WorldActorActionType;
-use App\System\ConsoleColor;
+use App\System\ConsoleColorCode;
+use App\System\Helpers\ConsoleColorPalette;
 use App\System\Player\PlayerPreset;
 
 class Player implements ComponentInterface
@@ -22,7 +23,7 @@ class Player implements ComponentInterface
             new Player(),
             new HitPoints(10,10),
             new MapPosition($x,$y),
-            new DefaultColor(ConsoleColor::Yellow->value),
+            new DefaultColor(ConsoleColorPalette::SYSTEM_YELLOW),
             new MapSymbol(sprintf("%s", $playerPreset->getDefaultSymbol())),
             new Collideable(),
             new MovementQueue(10),

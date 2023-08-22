@@ -14,13 +14,14 @@ use App\Engine\Component\Player;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityCollection;
 use App\Engine\Entity\EntityManager;
-use App\System\ConsoleColor;
+use App\System\Biome\BiomePreset;
+use App\System\Helpers\ConsoleColorPalette;
 use App\System\Player\PlayerPresetLibrary;
-use PHP_Parallel_Lint\PhpConsoleColor\ConsoleColor as ConsoleColorManager;
+use PHP_Parallel_Lint\PhpConsoleColor\ConsoleColor;
 
 class WorldManager
 {
-    private const EMPTY_CELL_SYMBOL = '.';
+    private const EMPTY_CELL_SYMBOL = ' ';
 
     /** @var EntityCollection[][] */
     private array $entityMap = [];
@@ -33,20 +34,23 @@ class WorldManager
     private ?array $groundPathWeights = null;
     private $lastDraw = null;
 
+    private $mapBiomeData = [];
+
     public function __construct(
         private readonly EntityManager $entityManager,
-        WorldPresetLibrary             $worldPresetLibrary,
+        private readonly WorldPresetLibrary $worldPresetLibrary,
         //TODO the viewport should also be a component on an entity, that can be attached to a socket.
         // this way, it's possible to create multiple map clients
         // with each having it's own viewport, attached to the player entity.
-        PlayerPresetLibrary            $playerPresetLibrary,
+        private readonly PlayerPresetLibrary $playerPresetLibrary,
+        private readonly ConsoleColor $consoleColor,
     )
     {
-        $worldPreset = $worldPresetLibrary->getDefaultWorldPreset();
+        $worldPreset = $this->worldPresetLibrary->getDefaultWorldPreset();
         $this->width = $worldPreset->getMapWidth();
         $this->height = $worldPreset->getMapHeight();
 
-        $playerPreset = $playerPresetLibrary->getDefaultPlayerPreset();
+        $playerPreset = $this->playerPresetLibrary->getDefaultPlayerPreset();
 
         $this->viewportWidth = $playerPreset->getInitialViewportWidth();
         $this->viewportHeight = $playerPreset->getInitialViewportHeight();
@@ -126,27 +130,24 @@ class WorldManager
 
                 $entityIds = array_keys($drawableEntities);
                 $topEntityId = end($entityIds);
-                $topEntityId = $topEntityId ? $topEntityId : '';
+                $topEntityId = $topEntityId ?: '';
                 /* @var ?Entity $topEntity */
                 $topEntity = $this->entityManager->getEntityById($topEntityId) ?? null;
 
                 /** @var null|DrawableInterface */
                 $drawable = $topEntity?->getComponent($this->drawableClass);
 
-                $symbol = $drawable?->getSymbol() ?? $this->getEmptySymbolTest((int)$mapX, (int)$mapY);
+                $symbol = $drawable?->getSymbol() ?? self::EMPTY_CELL_SYMBOL;
 
-                /** @var ?ColorEffect $colorEffect */
-                $colorEffect = $topEntity ? $topEntity?->getComponent(ColorEffect::class) : null;
-                $defaultColor = $topEntity ? $topEntity?->getComponent(DefaultColor::class) : null;
+                $symbol = sprintf(" %s", $symbol);
 
-                $symbol = sprintf(
-                    "%s%s%s",
-                    $colorEffect?->getColor() ?? $defaultColor?->getColor() ?? ConsoleColor::Color_Off->value,
-                    $symbol,
-                    ConsoleColor::Color_Off->value
+                echo $this->consoleColor->apply(
+                    [
+                        sprintf('bg_color_%d', $this->getBackgroudColor((int)$mapX, (int)$mapY)->toInt()),
+                        sprintf('color_%d', $this->getForegroundColor($topEntity)->toInt()),
+                    ],
+                    $symbol
                 );
-
-                echo sprintf(" %s", $symbol);
             }
             echo "\n";
         }
@@ -277,14 +278,42 @@ class WorldManager
         return $this->groundPathWeights;
     }
 
-    private function getEmptySymbolTest(int $mapX, int $mapY): string
+    public function getMapBiomeData(): array
     {
-//        $consoleColor = new ConsoleColorManager();
-//
-//        if ($mapX % 2 === 0) {
-//            return $consoleColor->apply(['bg_light_blue','red'], self::EMPTY_CELL_SYMBOL);
-//        }
+        return $this->mapBiomeData;
+    }
 
-        return self::EMPTY_CELL_SYMBOL;
+    public function setMapBiomeData(array $mapBiomeData): self
+    {
+        $this->mapBiomeData = $mapBiomeData;
+        return $this;
+    }
+
+    private function getBackgroudColor(int $x, int $y): ConsoleColorPalette
+    {
+        $result = 'bg_default';
+
+        /** @var ?BiomePreset $biome */
+        $biome = $this->mapBiomeData[$x][$y]['preset'];
+
+        if ($biome) {
+            $colors = $biome->getColors();
+            $randomColor = $colors[rand(0, count($colors)-1)];
+
+            $result = ConsoleColorPalette::tryFrom($randomColor) ?? ConsoleColorPalette::default();
+        }
+
+        return $result;
+    }
+
+    private function getForegroundColor(?Entity $topEntity): ConsoleColorPalette
+    {
+        /** @var ?ColorEffect $colorEffect */
+        $colorEffect = $topEntity ? $topEntity?->getComponent(ColorEffect::class) : null;
+        $defaultColor = $topEntity ? $topEntity?->getComponent(DefaultColor::class) : null;
+
+        return $colorEffect?->getColor()
+        ?? $defaultColor?->getColor()
+        ?? ConsoleColorPalette::default();
     }
 }

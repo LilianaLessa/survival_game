@@ -14,4 +14,5 @@ enum PresetDataType: string
     case WORLD_PRESET = 'worldConfigPreset';
     case PLAYER_PRESET = 'playerConfigPreset';
     case ITEM_PRESET = 'itemPreset';
+    case BIOME_PRESET = 'biomePreset';
 }

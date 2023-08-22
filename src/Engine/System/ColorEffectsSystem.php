@@ -7,7 +7,7 @@ namespace App\Engine\System;
 use App\Engine\Component\ColorEffect;
 use App\Engine\Component\MapSymbol;
 use App\Engine\Entity\EntityManager;
-use App\System\ConsoleColor;
+use App\System\ConsoleColorCode;
 
 class ColorEffectsSystem implements WorldSystemInterface
 {
@@ -32,16 +32,5 @@ class ColorEffectsSystem implements WorldSystemInterface
                 $this->entityManager->removeComponentsFromEntity($entityId, $colorEffect);
             }
         }
-
-//        //todo debug tests
-//        $entities = $this->entityManager->getEntityCollection();
-//        foreach ($entities as $entityId => $entity) {
-//            if (rand(0,100) < 30) {
-//                $this->entityManager->updateEntityComponents(
-//                    $entityId,
-//                    new ColorEffect(150, ConsoleColor::Red->value),
-//                );
-//            }
-//        }
     }
 }

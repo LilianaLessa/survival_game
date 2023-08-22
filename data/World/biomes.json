@@ -1,0 +1,72 @@
+[
+  {
+    "dataType": "biomePreset",
+    "name": "meadow",
+    "colors": [
+      "pale_green1"
+    ],
+    "minHeight": 0.2,
+    "minMoisture": 0.5,
+    "minHeat": 0.3
+  },
+  {
+    "dataType": "biomePreset",
+    "name": "forest",
+    "colors": [
+      "dark_olive_green3"
+    ],
+    "minHeight": 0.2,
+    "minMoisture": 0.4,
+    "minHeat": 0.4
+  },
+  {
+  "dataType": "biomePreset",
+  "name": "desert",
+  "colors": [
+    "sandy_brown"
+  ],
+  "minHeight": 0.2,
+  "minMoisture": 0,
+  "minHeat": 0.5
+  },
+  {
+    "dataType": "biomePreset",
+    "name": "jungle",
+    "colors": [
+      "chartreuse4"
+    ],
+    "minHeight": 0.3,
+    "minMoisture": 0.5,
+    "minHeat": 0.62
+  },
+  {
+    "dataType": "biomePreset",
+    "name": "mountains",
+    "colors": [
+      "dark_slate_gray2"
+    ],
+    "minHeight": 0.5,
+    "minMoisture": 0,
+    "minHeat": 0
+  },
+  {
+    "dataType": "biomePreset",
+    "name": "ocean",
+    "colors": [
+      "royal_blue1"
+    ],
+    "minHeight": 0,
+    "minMoisture": 0,
+    "minHeat": 0
+  },
+  {
+    "dataType": "biomePreset",
+    "name": "tundra",
+    "colors": [
+      "light_steel_blue1"
+    ],
+    "minHeight": 0.2,
+    "minMoisture": 0,
+    "minHeat": 0
+  }
+]

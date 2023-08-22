@@ -17,6 +17,9 @@ use App\System\AI\Behavior\EffectHandlers\Attack\Attack;
 use App\System\AI\Behavior\EffectHandlers\IncreaseAggro\IncreaseAggro;
 use App\System\AI\Behavior\EffectHandlers\Move\Move;
 use App\System\AI\BehaviorPresetLibrary;
+use App\System\Biome\BiomeGeneratorService;
+use App\System\Biome\BiomePresetLibrary;
+use App\System\Helpers\PerlinNoiseGenerator;
 use App\System\Helpers\RouteService;
 use App\System\Item\ItemPresetLibrary;
 use App\System\Monster\MonsterPresetLibrary;
@@ -24,6 +27,7 @@ use App\System\Monster\Spawner\MonsterSpawnerLibrary;
 use App\System\Player\PlayerPresetLibrary;
 use App\System\World\WorldManager;
 use App\System\World\WorldPresetLibrary;
+use PHP_Parallel_Lint\PhpConsoleColor\ConsoleColor;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
@@ -51,6 +55,7 @@ function registerBehaviorEffectHandlers(ServicesConfigurator $services): void
 function registerPresetLibraries(ServicesConfigurator $services): void
 {
     $services->set(PlayerPresetLibrary::class, PlayerPresetLibrary::class);
+    $services->set(BiomePresetLibrary::class, BiomePresetLibrary::class);
     $services->set(ItemPresetLibrary::class, ItemPresetLibrary::class);
     $services->set(WorldPresetLibrary::class, WorldPresetLibrary::class);
     $services->set(BehaviorPresetLibrary::class, BehaviorPresetLibrary::class);
@@ -71,6 +76,7 @@ function registerManagers(ServicesConfigurator $services): void
                 new Reference(EntityManager::class),
                 new Reference(WorldPresetLibrary::class),
                 new Reference(PlayerPresetLibrary::class),
+                new Reference(ConsoleColor::class),
             ]
         )
     ;
@@ -81,6 +87,17 @@ function registerHelpers(ServicesConfigurator $services)
     $services->set(RouteService::class, RouteService::class)
         ->args([
             new Reference(WorldManager::class)
+        ]);
+
+    $services->set(PerlinNoiseGenerator::class, PerlinNoiseGenerator::class);
+
+    $services->set(ConsoleColor::class, ConsoleColor::class);
+
+    $services->set(BiomeGeneratorService::class, BiomeGeneratorService::class)
+        ->args([
+            new Reference(BiomePresetLibrary::class),
+            new Reference(WorldManager::class),
+            new Reference(PerlinNoiseGenerator::class),
         ]);
 }
 

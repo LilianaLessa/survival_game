@@ -9,7 +9,8 @@ use App\Engine\Component\Item\ItemDropper\ItemDropper;
 use App\Engine\Component\Item\ItemDropper\ItemDropperCollection;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
-use App\System\ConsoleColor;
+use App\System\ConsoleColorCode;
+use App\System\Helpers\ConsoleColorPalette;
 use App\System\Item\ItemPresetLibrary;
 
 class Tree implements ComponentInterface
@@ -25,7 +26,7 @@ class Tree implements ComponentInterface
             new MapPosition($x, $y),
            // new MapSymbol("\033[32m♣\033[0m"),
             new MapSymbol("♣"),
-            new DefaultColor(ConsoleColor::Green->value),
+            new DefaultColor(ConsoleColorPalette::SYSTEM_GREEN),
             new Collideable(),
             new HitPoints(5,5),
             new ItemDropperCollection(

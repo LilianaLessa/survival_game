@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Engine\Component;
 
+use App\System\Helpers\ConsoleColorPalette;
+
 class ColorEffect implements ComponentInterface
 {
     private int $creationTime;
 
     public function __construct(
-        private readonly int $lifeSpanInMs,
-        private readonly string $color,
+        private readonly int                 $lifeSpanInMs,
+        private readonly ConsoleColorPalette $color,
     )
     {
         $this->creationTime = (int) floor(microtime(true) * 1000);
@@ -23,7 +25,7 @@ class ColorEffect implements ComponentInterface
         return $current - $this->creationTime >= $this->lifeSpanInMs;
     }
 
-    public function getColor(): string
+    public function getColor(): ConsoleColorPalette
     {
         return $this->color;
     }

@@ -18,6 +18,8 @@ use App\Engine\System\WorldActionApplier;
 use App\Engine\System\WorldController;
 use App\Engine\System\WorldSystemInterface;
 use App\System\AI\BehaviorPresetLibrary;
+use App\System\Biome\BiomeGeneratorService;
+use App\System\Biome\BiomePresetLibrary;
 use App\System\Item\ItemPresetLibrary;
 use App\System\Kernel;
 use App\System\Monster\MonsterPresetLibrary;
@@ -82,11 +84,13 @@ $monsterSpawnerLibrary = Kernel::getContainer()->get(MonsterSpawnerLibrary::clas
 /** @var WorldPresetLibrary $worldPresetLibrary */
 $worldPresetLibrary = Kernel::getContainer()->get(WorldPresetLibrary::class);
 $itemPresetLibrary =  Kernel::getContainer()->get(ItemPresetLibrary::class);
+$biomePresetLibrary =  Kernel::getContainer()->get(BiomePresetLibrary::class);
 
 $behaviorPresetLibrary->load('./data/Entity/AI/Behavior');
 $monsterPresetLibrary->load('./data/Entity/Monster');
 $monsterSpawnerLibrary->load('./data/Entity/Monster');
 $worldPresetLibrary->load('./data/World');
+$biomePresetLibrary->load('./data/World');
 $playerPresetLibrary->load('./data/Player');
 $itemPresetLibrary->load('./data/Item');
 
@@ -101,10 +105,15 @@ $playerPreset = $playerPresetLibrary->getDefaultPlayerPreset();
 $initialViewportWidth = $playerPreset->getInitialViewportWidth();
 $initialViewportHeight = $playerPreset->getInitialViewportHeight();
 
-/** @var WorldManager $world */
-$world = Kernel::getContainer()->get(WorldManager::class);
+/** @var BiomeGeneratorService $biomeGenerator */
+$biomeGenerator = Kernel::getContainer()->get(BiomeGeneratorService::class);
+$mapBiomeData = $biomeGenerator->generate();
 
-$screenUpdater = new ScreenUpdater($entityManager, $world, $worldPreset->getScreenUpdaterFps());
+/** @var WorldManager $worldManager */
+$worldManager = Kernel::getContainer()->get(WorldManager::class);
+$worldManager->setMapBiomeData($mapBiomeData);
+
+$screenUpdater = new ScreenUpdater($entityManager, $worldManager, $worldPreset->getScreenUpdaterFps());
 
 $systems = [
     ///...Kernel::getRegisteredGameSystemInstances(),
@@ -119,7 +128,7 @@ $systems = [
     Kernel::getContainer()->get(WorldController::class),
     Kernel::getContainer()->get(MonsterSpawner::class),
 
-    new TreeSpawner($world, $entityManager, $itemPresetLibrary, (int) ceil(($worldWidth * $worldHeight) * 0.1)),
+    new TreeSpawner($worldManager, $entityManager, $itemPresetLibrary, (int) ceil(($worldWidth * $worldHeight) * 0.1)),
     //controllers
     //new MonsterController($entityManager),
     //todo this should be attached to the player cli/unblocking cli socket.
