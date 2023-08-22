@@ -1361,5 +1361,57 @@
     "priceG": 0,
     "priceS": 30,
     "priceC": 0
+  },
+  {
+    "dataType": "itemPreset",
+    "name": "jungleClaw",
+    "inGameName": "Jungle Claw",
+    "description": "A sharp claw obtained from a jungle predator.",
+    "shortDescription": "Sharp jungle claw",
+    "stackable": true,
+    "stackSize": 50,
+    "rarity": "common",
+    "priceG": 0,
+    "priceS": 5,
+    "priceC": 0
+  },
+  {
+    "dataType": "itemPreset",
+    "name": "jungleHide",
+    "inGameName": "Jungle Hide",
+    "description": "A tough hide harvested from a jungle creature.",
+    "shortDescription": "Tough jungle hide",
+    "stackable": true,
+    "stackSize": 50,
+    "rarity": "common",
+    "priceG": 0,
+    "priceS": 5,
+    "priceC": 0
+  },
+  {
+    "dataType": "itemPreset",
+    "name": "snakeVenom",
+    "inGameName": "Snake Venom",
+    "description": "Deadly venom extracted from a venomous serpent.",
+    "shortDescription": "Deadly snake venom",
+    "stackable": true,
+    "stackSize": 50,
+    "rarity": "common",
+    "priceG": 0,
+    "priceS": 5,
+    "priceC": 0
+  },
+  {
+    "dataType": "itemPreset",
+    "name": "jungleFang",
+    "inGameName": "Jungle Fang",
+    "description": "A sharp fang obtained from a jungle predator.",
+    "shortDescription": "Sharp jungle fang",
+    "stackable": true,
+    "stackSize": 50,
+    "rarity": "common",
+    "priceG": 0,
+    "priceS": 5,
+    "priceC": 0
   }
 ]

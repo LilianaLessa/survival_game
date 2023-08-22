@@ -98,7 +98,7 @@
     "behaviors":  [
       {"preset": "idleOnBiome"},
       {"preset": "increaseAggroOnAttacked"},
-      {"preset": "attack"}
+      {"preset": "attackOnBiome"}
     ],
     "dropCollection": [
       {
@@ -178,7 +178,7 @@
     "behaviors":  [
       {"preset": "idleOnBiome"},
       {"preset": "increaseAggroOnAttacked"},
-      {"preset": "attack"}
+      {"preset": "attackOnBiome"}
     ],
     "dropCollection": [
       {
@@ -234,7 +234,7 @@
     "behaviors":  [
       {"preset": "idleOnBiome"},
       {"preset": "increaseAggroOnAttacked"},
-      {"preset": "attack"}
+      {"preset": "attackOnBiome"}
     ],
     "dropCollection": [
       {
@@ -277,5 +277,81 @@
     "size": "medium",
     "baseMovementSpeed": 3,
     "baseAttackSpeed": 4
+  },
+  {
+    "dataType": "monsterPreset",
+    "name": "junglePanther",
+    "inGameName": "Jungle Panther",
+    "description": "A sleek and agile panther native to the jungle.",
+    "level": 3,
+    "baseMovementSpeed": 5,
+    "baseAttackSpeed": 5,
+    "totalHitPoints": 25,
+    "symbol": "⚕",
+    "defaultColor": "grey0",
+    "dropCollection": [
+      {
+        "name": "jungleClaw",
+        "events": [
+          {"type": "die", "chance": 0.5, "min": 1, "max": 1}
+        ]
+      },
+      {
+        "name": "jungleHide",
+        "events": [
+          {"type": "die", "chance": 0.3, "min": 1, "max": 1}
+        ]
+      }
+    ],
+    "sightRadius": 8,
+    "hearRadius": 6,
+    "behaviors": [
+      {"preset": "idleOnBiome"},
+      {"preset": "increaseAggroOnAttacked"},
+      {"preset": "attackOnBiome"}
+    ],
+    "elements": [
+      {"element": "nature", "level": 2}
+    ],
+    "race": "beast",
+    "size": "medium"
+  },
+  {
+    "dataType": "monsterPreset",
+    "name": "venomousSerpent",
+    "inGameName": "Venomous Serpent",
+    "description": "A deadly serpent with potent venom, lurking in the jungle.",
+    "level": 5,
+    "baseMovementSpeed": 4,
+    "baseAttackSpeed": 8,
+    "totalHitPoints": 30,
+    "symbol": "⚔",
+    "defaultColor": "dark_orange",
+    "dropCollection": [
+      {
+        "name": "snakeVenom",
+        "events": [
+          {"type": "die", "chance": 0.6, "min": 1, "max": 1}
+        ]
+      },
+      {
+        "name": "jungleFang",
+        "events": [
+          {"type": "die", "chance": 0.4, "min": 1, "max": 1}
+        ]
+      }
+    ],
+    "sightRadius": 10,
+    "hearRadius": 8,
+    "behaviors": [
+      {"preset": "idleOnBiome"},
+      {"preset": "increaseAggroOnAttacked"},
+      {"preset": "attackOnBiome"}
+    ],
+    "elements": [
+      {"element": "poison", "level": 3}
+    ],
+    "race": "reptile",
+    "size": "medium"
   }
 ]

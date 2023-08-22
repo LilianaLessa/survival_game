@@ -78,5 +78,43 @@
       "endX": 249,
       "endY": 249
     }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "junglePanther_jungle",
+    "monster": "junglePanther",
+    "max": 3,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "jungle",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "venomousSerpent_junble",
+    "monster": "venomousSerpent",
+    "max": 5,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "jungle",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
   }
 ]

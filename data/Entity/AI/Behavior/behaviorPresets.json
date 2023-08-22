@@ -89,6 +89,32 @@
     }
   },
   {
+    "dataType": "behaviorPreset",
+    "name": "attackOnBiome",
+    "silent": false,
+    "effects": [
+      {
+        "attack": {
+          "target": "topAggroEntity"
+        }
+      }
+    ],
+    "triggers": {
+      "isAggroQueueEmpty": false
+    },
+    "transitions" : {
+      "from": ["idleOnBiome"],
+      "to": [
+        {
+          "preset": "idleOnBiome",
+          "triggers": {
+            "isAggroQueueEmpty": true
+          }
+        }
+      ]
+    }
+  },
+  {
     "dataType": "preset_debug",
     "name": "returnToSelfBiome",
     "effects": {
@@ -100,10 +126,10 @@
       "inSelfBiome": false
     },
     "transitions" : {
-      "from": ["idle"],
+      "from": ["idleOnBiome"],
       "to": [
         {
-          "preset": "idle",
+          "preset": "idleOnBiome",
           "triggers": {
             "inSelfBiome": true
           }

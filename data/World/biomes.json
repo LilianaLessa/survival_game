@@ -43,7 +43,7 @@
     "dataType": "biomePreset",
     "name": "mountains",
     "colors": [
-      "rosyBrown"
+      "rosy_brown"
     ],
     "minHeight": 0.5,
     "minMoisture": 0,
