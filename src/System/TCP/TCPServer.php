@@ -25,24 +25,10 @@ class TCPServer
     public function init(): void
     {
         $this->sockets = [];
-        $this->setUpUiMessageEventListener();
 
         $server = Socket\listen($this->address);
         echo 'TCP Command listener on ' . $server->getAddress() . ' ...' . PHP_EOL;
         $this->handleConnections($server);
-    }
-
-    private function setUpUiMessageEventListener(): void
-    {
-        Dispatcher::getInstance()->addListener(
-            UiMessageEvent::EVENT_NAME,
-            function (UiMessageEvent $event) {
-                //todo send message only for the subscribers.
-                foreach ($this->sockets as $socket) {
-                    $socket->write($event->getMessage());
-                }
-            }
-        );
     }
 
     private function handleConnections(Socket\ResourceServerSocket $server): void

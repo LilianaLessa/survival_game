@@ -21,6 +21,7 @@ use App\Engine\Component\Monster;
 use App\Engine\Component\MovementQueue;
 use App\Engine\Component\MsTimeFromLastAttack;
 use App\Engine\Component\Player;
+use App\Engine\Component\PlayerCommandQueue;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\System\ConsoleColorCode;
@@ -28,6 +29,7 @@ use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
 use App\System\Helpers\ConsoleColorPalette;
 use App\System\Helpers\RouteService;
+use App\System\Kernel;
 
 class BattleSystem implements AISystemInterface
 {
@@ -217,7 +219,7 @@ class BattleSystem implements AISystemInterface
         /** @var ?HitPoints $hitPoints */
         $hitPoints = $targetEntity->getComponent(HitPoints::class);
 
-        $hitMessage = sprintf("%s attacks %s\n", $monsterName, $targetName);
+        $uiMessage = sprintf("%s attacks %s\n", $monsterName, $targetName);
 
         if ($hitPoints) {
             $damage = 1;
@@ -239,18 +241,19 @@ class BattleSystem implements AISystemInterface
                 ...$components
             );
 
-            $hitMessage .= sprintf(
-                "\tCaused %d damage. HP: %d/%d\n",
-                $damage,
-                $newHitPoints->getCurrent(),
-                $newHitPoints->getTotal(),
-            );
-        }
+            /** @var ?PlayerCommandQueue $attackerPlayerCommandQueue */
+            $attackerPlayerCommandQueue = $attacker->getComponent(PlayerCommandQueue::class);
+            if ($attackerPlayerCommandQueue) {
+                $uiMessage .= sprintf("\t%d damage caused\n", $damage);
+                Dispatcher::getInstance()->dispatch(new UiMessageEvent($uiMessage, $attackerPlayerCommandQueue));
+            }
 
-        Dispatcher::dispatch(
-            new UiMessageEvent(
-                $hitMessage
-            )
-        );
+            /** @var ?PlayerCommandQueue $attackerPlayerCommandQueue */
+            $targetPlayerCommandQueue = $targetEntity->getComponent(PlayerCommandQueue::class);
+            if ($targetPlayerCommandQueue) {
+                $uiMessage .= sprintf("\t%d damage received\n", $damage);
+                Dispatcher::getInstance()->dispatch(new UiMessageEvent($uiMessage, $targetPlayerCommandQueue));
+            }
+        }
     }
 }

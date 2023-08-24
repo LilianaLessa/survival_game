@@ -9,10 +9,12 @@ use App\Engine\Component\Item\ItemCollector;
 use App\Engine\Component\Item\ItemOnGround;
 use App\Engine\Component\Item\ItemOnInventory;
 use App\Engine\Component\Player;
+use App\Engine\Component\PlayerCommandQueue;
 use App\Engine\Entity\EntityManager;
 use App\Engine\System\WorldSystemInterface;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
+use App\System\Kernel;
 use App\System\World\WorldManager;
 
 class CollectItems implements WorldSystemInterface
@@ -55,14 +57,20 @@ class CollectItems implements WorldSystemInterface
                             ItemOnInventory::createFromItemOnGround($this->entityManager, $itemOnGround)
                         );
 
-                        if ($collectorEntity->getComponent(Player::class)) {
-                            Dispatcher::dispatch(
+                        /** @var PlayerCommandQueue $playerCommandQueue */
+                        $playerCommandQueue = $collectorEntity->getComponent(PlayerCommandQueue::class);
+                        if ($playerCommandQueue) {
+
+                            $uiMessage = sprintf(
+                                "You got %dx %s.\n",
+                                $itemOnGround->getAmount(),
+                                $itemOnGround->getItemBlueprint()->getName(),
+                            );
+
+                            Dispatcher::getInstance()->dispatch(
                                 new UiMessageEvent(
-                                    sprintf(
-                                        "You got %dx %s.\n",
-                                        $itemOnGround->getAmount(),
-                                        $itemOnGround->getItemBlueprint()->getName(),
-                                    )
+                                    $uiMessage,
+                                    $playerCommandQueue
                                 )
                             );
                         }
@@ -70,7 +78,5 @@ class CollectItems implements WorldSystemInterface
                 }
             }
         }
-
-        // TODO: Implement process() method.
     }
 }

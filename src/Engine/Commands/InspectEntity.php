@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace App\Engine\Commands;
 
-use App\Engine\Component\MapPosition;
-use App\Engine\Entity\Entity;
+use App\Engine\Component\PlayerCommandQueue;
 use App\Engine\Entity\EntityManager;
-use App\System\Direction;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
 use App\System\Kernel;
-use App\System\World\WorldManager;
 
 class InspectEntity implements InvokableCommandInterface
 {
@@ -22,7 +19,7 @@ class InspectEntity implements InvokableCommandInterface
     ) {
     }
 
-    public function __invoke()
+    public function __invoke(PlayerCommandQueue $playerCommandQueue)
     {
         /** @var EntityManager $entityManager */
         $entityManager = Kernel::getContainer()->get(EntityManager::class);
@@ -35,7 +32,7 @@ class InspectEntity implements InvokableCommandInterface
 
             $uiMessage .= "\n";
 
-            Dispatcher::getInstance()->dispatch(new UiMessageEvent($uiMessage));
+            Dispatcher::getInstance()->dispatch(new UiMessageEvent($uiMessage, $playerCommandQueue));
         }
     }
 }

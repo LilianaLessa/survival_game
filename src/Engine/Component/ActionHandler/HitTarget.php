@@ -8,10 +8,11 @@ use App\Engine\Component\ColorEffect;
 use App\Engine\Component\HitByEntity;
 use App\Engine\Component\HitPoints;
 use App\Engine\Component\MapPosition;
+use App\Engine\Component\PlayerCommandQueue;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
-use App\System\ConsoleColorCode;
 use App\System\Event\Dispatcher;
+use App\System\Event\Event\DebugMessageEvent;
 use App\System\Event\Event\UiMessageEvent;
 use App\System\Helpers\ConsoleColorPalette;
 
@@ -45,19 +46,22 @@ class HitTarget implements ActionHandlerInterface
                 ...$components,
             );
 
-            Dispatcher::dispatch(
-                new UiMessageEvent(
-                    sprintf(
-                        "entity at %d,%d was Hit. %d/%d Id %s\n",
-                        ...[
-                            ...$targetCoordinates,
-                            $hitPoints->getCurrent(),
-                            $hitPoints->getTotal(),
-                            $targetEntity->getId()
-                        ]
-                    )
-                )
-            );
+            /** @var ?PlayerCommandQueue $playerCommandQueue */
+            $playerCommandQueue = $actorEntity->getComponent(PlayerCommandQueue::class);
+
+            if ($playerCommandQueue) {
+                $uiMessage = sprintf(
+                    "entity at %d,%d was Hit. %d/%d Id %s\n",
+                    ...[
+                        ...$targetCoordinates,
+                        $hitPoints->getCurrent(),
+                        $hitPoints->getTotal(),
+                        $targetEntity->getId()
+                    ]
+                );
+
+                Dispatcher::getInstance()->dispatch(new DebugMessageEvent($uiMessage, $playerCommandQueue));
+            }
         }
     }
 }

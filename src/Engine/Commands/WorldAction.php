@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Engine\Commands;
 
+use App\Engine\Component\PlayerCommandQueue;
 use App\Engine\Component\WorldActor;
 use App\Engine\Entity\EntityManager;
 use App\System\Direction;
@@ -18,7 +19,7 @@ readonly class WorldAction implements InvokableCommandInterface
     ) {
     }
 
-    public function __invoke()
+    public function __invoke(PlayerCommandQueue $playerCommandQueue)
     {
         $entity = $this->entityManager->getEntityById($this->entityId);
         if ($entity) {

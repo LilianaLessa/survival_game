@@ -12,7 +12,6 @@ use App\Engine\System\MovementApplier;
 use App\Engine\System\PlayerController;
 use App\Engine\System\PlayerSpawner;
 use App\Engine\System\WorldActionApplier;
-use App\Engine\System\WorldController;
 use App\System\AI\Behavior\EffectHandlers\Attack\Attack;
 use App\System\AI\Behavior\EffectHandlers\IncreaseAggro\IncreaseAggro;
 use App\System\AI\Behavior\EffectHandlers\Move\Move;
@@ -27,9 +26,15 @@ use App\System\Monster\Spawner\MonsterSpawnerLibrary;
 use App\System\Player\PlayerFactory;
 use App\System\Player\PlayerPresetLibrary;
 use App\System\Screen\ScreenUpdater;
-use App\System\Server\Client\ClientPool;
+use App\System\Server\Client\CliClient;
+use App\System\Server\Client\MainClient;
+use App\System\Server\Client\Network\ClientPool;
+use App\System\Server\Client\UiMessageReceiverClient;
+use App\System\Server\Client\UnblockingCliClient;
+use App\System\Server\PacketHandlers\AttachClientHandler;
 use App\System\Server\PacketHandlers\GameCommandHandler;
 use App\System\Server\PacketHandlers\RegisterNewClientHandler;
+use App\System\Server\PacketHandlers\RequestClientUuidHandler;
 use App\System\Server\PacketHandlers\ShutdownSocketHandler;
 use App\System\Server\ServerPresetLibrary;
 use App\System\World\WorldManager;
@@ -163,11 +168,6 @@ function registerEngineServices(ServicesConfigurator $services)
             new Reference(ItemPresetLibrary::class),
         ]);
 
-    $services->set(WorldController::class, WorldController::class)
-        ->args([
-            new Reference(WorldManager::class),
-        ]);
-
     $services->set(MonsterSpawner::class, MonsterSpawner::class)
         ->args([
             new Reference(WorldManager::class),
@@ -197,7 +197,7 @@ function registerGameInfrastructure(ServicesConfigurator $services): void
         ]);
 }
 
-function registerNetworkPacketHandlers(ServicesConfigurator $services): void
+function registerClientPacketHandlers(ServicesConfigurator $services): void
 {
     $services->set(RegisterNewClientHandler::class, RegisterNewClientHandler::class)->args([
         new Reference(ClientPool::class),
@@ -213,14 +213,42 @@ function registerNetworkPacketHandlers(ServicesConfigurator $services): void
     $services->set(ShutdownSocketHandler::class, ShutdownSocketHandler::class)->args([
         new Reference(ClientPool::class),
     ]);
+
+    $services->set(AttachClientHandler::class, AttachClientHandler::class)->args([
+        new Reference(ClientPool::class),
+    ]);
+    $services->set(RequestClientUuidHandler::class, RequestClientUuidHandler::class)->args([
+        new Reference(ClientPool::class),
+    ]);
 }
 
 function registerNetworkInfrastructure(ServicesConfigurator $services)
 {
-    registerNetworkPacketHandlers($services);
+    registerClientPacketHandlers($services);
+
+    registerClientTypes($services);
 
     $services->set(ClientPool::class, ClientPool::class)->args([
         new Reference(EntityManager::class),
+    ]);
+}
+
+function registerClientTypes(ServicesConfigurator $services)
+{
+    $services->set(MainClient::class, MainClient::class)->args([
+        new Reference(ServerPresetLibrary::class),
+    ]);
+
+    $services->set(CliClient::class, CliClient::class)->args([
+        new Reference(ServerPresetLibrary::class),
+    ]);
+
+    $services->set(UnblockingCliClient::class, UnblockingCliClient::class)->args([
+        new Reference(ServerPresetLibrary::class),
+    ]);
+
+    $services->set(UiMessageReceiverClient::class, UiMessageReceiverClient::class)->args([
+        new Reference(ServerPresetLibrary::class),
     ]);
 }
 

@@ -6,9 +6,7 @@ namespace App\System\Server\PacketHandlers;
 
 use Amp\Socket\ResourceSocket;
 use App\Engine\Component\PlayerCommandQueue;
-use App\Engine\System\ReceiverSystemInterface;
-use App\System\Kernel;
-use App\System\Server\Client\ClientPool;
+use App\System\Server\Client\Network\ClientPool;
 use Ramsey\Uuid\UuidInterface;
 
 class GameCommandHandler implements ClientPacketHandlerInterface

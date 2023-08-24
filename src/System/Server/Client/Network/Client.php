@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\System\Server\Client;
+namespace App\System\Server\Client\Network;
 
 use App\Engine\Entity\Entity;
 use Ramsey\Uuid\UuidInterface;

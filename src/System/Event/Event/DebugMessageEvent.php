@@ -7,9 +7,9 @@ namespace App\System\Event\Event;
 
 use App\Engine\Component\PlayerCommandQueue;
 
-class UiMessageEvent extends AbstractEvent
+class DebugMessageEvent extends AbstractEvent
 {
-    public const EVENT_NAME = 'ui.message';
+    public const EVENT_NAME = 'debug.message';
     public function __construct(
         private readonly string $message,
         private readonly PlayerCommandQueue $playerCommandQueue

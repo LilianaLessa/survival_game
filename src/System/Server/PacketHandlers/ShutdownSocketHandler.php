@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\System\Server\PacketHandlers;
 
 use Amp\Socket\ResourceSocket;
-use App\System\Server\Client\ClientPool;
+use App\System\Server\Client\Network\ClientPool;
 use Ramsey\Uuid\UuidInterface;
 
 class ShutdownSocketHandler implements ClientPacketHandlerInterface

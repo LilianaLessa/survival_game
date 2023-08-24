@@ -23,6 +23,7 @@ use App\Engine\Trait\CommandParserTrait;
 use App\System\CommandPredicate;
 use App\System\Direction;
 use App\System\Event\Dispatcher;
+use App\System\Event\Event\DebugMessageEvent;
 use App\System\Event\Event\UiMessageEvent;
 use App\System\Helpers\Point2D;
 use App\System\Item\ItemPresetLibrary;
@@ -65,20 +66,39 @@ class PlayerController implements WorldSystemInterface
                     [$commandPredicate, $commandArguments] = $this->extractCommand($rawCommand);
 
                     $this->parseMovementCommand($commandPredicate, $commandArguments, $movable, $position);
-                    $this->parseDebugCommand($commandPredicate, $commandArguments, $position);
-                    $this->parseInfoCommand($commandPredicate, $commandArguments, $position, $inventory);
-                    $this->parseActionOnWorldCommand($commandPredicate, $commandArguments, $entityId);
-                    $this->parseWorldViewChange($commandPredicate, $commandArguments);
-                } catch (\Throwable $e) {
-                    Dispatcher::dispatch(
-                        new UiMessageEvent(
-                            sprintf(
-                                "\nException on parsing player command (%s): %s\n",
-                                $rawCommand,
-                                $e->getMessage(),
-                            )
-                        )
+                    $this->parseDebugCommand(
+                        $commandPredicate,
+                        $commandArguments,
+                        $position,
+                        $playerCommandQueue,
+                        $inventory
                     );
+                    $this->parseInfoCommand(
+                        $commandPredicate,
+                        $commandArguments,
+                        $position,
+                        $inventory,
+                        $playerCommandQueue
+                    );
+                    $this->parseActionOnWorldCommand(
+                        $commandPredicate,
+                        $commandArguments,
+                        $entityId,
+                        $playerCommandQueue
+                    );
+                    $this->parseWorldViewChange(
+                        $commandPredicate,
+                        $commandArguments,
+                        $playerCommandQueue
+                    );
+                } catch (\Throwable $e) {
+                    $uiMessage =  sprintf(
+                        "\nException on parsing player command (%s): %s\n",
+                        $rawCommand,
+                        $e->getMessage(),
+                    );
+
+                    Dispatcher::getInstance()->dispatch(new DebugMessageEvent($uiMessage, $playerCommandQueue));
                 }
             }
         }
@@ -111,7 +131,8 @@ class PlayerController implements WorldSystemInterface
         ?CommandPredicate $commandPredicate,
         array $commandArguments,
         MapPosition $position,
-        Inventory $inventory
+        Inventory $inventory,
+        PlayerCommandQueue $playerCommandQueue,
     ): void {
         $command = match ($commandPredicate) {
             CommandPredicate::PLAYER_SELF_WHERE => new WhereAmI($position),
@@ -120,13 +141,14 @@ class PlayerController implements WorldSystemInterface
             default => null,
         };
 
-        $command && $command();
+        $command && $command($playerCommandQueue);
     }
 
     private function parseActionOnWorldCommand(
         ?CommandPredicate $commandPredicate,
         array $commandArguments,
         string $entityId,
+        PlayerCommandQueue $playerCommandQueue,
     ): void {
         $command = match ($commandPredicate) {
             CommandPredicate::PLAYER_ACTION => new WorldAction(
@@ -138,7 +160,7 @@ class PlayerController implements WorldSystemInterface
             default => null,
         };
 
-        $command && $command();
+        $command && $command($playerCommandQueue);
     }
 
     //todo these commands should be moved to their own debug controller.
@@ -146,6 +168,8 @@ class PlayerController implements WorldSystemInterface
         ?CommandPredicate $commandPredicate,
         array $commandArguments,
         MapPosition $position,
+        PlayerCommandQueue $playerCommandQueue,
+        Inventory $inventory,
     ): void {
         $debugCommand = match ($commandPredicate) {
             CommandPredicate::DEBUG_INSPECT_CELL => new InspectCell(
@@ -160,13 +184,14 @@ class PlayerController implements WorldSystemInterface
             CommandPredicate::DEBUG_GIVE_ITEM => new GiveItemToPlayer(
                 $this->entityManager,
                 $this->itemManager,
+                $inventory,
                 $commandArguments[0] ?? 'wood',
                 (int) ($commandArguments[1] ?? 1),
             ),
             default => null,
         };
 
-        $debugCommand && $debugCommand();
+        $debugCommand && $debugCommand($playerCommandQueue);
     }
 
     private function calculateTargetCoordinates(MapPosition $from, Direction $direction): Point2D
@@ -185,11 +210,13 @@ class PlayerController implements WorldSystemInterface
         );
     }
 
-    private function parseWorldViewChange(?CommandPredicate $commandPredicate, array $commandArguments): void
-    {
-
+    private function parseWorldViewChange(
+        ?CommandPredicate $commandPredicate,
+        array $commandArguments,
+        PlayerCommandQueue $playerCommandQueue,
+    ): void {
         $execute = match ($commandPredicate) {
-            CommandPredicate::WORLD_SET_VIEW => function () use ($commandArguments) {
+            CommandPredicate::WORLD_SET_VIEW => function () use ($commandArguments, $playerCommandQueue) {
                 $worldType = $commandArguments[0] ?? 'world';
                 $worldViewType = match ($worldType) {
                     'fluid' => Fluid::class,
@@ -199,11 +226,9 @@ class PlayerController implements WorldSystemInterface
 
                 $this->world->setDrawableClass($worldViewType);
 
-                Dispatcher::getInstance()->dispatch(
-                    new UiMessageEvent(
-                        sprintf("World view mode set to %s\n", $worldType)
-                    )
-                );
+                $uiMessage = sprintf("World view mode set to %s\n", $worldType);
+
+                Dispatcher::getInstance()->dispatch(new UiMessageEvent($uiMessage, $playerCommandQueue));
             },
             default => null
         };

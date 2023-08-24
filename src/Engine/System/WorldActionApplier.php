@@ -6,12 +6,15 @@ namespace App\Engine\System;
 
 use App\Engine\Component\ActionHandler\ActionHandlerList;
 use App\Engine\Component\MapPosition;
+use App\Engine\Component\PlayerCommandQueue;
 use App\Engine\Component\WorldActor;
 use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
 use App\System\Direction;
 use App\System\Event\Dispatcher;
+use App\System\Event\Event\DebugMessageEvent;
 use App\System\Event\Event\UiMessageEvent;
+use App\System\Kernel;
 use App\System\World\WorldManager;
 
 class WorldActionApplier implements WorldSystemInterface
@@ -27,15 +30,17 @@ class WorldActionApplier implements WorldSystemInterface
         $entities = $this->entityManager->getEntitiesWithComponents(
             WorldActor::class,
             MapPosition::class,
-            ActionHandlerList::class
+            ActionHandlerList::class,
+            PlayerCommandQueue::class,
         );
 
         /**
          * @var WorldActor $worldActor
          * @var MapPosition $mapPosition
          * @var ActionHandlerList $actionHandlers
+         * @var PlayerCommandQueue $playerCommandQueue
          */
-        foreach ($entities as $actorEntityId => [$worldActor, $mapPosition, $actionHandlers])
+        foreach ($entities as $actorEntityId => [$worldActor, $mapPosition, $actionHandlers, $playerCommandQueue])
         {
             $actorEntity = $this->entityManager->getEntityById($actorEntityId);
             $actionQueue = $worldActor->getActionQueue();
@@ -53,17 +58,16 @@ class WorldActionApplier implements WorldSystemInterface
                         )?->execute($this->entityManager, $targetEntity, $actorEntity);
                     }
 
-                    Dispatcher::dispatch(
-                        new UiMessageEvent(
-                            sprintf(
-                                "Action %s => %d,%d\n",
-                                $action->getActionType(),
-                                ...$targetCoordinates
-                            )
-                        )
+                    $uiMessage = sprintf(
+                        "Action %s => %d,%d\n",
+                        $action->getActionType(),
+                        ...$targetCoordinates
                     );
+
+                    Dispatcher::getInstance()->dispatch(new DebugMessageEvent($uiMessage, $playerCommandQueue));
                 }
             }
+
             $worldActor->clear();
         }
     }

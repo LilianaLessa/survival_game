@@ -13,20 +13,7 @@ use League\Uri\Http;
 use function Amp\Socket\connect;
 use function Amp\Socket\connectTls;
 
-function key2Command($string) {
-    return match (Key::tryFrom($string)) {
-        Key::ARROW_UP => sprintf("action %s %s", WorldActorActionType::PRIMARY->value, Direction::UP->value),
-        Key::ARROW_DOWN => sprintf("action %s %s", WorldActorActionType::PRIMARY->value, Direction::DOWN->value),
-        Key::ARROW_RIGHT => sprintf("action %s %s", WorldActorActionType::PRIMARY->value, Direction::RIGHT->value),
-        Key::ARROW_LEFT => sprintf("action %s %s", WorldActorActionType::PRIMARY->value, Direction::LEFT->value),
-        Key::W => Direction::UP->value,
-        Key::S => Direction::DOWN->value,
-        Key::D => Direction::RIGHT->value,
-        Key::A => Direction::LEFT->value,
-        Key::I => CommandPredicate::INVENTORY->value,
-        default => '',
-    };
-}
+
 
 function connectToGameServer(string $address): \Amp\Socket\Socket
 {

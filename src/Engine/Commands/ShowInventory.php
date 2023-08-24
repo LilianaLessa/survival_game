@@ -6,9 +6,12 @@ namespace App\Engine\Commands;
 
 use App\Engine\Component\Item\Inventory;
 use App\Engine\Component\Item\ItemOnInventory;
+use App\Engine\Component\PlayerCommandQueue;
+use App\Engine\Entity\EntityManager;
 use App\System\ConsoleColorCode;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
+use App\System\Kernel;
 
 class ShowInventory implements InvokableCommandInterface
 {
@@ -16,7 +19,7 @@ class ShowInventory implements InvokableCommandInterface
     {
     }
 
-    public function __invoke()
+    public function __invoke(PlayerCommandQueue $playerCommandQueue)
     {
         $items = $this->inventory->getItems()->getEntitiesWithComponents(
             ItemOnInventory::class
@@ -68,6 +71,6 @@ class ShowInventory implements InvokableCommandInterface
 
         $uiMessage .= "\n-----------------\n";
 
-        Dispatcher::dispatch(new UiMessageEvent($uiMessage));
+        Dispatcher::getInstance()->dispatch(new UiMessageEvent($uiMessage, $playerCommandQueue));
     }
 }

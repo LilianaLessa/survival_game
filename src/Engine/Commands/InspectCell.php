@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Engine\Commands;
 
 use App\Engine\Component\MapPosition;
+use App\Engine\Component\PlayerCommandQueue;
 use App\Engine\Entity\Entity;
 use App\System\Direction;
 use App\System\Event\Dispatcher;
@@ -23,13 +24,11 @@ class InspectCell implements InvokableCommandInterface
     ) {
     }
 
-    public function __invoke()
+    public function __invoke(PlayerCommandQueue $playerCommandQueue)
     {
         $coords = $this->calculateTargetCoordinates();
 
         $entities = $this->world->getEntityCollection(...$coords);
-
-        $uiMessage = '';
 
         $uiMessage = sprintf("%d entities found on %d,%d\n\n", count($entities), ...$coords);
         $i = 0;
@@ -65,8 +64,7 @@ class InspectCell implements InvokableCommandInterface
             $biomePreset->getName()
         );
 
-
-        Dispatcher::getInstance()->dispatch(new UiMessageEvent($uiMessage));
+        Dispatcher::getInstance()->dispatch(new UiMessageEvent($uiMessage, $playerCommandQueue));
     }
 
     private function calculateTargetCoordinates(): array

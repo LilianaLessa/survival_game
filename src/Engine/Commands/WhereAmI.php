@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Engine\Commands;
 
 use App\Engine\Component\MapPosition;
+use App\Engine\Component\PlayerCommandQueue;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
 
@@ -16,15 +17,13 @@ class WhereAmI implements InvokableCommandInterface
     }
 
 
-    public function __invoke()
+    public function __invoke(PlayerCommandQueue $playerCommandQueue)
     {
-        Dispatcher::dispatch(
-            new UiMessageEvent(
-                sprintf(
-                    "Current position: %d,%d\n",
-                    $this->position->getX(),
-                    $this->position->getY())
-            )
-        );
+        $uiMessage =  sprintf(
+            "Current position: %d,%d\n",
+            $this->position->getX(),
+            $this->position->getY());
+
+        Dispatcher::getInstance()->dispatch(new UiMessageEvent($uiMessage, $playerCommandQueue));
     }
 }

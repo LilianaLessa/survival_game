@@ -7,11 +7,13 @@ namespace App\Engine\System;
 use App\Engine\Component\MapPosition;
 use App\Engine\Component\MovementQueue;
 use App\Engine\Component\Player;
+use App\Engine\Component\PlayerCommandQueue;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
+use App\System\Kernel;
 use App\System\World\WorldManager;
 
 class MovementApplier implements PhysicsSystemInterface
@@ -48,19 +50,6 @@ class MovementApplier implements PhysicsSystemInterface
             $movementSpeed = $movementQueue->getBaseMovementSpeed(); //speed in cells p/ second
 
             $dueSteps === null && $dueSteps = (int)($movementSpeed > 0 ? floor($deltaS * $movementSpeed) : 0);
-
-//            if ($dueSteps > 0 && !$movementQueue->isQueueEmpty()) {
-//                Dispatcher::dispatch(
-//                    new UiMessageEvent(
-//                        sprintf(
-//                            "Triggered %d steps. %f - %s\n",
-//                            $dueSteps,
-//                            $deltaS,
-//                            $entityId
-//                        )
-//                    )
-//                );
-//            }
 
             for ($i = 0; $i < $dueSteps; $i++) {
                 $this->step($entityId, $movementQueue, $position);
@@ -108,10 +97,15 @@ class MovementApplier implements PhysicsSystemInterface
                 new MapPosition($targetX, $targetY)
             );
         } else {
-            if($this->entityManager->entityHasComponent($entityId,Player::class)) {
-                Dispatcher::getInstance()->dispatch(
-                    new UiMessageEvent("Can't move in this direction.\n")
-                );
+            /** @var ?PlayerCommandQueue $playerCommandQueue */
+            $playerCommandQueue = $this->entityManager->getComponentFromEntityId(
+                $entityId,
+                PlayerCommandQueue::class
+            );
+
+            if ($playerCommandQueue) {
+                $uiMessage = "Can't move in this direction.\n";
+                Dispatcher::getInstance()->dispatch(new UiMessageEvent($uiMessage, $playerCommandQueue));
             }
             $movementQueue->clear();
             return;

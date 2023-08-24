@@ -7,12 +7,15 @@ namespace App\System\Server\PacketHandlers;
 use Amp\Socket\ResourceSocket;
 use App\System\Player\PlayerFactory;
 use App\System\Player\PlayerPresetLibrary;
-use App\System\Server\Client\Client;
-use App\System\Server\Client\ClientPool;
-use App\System\Server\Client\Socket;
+use App\System\Server\Client\Network\Client;
+use App\System\Server\Client\Network\ClientPool;
+use App\System\Server\Client\Network\Socket;
+use App\System\Server\Client\Network\SocketType;
+use App\System\Server\ServerPacketHeader;
 use App\System\World\WorldManager;
 use Ramsey\Uuid\Rfc4122\UuidV4;
 use Ramsey\Uuid\UuidInterface;
+use function Amp\delay;
 
 class RegisterNewClientHandler implements ClientPacketHandlerInterface
 {
@@ -30,13 +33,7 @@ class RegisterNewClientHandler implements ClientPacketHandlerInterface
 
         $this->createPlayer($newClient, $socketUuid->toString(), $packetData);
 
-        $response = sprintf(
-            "%s %s",
-            'register_new_client_response',
-            $newClient->getUuid()->toString()
-        );
-
-        $socket->write($response);
+        $this->sendRegisterSuccess($socket, $newClient);
     }
 
     private function createNewClient(UuidInterface $socketUuid, ResourceSocket $socket): Client
@@ -46,7 +43,8 @@ class RegisterNewClientHandler implements ClientPacketHandlerInterface
         $newClient->addSocket(
             new Socket(
                 $socketUuid,
-                $socket
+                $socket,
+                SocketType::MAIN
             )
         );
 
@@ -63,5 +61,14 @@ class RegisterNewClientHandler implements ClientPacketHandlerInterface
         $newPlayer = $this->playerFactory->create($playerPreset, $socketUuid);
 
         $newClient->setPlayer($newPlayer);
+    }
+
+    private function sendRegisterSuccess(ResourceSocket $socket, Client $newClient): void
+    {
+        $socket->write(sprintf(
+            "%s %s\n",
+            ServerPacketHeader::CLIENT_REGISTER_SUCCESS->value,
+            $newClient->getUuid()->toString()
+        ));
     }
 }

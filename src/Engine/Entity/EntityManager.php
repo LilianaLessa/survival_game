@@ -71,6 +71,11 @@ class EntityManager
         $this->entityCollection->removeEntity($entityId);
     }
 
+    public function getComponentFromEntityId(string $entityId, string $componentClass): ?ComponentInterface
+    {
+        return $this->entityCollection[$entityId]->getComponent($componentClass);
+    }
+
     private function generateEntityId(): string
     {
         return (Uuid::uuid4())->toString();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Engine\Commands;
 
+use App\Engine\Component\PlayerCommandQueue;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
 use App\System\World\WorldManager;
@@ -16,8 +17,7 @@ class SetMapViewport implements InvokableCommandInterface
     ) {
     }
 
-
-    public function __invoke()
+    public function __invoke(PlayerCommandQueue $playerCommandQueue)
     {
         $width = $this->world->getViewportWidth();
         $height = $this->world->getViewportHeight();
@@ -31,14 +31,12 @@ class SetMapViewport implements InvokableCommandInterface
         $this->world->setViewportWidth($width);
         $this->world->setViewportHeight($height);
 
-        Dispatcher::dispatch(
-            new UiMessageEvent(
-                sprintf(
-                    "World viewport size set to %dx%d\n",
-                    $width,
-                    $height
-                )
-            )
+        $uiMessage = sprintf(
+            "World viewport size set to %dx%d\n",
+            $width,
+            $height
         );
+
+        Dispatcher::getInstance()->dispatch(new UiMessageEvent($uiMessage, $playerCommandQueue));
     }
 }
