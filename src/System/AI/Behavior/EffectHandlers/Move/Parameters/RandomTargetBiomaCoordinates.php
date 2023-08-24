@@ -39,7 +39,7 @@ class  RandomTargetBiomaCoordinates extends RandomTargetCoordinates
 
             foreach ($surroundings as $candidate) {
                 /** @var BiomePreset $candidateBiome */
-                $candidateBiome = $this->worldManager->getMapBiomeData()[$candidate[0]][$candidate[1]]['preset'] ?? null;
+                $candidateBiome = $this->worldManager->getTerrainData()[$candidate[0]][$candidate[1]]['preset'] ?? null;
 
                 $candidateBiomeName = $candidateBiome?->getName() ?? null;
 

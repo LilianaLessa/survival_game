@@ -12,6 +12,7 @@ use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
 use App\System\Event\Dispatcher;
+use App\System\Event\Event\DebugMessageEvent;
 use App\System\Event\Event\UiMessageEvent;
 use App\System\Kernel;
 use App\System\World\WorldManager;
@@ -91,17 +92,51 @@ class MovementApplier implements PhysicsSystemInterface
 
         [$targetX, $targetY] = $next->getCoordinates()->toArray();
 
+        /** @var ?PlayerCommandQueue $playerCommandQueue */
+        $playerCommandQueue = $this->entityManager->getComponentFromEntityId(
+            $entityId,
+            PlayerCommandQueue::class
+        );
+
         if ($this->validateMovement($position->getX(), $position->getY(), $targetX, $targetY)) {
             $this->entityManager->updateEntityComponents(
                 $entityId,
                 new MapPosition($targetX, $targetY)
             );
+            if ($playerCommandQueue) {
+
+                $chunkW = $this->world->getWorldChunkWidht();
+                $chunkH = $this->world->getWorldChunkHeight();
+
+                $uiMessage = sprintf(
+                    "Chunk c:%d",
+                    $this->world->getChunkNumber($targetX, $targetY)
+                );
+
+                $adjacentChunksCoordinates = [
+                    'u' => [$targetX, $targetY - $chunkH],
+                    'r' => [$targetX + $chunkW, $targetY],
+                    'd' => [$targetX, $targetY + $chunkH],
+                    'l' => [$targetX - $chunkW, $targetY],
+                ];
+
+                foreach ($adjacentChunksCoordinates as $chunk => $coordinates) {
+                    if (!$this->world->isOutOfBounds(...$coordinates)) {
+                        $uiMessage .= sprintf(
+                            " %s:%d",
+                            $chunk,
+                            $this->world->getChunkNumber(...$coordinates)
+                        );
+                    }
+                }
+
+                $uiMessage .= "\n";
+
+                Dispatcher::getInstance()->dispatch(new DebugMessageEvent($uiMessage, $playerCommandQueue));
+            }
+
         } else {
-            /** @var ?PlayerCommandQueue $playerCommandQueue */
-            $playerCommandQueue = $this->entityManager->getComponentFromEntityId(
-                $entityId,
-                PlayerCommandQueue::class
-            );
+
 
             if ($playerCommandQueue) {
                 $uiMessage = "Can't move in this direction.\n";

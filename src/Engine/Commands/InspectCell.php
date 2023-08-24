@@ -42,7 +42,7 @@ class InspectCell implements InvokableCommandInterface
         }
         $uiMessage .= "\n\n";
 
-        $biomeInfo = $this->world->getMapBiomeData()[$coords[0]][$coords[1]];
+        $biomeInfo = $this->world->getTerrainData()[$coords[0]][$coords[1]];
 
         [
             $height,

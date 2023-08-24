@@ -21,6 +21,8 @@ enum SocketType: string
 
     case UI_FIXED = 'ui_fixed';
 
+    case MAP = 'map';
+
     public function getClient(): ?AbstractClient
     {
         return match($this) {

@@ -103,7 +103,7 @@ class MonsterSpawner implements WorldSystemInterface
 
         $randomBiome = $biomes[rand(0, count($biomes) - 1)] ?? '';
 
-        $biomeCoordinates = $this->world->getLinearBiomeData($randomBiome->getName());
+        $biomeCoordinates = $this->world->getLinearTerrainData($randomBiome->getName());
 
         $randomBiomePoint = $biomeCoordinates[rand(0, count($biomeCoordinates) - 1)] ?? null;
 

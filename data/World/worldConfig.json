@@ -3,5 +3,7 @@
   "name": "defaultWorldPreset",
   "mapWidth": 150,
   "mapHeight": 150,
-  "screenUpdaterFps": 10
+  "screenUpdaterFps": 10,
+  "chunkWidth": 25,
+  "chunkHeight": 25
 }

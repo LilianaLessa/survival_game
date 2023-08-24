@@ -35,9 +35,13 @@ class WorldManager
     private ?array $groundPathWeights = null;
     private $lastDraw = null;
 
-    private $mapBiomeData = [];
+    private $terrainData = [];
 
-    private $linearBiomeData = [];
+    private $linearTerrainData = [];
+
+    private $worldChunkWidht = 25; //todo get from preset
+    private $worldChunkHeight = 25; //todo get from preset
+    private $chunkedTerrainData = [];
 
     public function __construct(
         private readonly EntityManager $entityManager,
@@ -290,29 +294,55 @@ class WorldManager
         return $this->groundPathWeights;
     }
 
-    public function getMapBiomeData(): array
+    public function getTerrainData(): array
     {
-        return $this->mapBiomeData;
+        return $this->terrainData;
     }
 
-    public function setMapBiomeData(array $mapBiomeData): self
+    public function setTerrainData(array $terrainData): self
     {
-        $this->linearBiomeData = [];
+        $this->linearTerrainData = [];
 
-        foreach ($mapBiomeData as $x => $column) {
+        foreach ($terrainData as $x => $column) {
             foreach ($column as $y => $data) {
-                $this->linearBiomeData[$data['preset']->getName()][] = new Point2D($x, $y);
+                $point2D = new Point2D($x, $y);
+                $this->linearTerrainData[$data['preset']->getName()][] = $point2D;
+                $chunkNumber = $this->getChunkNumber($x, $y);
+                $terrainData[$x][$y]['chunk'] = $chunkNumber;
+                $this->chunkedTerrainData[$chunkNumber][$x][$y] = $terrainData[$x][$y];
             }
         }
 
-        $this->mapBiomeData = $mapBiomeData;
+        $this->terrainData = $terrainData;
+
         return $this;
     }
 
     /** @return Point2D[] */
-    public function getLinearBiomeData(string $biomeName): array
+    public function getLinearTerrainData(string $biomeName): array
     {
-        return $this->linearBiomeData[$biomeName] ?? [];
+        return $this->linearTerrainData[$biomeName] ?? [];
+    }
+
+    public function getChunkNumber($x, $y): int {
+        $chunkRows = $this->worldChunkHeight;
+        $chunkCols = $this->worldChunkWidht;
+        $matrixCols = $this->width;
+
+        $chunkRow = floor($x / $chunkRows);
+        $chunkCol = floor($y / $chunkCols);
+
+        return (int)(($chunkRow * ceil($matrixCols / $chunkCols)) + $chunkCol);
+    }
+
+    public function getWorldChunkWidht(): int
+    {
+        return $this->worldChunkWidht;
+    }
+
+    public function getWorldChunkHeight(): int
+    {
+        return $this->worldChunkHeight;
     }
 
     private function getBackgroudColor(int $x, int $y): ConsoleColorPalette
@@ -320,7 +350,7 @@ class WorldManager
         $result = 'bg_default';
 
         /** @var ?BiomePreset $biome */
-        $biome = $this->mapBiomeData[$x][$y]['preset'];
+        $biome = $this->terrainData[$x][$y]['preset'];
 
         if ($biome) {
             $colors = $biome->getColors();

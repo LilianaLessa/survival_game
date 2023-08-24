@@ -30,7 +30,7 @@ echo "loading world config...\n"; Kernel::getContainer()->get(WorldPresetLibrary
 echo "loading biomes...\n"; Kernel::getContainer()->get(BiomePresetLibrary::class)->load('./data/World');
 echo "loading items...\n"; Kernel::getContainer()->get(ItemPresetLibrary::class)->load('./data/Item');
 
-$worldManager = Kernel::getContainer()->get(WorldManager::class)->setMapBiomeData(
+$worldManager = Kernel::getContainer()->get(WorldManager::class)->setTerrainData(
     (function (): array {
         /** @var BiomeGeneratorService $biomeGenerator */
         $biomeGenerator = Kernel::getContainer()->get(BiomeGeneratorService::class);
