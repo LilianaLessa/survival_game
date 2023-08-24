@@ -27,6 +27,7 @@ use App\System\Player\PlayerFactory;
 use App\System\Player\PlayerPresetLibrary;
 use App\System\Screen\ScreenUpdater;
 use App\System\Server\Client\CliClient;
+use App\System\Server\Client\FixedUIClient;
 use App\System\Server\Client\MainClient;
 use App\System\Server\Client\Network\ClientPool;
 use App\System\Server\Client\UiMessageReceiverClient;
@@ -35,6 +36,7 @@ use App\System\Server\PacketHandlers\AttachClientHandler;
 use App\System\Server\PacketHandlers\GameCommandHandler;
 use App\System\Server\PacketHandlers\RegisterNewClientHandler;
 use App\System\Server\PacketHandlers\RequestClientUuidHandler;
+use App\System\Server\PacketHandlers\RequestPlayerDataHandler;
 use App\System\Server\PacketHandlers\ShutdownSocketHandler;
 use App\System\Server\ServerPresetLibrary;
 use App\System\World\WorldManager;
@@ -220,6 +222,10 @@ function registerClientPacketHandlers(ServicesConfigurator $services): void
     $services->set(RequestClientUuidHandler::class, RequestClientUuidHandler::class)->args([
         new Reference(ClientPool::class),
     ]);
+    $services->set(RequestPlayerDataHandler::class, RequestPlayerDataHandler::class)->args([
+        new Reference(ClientPool::class),
+        new Reference(EntityManager::class),
+    ]);
 }
 
 function registerNetworkInfrastructure(ServicesConfigurator $services)
@@ -248,6 +254,10 @@ function registerClientTypes(ServicesConfigurator $services)
     ]);
 
     $services->set(UiMessageReceiverClient::class, UiMessageReceiverClient::class)->args([
+        new Reference(ServerPresetLibrary::class),
+    ]);
+
+    $services->set(FixedUIClient::class, FixedUIClient::class)->args([
         new Reference(ServerPresetLibrary::class),
     ]);
 }

@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Engine\Entity;
 
 use App\Engine\Component\ComponentInterface;
+use App\Engine\Component\PlayerCommandQueue;
+use App\System\Event\Dispatcher;
+use App\System\Event\Event\PlayerUpdated;
 use Ramsey\Uuid\Uuid;
 
 class EntityManager
@@ -39,6 +42,10 @@ class EntityManager
     public function removeComponentsFromEntity(string $entityId, ComponentInterface|string ...$componentClasses): void
     {
         $this->entityCollection->removeComponentsFromEntity($entityId, ...$componentClasses);
+
+        $entity = $this->getEntityById($entityId);
+
+        $this->updateClientUiIfPlayer($entity);
     }
 
     public function updateEntityComponents(string $entityId, ComponentInterface ...$components): ?Entity
@@ -51,6 +58,8 @@ class EntityManager
 
             $this->addEntity($entity);
         }
+
+        $this->updateClientUiIfPlayer($entity);
 
         return $entity;
     }
@@ -84,5 +93,18 @@ class EntityManager
     private function addEntity(Entity $entity)
     {
         $this->entityCollection->addEntity($entity);
+    }
+
+    private function updateClientUiIfPlayer(?Entity $entity): void
+    {
+        /** @var PlayerCommandQueue $playerCommandQueue */
+        $playerCommandQueue = $entity?->getComponent(PlayerCommandQueue::class) ?? null;
+
+        if ($playerCommandQueue) {
+            Dispatcher::dispatch(new PlayerUpdated(
+                $playerCommandQueue,
+                $entity,
+            ));
+        }
     }
 }

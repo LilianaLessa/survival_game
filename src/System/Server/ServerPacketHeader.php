@@ -21,6 +21,7 @@ enum ServerPacketHeader: string
     case CLIENT_ID = 'client_id';
 
     case UI_MESSAGE = 'ui_message';
+    case UI_PLAYER_UPDATED = 'ui_player_updated';
     case DEBUG_MESSAGE = 'debug_message';
 
     public function getHandler(): ServerPacketHandlerInterface

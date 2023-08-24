@@ -24,6 +24,7 @@ class Client
         return $this->uuid;
     }
 
+    /** @return Socket[] */
     public function getSockets(): array
     {
         return $this->sockets;

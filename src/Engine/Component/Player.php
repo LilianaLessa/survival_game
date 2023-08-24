@@ -32,7 +32,7 @@ class Player implements ComponentInterface
             new DefaultColor(ConsoleColorPalette::SYSTEM_YELLOW),
             new MapSymbol(sprintf("%s", $playerPreset->getDefaultSymbol())),
             new Collideable(),
-            new MovementQueue(10),
+            new MovementQueue($playerPreset->getBaseMovementSpeed()),
             new WorldActor(),
             new ActionHandlerList(
                 [

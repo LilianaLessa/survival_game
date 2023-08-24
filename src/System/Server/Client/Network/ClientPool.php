@@ -7,6 +7,7 @@ namespace App\System\Server\Client\Network;
 use App\Engine\Entity\EntityManager;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\DebugMessageEvent;
+use App\System\Event\Event\PlayerUpdated;
 use App\System\Event\Event\UiMessageEvent;
 use App\System\Server\ServerPacketHeader;
 
@@ -22,6 +23,7 @@ class ClientPool
     {
         $this->setUpUiMessageEventListener();
         $this->setUpDebugMessageEventListener();
+        $this->setUpPlayerUpdatedEventListener();
     }
 
     public function getClients(): array
@@ -120,6 +122,39 @@ class ClientPool
                     $data = sprintf(
                         '%s %s',
                         ServerPacketHeader::DEBUG_MESSAGE->value,
+                        $message
+                    );
+
+                    foreach ($uiMessageReceivers as $socket) {
+                        $socket->getSocket()->write($data);
+                    }
+                }
+            }
+        );
+    }
+
+    private function setUpPlayerUpdatedEventListener(): void
+    {
+        Dispatcher::getInstance()->addListener(
+            PlayerUpdated::EVENT_NAME,
+            function (PlayerUpdated $event) {
+
+                $socketUuid = $event->getPlayerCommandQueue()->getSocketUuid();
+                $client = $this->clientsBySocketId[$socketUuid] ?? null;
+
+                if ($client) {
+                    $playerEntity = $event->getPlayerEntity();
+                    $message = serialize($playerEntity);
+
+                    /** @var Socket[] $uiMessageReceivers */
+                    $uiMessageReceivers = array_filter(
+                        $client->getSockets(),
+                        fn ($s) => $s->getSocketType() === SocketType::UI_FIXED
+                    );
+
+                    $data = sprintf(
+                        '%s %s',
+                        ServerPacketHeader::UI_PLAYER_UPDATED->value,
                         $message
                     );
 

@@ -10,6 +10,7 @@ use App\System\Server\PacketHandlers\ClientPacketHandlerInterface;
 use App\System\Server\PacketHandlers\GameCommandHandler;
 use App\System\Server\PacketHandlers\RegisterNewClientHandler;
 use App\System\Server\PacketHandlers\RequestClientUuidHandler;
+use App\System\Server\PacketHandlers\RequestPlayerDataHandler;
 use App\System\Server\PacketHandlers\ShutdownSocketHandler;
 
 enum ClientPacketHeader: string
@@ -21,11 +22,14 @@ enum ClientPacketHeader: string
 
     case SHUTDOWN_SOCKET = 'exit';
 
+    case REQUEST_PLAYER_DATA = 'request_player_data';
+
     public function getHandler(): ClientPacketHandlerInterface
     {
         return match ($this) {
             self::REGISTER_NEW_CLIENT => Kernel::getContainer()->get(RegisterNewClientHandler::class),
             self::REQUEST_CLIENT_UUID => Kernel::getContainer()->get(RequestClientUuidHandler::class),
+            self::REQUEST_PLAYER_DATA => Kernel::getContainer()->get(RequestPlayerDataHandler::class),
             self::ATTACH_CLIENT => Kernel::getContainer()->get(AttachClientHandler::class),
             self::GAME_COMMAND => Kernel::getContainer()->get(GameCommandHandler::class),
             self::SHUTDOWN_SOCKET => Kernel::getContainer()->get(ShutdownSocketHandler::class),

@@ -72,15 +72,16 @@ class MainClient extends AbstractClient
             /** @var SocketType[] $socketTypes */
             $socketTypes = SocketType::cases();
 
+            echo "\n\n";
             foreach ($socketTypes as $socketType) {
                 if ($socketType !== SocketType::MAIN) {
-                    system(
-                        sprintf(
-                            'gnome-terminal -- php8.2 client_ubuntu.php %s %s',
-                            $clientUuid,
-                            $socketType->value
-                        )
+                    $openClientCommand = sprintf(
+                        'gnome-terminal -- php8.2 client_ubuntu.php %s %s',
+                        $clientUuid,
+                        $socketType->value
                     );
+                    echo $openClientCommand . "\n";
+                    system($openClientCommand);
                 }
             }
         }
