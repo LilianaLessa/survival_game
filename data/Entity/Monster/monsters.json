@@ -10,9 +10,9 @@
     "symbol": "♞",
     "defaultColor": "dark_orange3",
     "behaviors":  [
-      {"preset": "idle"},
+      {"preset": "idleOnBiome"},
       {"preset": "increaseAggroOnAttacked"},
-      {"preset": "attack"}
+      {"preset": "attackOnBiome"}
     ],
     "dropCollection": [
       {

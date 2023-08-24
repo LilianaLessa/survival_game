@@ -31,6 +31,7 @@ use App\System\World\WorldManager;
 use App\System\World\WorldPresetLibrary;
 use PHP_Parallel_Lint\PhpConsoleColor\ConsoleColor;
 use function Amp\delay;
+use function Amp\async;
 
 require_once 'vendor/autoload.php';
 
@@ -107,7 +108,19 @@ $initialViewportHeight = $playerPreset->getInitialViewportHeight();
 
 /** @var BiomeGeneratorService $biomeGenerator */
 $biomeGenerator = Kernel::getContainer()->get(BiomeGeneratorService::class);
-$mapBiomeData = $biomeGenerator->generate();
+
+$mapBiomeData = null;
+
+async(function () use (&$mapBiomeData, $biomeGenerator) {
+    $mapBiomeData = $biomeGenerator->generate();
+});
+
+(function () use (&$mapBiomeData) {
+    while ($mapBiomeData === null) {
+        echo sprintf("Generating world...\r");
+        delay(0.1);
+    }
+})();
 
 /** @var WorldManager $worldManager */
 $worldManager = Kernel::getContainer()->get(WorldManager::class);

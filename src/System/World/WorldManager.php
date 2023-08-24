@@ -143,7 +143,7 @@ class WorldManager
 
                 $symbol = $drawable?->getSymbol() ?? self::EMPTY_CELL_SYMBOL;
 
-                $symbol = sprintf(" %s", $symbol);
+                $symbol = sprintf("%s ", $symbol);
 
                 echo $this->consoleColor->apply(
                     [
