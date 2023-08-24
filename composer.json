@@ -21,6 +21,7 @@
       "blackscorp/astar": "^1.2",
       "symfony/dependency-injection": "^6.3",
         "symfony/config": "^6.3",
-        "php-parallel-lint/php-console-color": "^1.0"
+        "php-parallel-lint/php-console-color": "^1.0",
+      "ext-zlib": "*"
     }
 }

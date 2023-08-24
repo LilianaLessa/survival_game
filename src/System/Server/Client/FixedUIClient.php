@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\System\Server\Client;
 
 use App\Engine\Component\HitPoints;
+use App\Engine\Component\InGameName;
 use App\Engine\Component\MapPosition;
 use App\Engine\Component\MapSymbol;
+use App\Engine\Component\Monster;
 use App\Engine\Entity\Entity;
 use App\System\PresetLibrary\PresetDataType;
 use App\System\Server\Client\Network\SocketType;
@@ -16,7 +18,9 @@ use App\System\Server\ServerPresetLibrary;
 
 class FixedUIClient extends AbstractClient
 {
-    private ?Entity $player;
+    private ?Entity $player = null;
+    /** @var Entity[] */
+    private array $currentTargets = [];
 
     private string|false $clientIdString;
 
@@ -73,6 +77,14 @@ class FixedUIClient extends AbstractClient
                 $this->player = unserialize($message);
                 $needUpdate = true;
                 break;
+            case ServerPacketHeader::UI_CURRENT_TARGET_UPDATED:
+                /** @var Entity $currentTarget */
+                echo $message;
+                $currentTarget = unserialize($message);
+                $this->currentTargets[$currentTarget->getId()] = $currentTarget;
+
+                $needUpdate = true;
+                break;
             default:
                 break;
         }
@@ -102,25 +114,59 @@ class FixedUIClient extends AbstractClient
             /** @var HitPoints $hitPoints */
             $hitPoints = $this->player->getComponent(HitPoints::class);
 
-            echo sprintf(
-                "%s - HP: %d/%d - %s\n",
-                $mapSymbol->getSymbol(),
-                $hitPoints->getCurrent(),
-                $hitPoints->getTotal(),
-                sprintf(
-                    '<todo player name - %s>',
-                    $this->player->getId()
-                ),
-            );
+            /** @var InGameName $inGameName */
+            $inGameName = $this->player->getComponent(InGameName::class);
 
             /** @var MapPosition $mapPosition */
             $mapPosition = $this->player->getComponent(MapPosition::class);
 
             echo sprintf(
-                "Position: %d %d\n",
+                "%s (%d,%d) - HP: %d/%d - %s\n",
+                $mapSymbol->getSymbol(),
                 $mapPosition->get()->getX(),
                 $mapPosition->get()->getY(),
+                $hitPoints->getCurrent(),
+                $hitPoints->getTotal(),
+                $inGameName->getInGameName(),
             );
+
+
+            $this->currentTargets = array_filter(
+                $this->currentTargets,
+                function (Entity $currentTarget) {
+                    /** @var HitPoints $hitPoints */
+                    $hitPoints = $currentTarget->getComponent(HitPoints::class);
+
+                    return ($hitPoints?->getCurrent() ?? 0) > 0;
+                },
+            );
+
+            if (count($this->currentTargets) > 0) {
+                echo "Targets:\n";
+                $index = 1;
+                foreach ($this->currentTargets as $currentTarget) {
+                    /** @var MapSymbol $mapSymbol */
+                    $mapSymbol = $currentTarget->getComponent(MapSymbol::class);
+                    /** @var HitPoints $hitPoints */
+                    $hitPoints = $currentTarget->getComponent(HitPoints::class);
+                    /** @var InGameName $inGameName */
+                    $inGameName = $currentTarget->getComponent(InGameName::class);
+                    /** @var MapPosition $mapPosition */
+                    $mapPosition = $currentTarget->getComponent(MapPosition::class);
+
+
+                    echo sprintf(
+                        "\t%d - %s (%d,%d) - HP: %d/%d - %s\n",
+                        $index++,
+                        $mapSymbol->getSymbol(),
+                        $mapPosition->get()->getX(),
+                        $mapPosition->get()->getY(),
+                        $hitPoints->getCurrent(),
+                        $hitPoints->getTotal(),
+                        $inGameName->getInGameName(),
+                    );
+                }
+            }
         }
 
         ob_end_flush();

@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace App\System\Server\PacketHandlers;
 
 use Amp\Socket\ResourceSocket;
+use App\Engine\Component\HitPoints;
+use App\Engine\Component\InGameName;
+use App\Engine\Component\MapPosition;
+use App\Engine\Component\MapSymbol;
 use App\Engine\Component\PlayerCommandQueue;
 use App\Engine\Entity\EntityManager;
 use App\System\Server\Client\Network\ClientPool;
@@ -31,7 +35,7 @@ class RequestPlayerDataHandler implements ClientPacketHandlerInterface
             PlayerCommandQueue::class,
         );
 
-        $playerEntity = null;
+        $entity = null;
 
         /**
          * @var PlayerCommandQueue $playerCommandQueue
@@ -39,24 +43,29 @@ class RequestPlayerDataHandler implements ClientPacketHandlerInterface
         foreach ($players as $entityId => [$playerCommandQueue]) {
             $socketId = $playerCommandQueue->getSocketUuid();
             if (in_array($socketId, $clientSocketUuids)) {
-                $playerEntity = $this->entityManager->getEntityById($entityId);
+                $entity = $this->entityManager->getEntityById($entityId);
                 break;
             }
         }
 
-        if ($playerEntity) {
-            $message = serialize($playerEntity);
-
-            /** @var Socket[] $uiMessageReceivers */
-            $uiMessageReceivers = array_filter(
-                $clientSockets,
-                fn ($s) => $s->getSocketType() === SocketType::UI_FIXED
-            );
-
+        if ($entity) {
+            //todo this is repeated at \App\System\Server\Client\Network\ClientPool::setUpPlayerUpdatedEventListener
+            $message = serialize($entity->reduce(
+                MapSymbol::class,
+                HitPoints::class,
+                InGameName::class,
+                MapPosition::class,
+            ));
             $data = sprintf(
                 '%s %s',
                 ServerPacketHeader::UI_PLAYER_UPDATED->value,
                 $message
+            );
+
+            /** @var Socket[] $uiMessageReceivers */
+            $uiMessageReceivers = array_filter(
+                $client->getSockets(),
+                fn ($s) => $s->getSocketType() === SocketType::UI_FIXED
             );
 
             foreach ($uiMessageReceivers as $socket) {

@@ -35,6 +35,8 @@ class UiMessageReceiverClient extends AbstractClient
                 ...$this->parsePackage($rawPackageData)
             );
 
+            echo "\n\n";
+
             while($this->socket->isWritable() && $this->socket->isReadable()) {
                 $rawPackageData = $this->socket->read();
                 if ($rawPackageData) {

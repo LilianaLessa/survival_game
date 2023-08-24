@@ -52,5 +52,16 @@ class Entity
     {
         unset($this->components[$componentType]);
     }
+
+    public function reduce(string ...$componentsClasses): Entity
+    {
+        return new Entity(
+            $this->id,
+            ...array_filter(array_map(
+                fn ($c) => $this->getComponent($c),
+                $componentsClasses,
+            ))
+        );
+    }
 }
 

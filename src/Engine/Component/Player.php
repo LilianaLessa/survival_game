@@ -27,6 +27,7 @@ class Player implements ComponentInterface
         return $entityManager->createEntity(
             new Player(),
             new PlayerCommandQueue($socketUuid),
+            new InGameName(sprintf('<todo player name - %s>', $socketUuid)),
             new HitPoints($playerPreset->getTotalHitPoints(),$playerPreset->getTotalHitPoints()),
             new MapPosition($x,$y),
             new DefaultColor(ConsoleColorPalette::SYSTEM_YELLOW),

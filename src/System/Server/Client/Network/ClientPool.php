@@ -4,11 +4,18 @@ declare(strict_types=1);
 
 namespace App\System\Server\Client\Network;
 
+use App\Engine\Component\HitPoints;
+use App\Engine\Component\InGameName;
+use App\Engine\Component\MapPosition;
+use App\Engine\Component\MapSymbol;
+use App\Engine\Component\Monster;
+use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\DebugMessageEvent;
 use App\System\Event\Event\PlayerUpdated;
 use App\System\Event\Event\UiMessageEvent;
+use App\System\Event\Event\UpdatePlayerCurrentTarget;
 use App\System\Server\ServerPacketHeader;
 
 class ClientPool
@@ -24,6 +31,7 @@ class ClientPool
         $this->setUpUiMessageEventListener();
         $this->setUpDebugMessageEventListener();
         $this->setUpPlayerUpdatedEventListener();
+        $this->setUpUpdatePlayerCurrentTargetEventListener();
     }
 
     public function getClients(): array
@@ -133,18 +141,62 @@ class ClientPool
         );
     }
 
+    //todo repeated at \App\System\Server\PacketHandlers\RequestPlayerDataHandler::handle
     private function setUpPlayerUpdatedEventListener(): void
     {
         Dispatcher::getInstance()->addListener(
             PlayerUpdated::EVENT_NAME,
             function (PlayerUpdated $event) {
-
                 $socketUuid = $event->getPlayerCommandQueue()->getSocketUuid();
                 $client = $this->clientsBySocketId[$socketUuid] ?? null;
 
                 if ($client) {
-                    $playerEntity = $event->getPlayerEntity();
-                    $message = serialize($playerEntity);
+                    $entity = $event->getPlayerEntity();
+
+                    $message = serialize($entity->reduce(
+                        MapSymbol::class,
+                        HitPoints::class,
+                        InGameName::class,
+                        MapPosition::class,
+                    ));
+
+                    $data = sprintf(
+                        '%s %s',
+                        ServerPacketHeader::UI_PLAYER_UPDATED->value,
+                        $message
+                    );
+
+                    /** @var Socket[] $uiMessageReceivers */
+                    $uiMessageReceivers = array_filter(
+                        $client->getSockets(),
+                        fn ($s) => $s->getSocketType() === SocketType::UI_FIXED
+                    );
+
+                    foreach ($uiMessageReceivers as $socket) {
+                        $socket->getSocket()->write($data);
+                    }
+                }
+            }
+        );
+    }
+
+    private function setUpUpdatePlayerCurrentTargetEventListener(): void
+    {
+        Dispatcher::getInstance()->addListener(
+            UpdatePlayerCurrentTarget::EVENT_NAME,
+            function (UpdatePlayerCurrentTarget $event) {
+                $socketUuid = $event->getPlayerCommandQueue()->getSocketUuid();
+                $client = $this->clientsBySocketId[$socketUuid] ?? null;
+
+                if ($client) {
+                    $entity = $event->getCurrentTarget();
+
+                    $message = serialize($entity->reduce(
+                        MapSymbol::class,
+                        HitPoints::class,
+                        InGameName::class,
+                        MapPosition::class,
+                    ));
 
                     /** @var Socket[] $uiMessageReceivers */
                     $uiMessageReceivers = array_filter(
@@ -154,7 +206,7 @@ class ClientPool
 
                     $data = sprintf(
                         '%s %s',
-                        ServerPacketHeader::UI_PLAYER_UPDATED->value,
+                        ServerPacketHeader::UI_CURRENT_TARGET_UPDATED->value,
                         $message
                     );
 

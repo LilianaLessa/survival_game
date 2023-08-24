@@ -41,6 +41,7 @@ class MonsterPresetLibrary extends AbstractPresetLibrary
         $monsterPreset->setBaseMovementSpeed($rawPreset->baseMovementSpeed ?? 0);
         $monsterPreset->setBaseAttackSpeed($rawPreset->baseAttackSpeed ?? 0);
         $monsterPreset->setTotalHitPoints($rawPreset->totalHitPoints ?? 1);
+        $monsterPreset->setInGameName($rawPreset->inGameName ?? $rawPreset->name);
 
         $monsterPreset->setDropCollection(...$this->generateMonsterDropCollection($rawPreset));
         $monsterPreset->setDefaultColor(

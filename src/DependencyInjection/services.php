@@ -26,7 +26,6 @@ use App\System\Monster\Spawner\MonsterSpawnerLibrary;
 use App\System\Player\PlayerFactory;
 use App\System\Player\PlayerPresetLibrary;
 use App\System\Screen\ScreenUpdater;
-use App\System\Server\Client\CliClient;
 use App\System\Server\Client\FixedUIClient;
 use App\System\Server\Client\MainClient;
 use App\System\Server\Client\Network\ClientPool;
@@ -245,9 +244,6 @@ function registerClientTypes(ServicesConfigurator $services)
         new Reference(ServerPresetLibrary::class),
     ]);
 
-    $services->set(CliClient::class, CliClient::class)->args([
-        new Reference(ServerPresetLibrary::class),
-    ]);
 
     $services->set(UnblockingCliClient::class, UnblockingCliClient::class)->args([
         new Reference(ServerPresetLibrary::class),

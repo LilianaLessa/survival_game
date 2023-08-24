@@ -24,12 +24,10 @@ use App\Engine\Component\Player;
 use App\Engine\Component\PlayerCommandQueue;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
-use App\System\ConsoleColorCode;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
 use App\System\Helpers\ConsoleColorPalette;
 use App\System\Helpers\RouteService;
-use App\System\Kernel;
 
 class BattleSystem implements AISystemInterface
 {

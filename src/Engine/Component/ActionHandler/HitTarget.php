@@ -13,7 +13,7 @@ use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\DebugMessageEvent;
-use App\System\Event\Event\UiMessageEvent;
+use App\System\Event\Event\UpdatePlayerCurrentTarget;
 use App\System\Helpers\ConsoleColorPalette;
 
 class HitTarget implements ActionHandlerInterface
@@ -60,7 +60,11 @@ class HitTarget implements ActionHandlerInterface
                     ]
                 );
 
-                Dispatcher::getInstance()->dispatch(new DebugMessageEvent($uiMessage, $playerCommandQueue));
+                Dispatcher::dispatch(new DebugMessageEvent($uiMessage, $playerCommandQueue));
+
+                Dispatcher::dispatch(
+                    new UpdatePlayerCurrentTarget($playerCommandQueue, $targetEntity)
+                );
             }
         }
     }

@@ -22,6 +22,8 @@ class MonsterPreset extends AbstractPreset
 
     private ConsoleColorPalette $defaultColor;
 
+    private string $inGameName;
+
     public function __construct(
         string $name,
         private readonly ?string $symbol,
@@ -32,6 +34,7 @@ class MonsterPreset extends AbstractPreset
         parent::__construct(PresetDataType::MONSTER_PRESET, $name);
 
         $this->defaultColor = ConsoleColorPalette::default();
+        $this->inGameName = $name;
     }
 
     public function getSymbol(): string
@@ -97,6 +100,17 @@ class MonsterPreset extends AbstractPreset
     public function setDefaultColor(ConsoleColorPalette $defaultColor): self
     {
         $this->defaultColor = $defaultColor;
+        return $this;
+    }
+
+    public function getInGameName(): string
+    {
+        return $this->inGameName;
+    }
+
+    public function setInGameName(string $inGameName): self
+    {
+        $this->inGameName = $inGameName;
         return $this;
     }
 }

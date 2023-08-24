@@ -38,6 +38,7 @@ class Monster implements ComponentInterface
             new ParentSpawner($parentSpawner),
             new MapSymbol($monsterPreset->getSymbol()),
             new BehaviorCollection(...$monsterPreset->getBehaviorCollection()->getBehaviors()),
+            new InGameName($monsterPreset->getInGameName()),
             new Monster($monsterPreset),
             new DefaultColor($monsterPreset->getDefaultColor()),
             new Battler($monsterPreset->getBaseAttackSpeed()),

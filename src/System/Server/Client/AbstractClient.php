@@ -12,6 +12,8 @@ use App\System\Server\ClientPacketHeader;
 use App\System\Server\ServerPacketHeader;
 use App\System\Server\ServerPreset;
 use League\Uri\Http;
+use function Amp\async;
+use function Amp\delay;
 use function Amp\Socket\connect;
 use function Amp\Socket\connectTls;
 
@@ -45,6 +47,15 @@ abstract class AbstractClient
             !$initResult ? 'Failed' : 'Accepted',
             $message,
         );
+
+        if ($initResult) {
+            async(function () {
+               while ($this->socket->isReadable() && $this->socket->isWritable()) {
+                   delay(0.1);
+               }
+               die();
+            });
+        }
 
         return $initResult;
     }

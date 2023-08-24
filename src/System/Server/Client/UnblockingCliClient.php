@@ -14,6 +14,8 @@ use App\System\Server\ClientPacketHeader;
 use App\System\Server\ServerPresetLibrary;
 class UnblockingCliClient extends AbstractClient
 {
+    private bool $unblockingActive = true;
+
     public function __construct(ServerPresetLibrary $serverPresetLibrary)
     {
         [ $mapServer ] = $serverPresetLibrary->getPresetByNameAndTypes(
@@ -36,8 +38,26 @@ class UnblockingCliClient extends AbstractClient
                 ...$this->parsePackage($rawPackageData)
             );
 
+            echo "\n\n";
+
             while ($this->socket->isWritable() && $this->socket->isReadable()) {
-                $this->unblockingInputMode();
+                $command = match ($this->unblockingActive) {
+                    true => $this->unblockingInputMode(),
+                    false => $this->blockingInputMode(),
+                };
+
+                if ($command) {
+                    if ($command === "\n") {
+                        $this->unblockingActive = false;
+                        continue;
+                    }
+
+                    $this->socket->write(
+                        sprintf('%s %s', ClientPacketHeader::GAME_COMMAND->value, $command)
+                    );
+                }
+
+                $this->unblockingActive = true;
             }
         }
 
@@ -49,20 +69,28 @@ class UnblockingCliClient extends AbstractClient
         return SocketType::UNBLOCKING_CLI;
     }
 
-    private function unblockingInputMode(): void
+    private function unblockingInputMode(): ?string
     {
         $stdin = fopen('php://stdin', 'r');
         stream_set_blocking($stdin, false);
         system('stty cbreak -echo');
 
+        $command = null;
         $keypress = fgets($stdin);
         if ($keypress) {
             $command = $this->key2Command($keypress);
-            $this->socket->write(
-                sprintf('%s %s', ClientPacketHeader::GAME_COMMAND->value, $command)
-            );
         }
         fclose($stdin);
+        return $command;
+    }
+
+    private function blockingInputMode(): ?string
+    {
+        system('stty cbreak echo');
+        $command = readline("\n>>");
+        system('stty cbreak -echo');
+
+        return $command;
     }
 
     private function key2Command($string): string {
@@ -80,6 +108,7 @@ class UnblockingCliClient extends AbstractClient
             Key::D => Direction::RIGHT->value,
             Key::A => Direction::LEFT->value,
             Key::I => CommandPredicate::INVENTORY->value,
+            Key::ENTER => "\n",
             default => '',
         };
     }
