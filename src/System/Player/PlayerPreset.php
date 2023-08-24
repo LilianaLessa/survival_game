@@ -14,7 +14,9 @@ class PlayerPreset extends AbstractPreset
 
     private string $defaultSymbol;
 
-    private int $totalHitPoints;
+    private int $totalHitPoints = 10;
+
+    private int $baseMovementSpeed = 10;
 
     public function __construct(string $name)
     {
@@ -65,6 +67,17 @@ class PlayerPreset extends AbstractPreset
     public function setTotalHitPoints(int $totalHitPoints): self
     {
         $this->totalHitPoints = $totalHitPoints;
+        return $this;
+    }
+
+    public function getBaseMovementSpeed(): int
+    {
+        return $this->baseMovementSpeed;
+    }
+
+    public function setBaseMovementSpeed(int $baseMovementSpeed): self
+    {
+        $this->baseMovementSpeed = $baseMovementSpeed;
         return $this;
     }
 }

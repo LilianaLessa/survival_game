@@ -59,13 +59,20 @@ if ($clientUuid) {
             ClientPacketHeader::REGISTER_NEW_CLIENT->value
         )
     );
+        $data = $socket->read();
+    if ($data) {
+        echo $data;
+        echo "\n\n";
+    }
 }
 
 while (1) {
-    $data = $socket->read();
-    if ($data) {
-        echo $data;
-    }
+
+
+    $command = readline('>>');
+    $socket->write(
+        sprintf('%s %s', ClientPacketHeader::GAME_COMMAND->value, $command)
+    );
 }
 
 //$socket->write($command);

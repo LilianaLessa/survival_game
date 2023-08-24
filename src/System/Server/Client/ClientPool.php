@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\System\Server\Client;
 
+use App\Engine\Entity\EntityManager;
+
 class ClientPool
 {
     /** @var Client[] */
@@ -11,6 +13,11 @@ class ClientPool
 
     /** @var Client[] */
     private array $clientsBySocketId;
+
+    public function __construct(private readonly EntityManager $entityManager)
+    {
+    }
+
 
     public function getClients(): array
     {
@@ -40,5 +47,22 @@ class ClientPool
     public function getClientBySocketUuid(string $socketUuid): ?Client
     {
         return $this->clientsBySocketId[$socketUuid] ?? null;
+    }
+
+    public function removeClient(Client $client): void
+    {
+        //remove all sockets related to client,
+        $sockets = $client->getSockets();
+        foreach ($sockets as $socket) {
+            $socket->getSocket()->close();
+            unset($this->clientsBySocketId[$socket->getUuid()->toString()]);
+        }
+
+        $playerId = $client->getPlayer()->getId();
+        $this->entityManager->removeEntity($playerId);
+
+        $client->shutDown();
+
+        unset($this->clients[$client->getUuid()->toString()]);
     }
 }

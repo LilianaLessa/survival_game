@@ -28,6 +28,7 @@ class PlayerPresetLibrary extends AbstractPresetLibrary
             ->setInitialViewportHeight($rawPreset->initialViewportHeight ?? 10)
             ->setDefaultSymbol($rawPreset->defaultSymbol ?? "☺")
             ->setTotalHitPoints($rawPreset->totalHitPoints ?? 10)
+            ->setTotalHitPoints($rawPreset->baseMovmenetSpeet ?? 10)
         ;
     }
 

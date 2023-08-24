@@ -12,7 +12,7 @@ use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
 use App\System\World\WorldManager;
 
-class WorldController implements ReceiverSystemInterface
+class WorldController// implements ReceiverSystemInterface
 {
     use CommandParserTrait;
 

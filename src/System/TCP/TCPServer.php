@@ -6,7 +6,6 @@ namespace App\System\TCP;
 
 use Amp\Socket;
 use Amp\Socket\ResourceSocket;
-use App\Engine\System\ReceiverSystemInterface;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
 use App\System\Server\ClientPacketHeader;
@@ -74,7 +73,9 @@ class TCPServer
                     array_shift($packageExplodedData);
                     $clientPackage->getHandler()->handle($socket, $socketUuid, ...$packageExplodedData);
                 }
-            } while ($data !== null && $data !== 'exit');
+            } while ($data !== null);
+            ClientPacketHeader::SHUTDOWN_SOCKET->getHandler()->handle($socket, $socketUuid, ...[]);
+
             $socket->close();
             unset($this->sockets[$socketUuid->toString()]);
         });

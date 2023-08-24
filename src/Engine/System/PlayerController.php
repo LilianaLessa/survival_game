@@ -12,10 +12,12 @@ use App\Engine\Commands\SetMapViewport;
 use App\Engine\Commands\ShowInventory;
 use App\Engine\Commands\WhereAmI;
 use App\Engine\Commands\WorldAction;
+use App\Engine\Component\Fluid;
 use App\Engine\Component\Item\Inventory;
 use App\Engine\Component\MapPosition;
+use App\Engine\Component\MapSymbol;
 use App\Engine\Component\MovementQueue;
-use App\Engine\Component\Player;
+use App\Engine\Component\PlayerCommandQueue;
 use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\CommandParserTrait;
 use App\System\CommandPredicate;
@@ -26,7 +28,7 @@ use App\System\Helpers\Point2D;
 use App\System\Item\ItemPresetLibrary;
 use App\System\World\WorldManager;
 
-class PlayerController implements ReceiverSystemInterface
+class PlayerController implements WorldSystemInterface
 {
     use CommandParserTrait;
 
@@ -43,56 +45,62 @@ class PlayerController implements ReceiverSystemInterface
     //     so, the arrows would be used to control the aim for long-distance skills.
     //     or when selected the skill, the aim should appear and the action arrows should be disabled.
     //     maybe this is better, as there's not a way to show character sight direction yet,
-    public function parse(string $rawCommand): void
+    public function process(): void
     {
-        [$commandPredicate, $commandArguments] = $this->extractCommand($rawCommand);
-
         $entityCollection = $this->entityManager->getEntitiesWithComponents(
-            Player::class,
+            PlayerCommandQueue::class,
             MovementQueue::class,
             MapPosition::class,
             Inventory::class,
         );
 
-        try {
-            /** @var MovementQueue $movable */
-            /** @var MapPosition $position */
-            /** @var Inventory $inventory */
-            foreach ($entityCollection as $entityId => [,$movable, $position, $inventory]) {
-                $this->parseMovementCommand($commandPredicate, $movable, $position);
-                $this->parseDebugCommand($commandPredicate, $commandArguments, $position);
-                $this->parseInfoCommand($commandPredicate, $commandArguments, $position, $inventory);
-                $this->parseActionOnWorldCommand($commandPredicate, $commandArguments, $entityId);
+        /** @var PlayerCommandQueue $playerCommandQueue */
+        /** @var MovementQueue $movable */
+        /** @var MapPosition $position */
+        /** @var Inventory $inventory */
+        foreach ($entityCollection as $entityId => [$playerCommandQueue ,$movable, $position, $inventory]) {
+            $commandQueue = $playerCommandQueue->getCommandQueue();
+            while (!$commandQueue->isEmpty() &&$rawCommand = $commandQueue->dequeue()) {
+                try {
+                    [$commandPredicate, $commandArguments] = $this->extractCommand($rawCommand);
 
-                break;
+                    $this->parseMovementCommand($commandPredicate, $commandArguments, $movable, $position);
+                    $this->parseDebugCommand($commandPredicate, $commandArguments, $position);
+                    $this->parseInfoCommand($commandPredicate, $commandArguments, $position, $inventory);
+                    $this->parseActionOnWorldCommand($commandPredicate, $commandArguments, $entityId);
+                    $this->parseWorldViewChange($commandPredicate, $commandArguments);
+                } catch (\Throwable $e) {
+                    Dispatcher::dispatch(
+                        new UiMessageEvent(
+                            sprintf(
+                                "\nException on parsing player command (%s): %s\n",
+                                $rawCommand,
+                                $e->getMessage(),
+                            )
+                        )
+                    );
+                }
             }
-        } catch (\Throwable $e) {
-            Dispatcher::dispatch(
-                new UiMessageEvent(
-                    sprintf(
-                        "\nException on parsing player command (%s): %s\n",
-                        $rawCommand,
-                        $e->getMessage(),
-                    )
-                )
-            );
         }
     }
 
     private function parseMovementCommand(
         ?CommandPredicate $commandPredicate,
+        array $commandArguments,
         MovementQueue $movementQueue,
         MapPosition $from
     ): void {
         $moveCommand = match ($commandPredicate) {
-            CommandPredicate::PLAYER_MOVE_UP => 
+            CommandPredicate::PLAYER_MOVE_UP =>
                 new MoveEntity($this->calculateTargetCoordinates($from, Direction::UP)),
-            CommandPredicate::PLAYER_MOVE_DOWN => 
+            CommandPredicate::PLAYER_MOVE_DOWN =>
                 new MoveEntity($this->calculateTargetCoordinates($from, Direction::DOWN)),
-            CommandPredicate::PLAYER_MOVE_LEFT => 
+            CommandPredicate::PLAYER_MOVE_LEFT =>
                 new MoveEntity($this->calculateTargetCoordinates($from, Direction::LEFT)),
-            CommandPredicate::PLAYER_MOVE_RIGHT => 
+            CommandPredicate::PLAYER_MOVE_RIGHT =>
                 new MoveEntity($this->calculateTargetCoordinates($from, Direction::RIGHT)),
+            CommandPredicate::PLAYER_WARP =>
+                new MoveEntity(new Point2D((int)$commandArguments[0], (int)$commandArguments[1])),
             default => null,
         };
 
@@ -175,5 +183,31 @@ class PlayerController implements ReceiverSystemInterface
             $from->getX() + $diff[0],
             $from->getY() + $diff[1],
         );
+    }
+
+    private function parseWorldViewChange(?CommandPredicate $commandPredicate, array $commandArguments): void
+    {
+
+        $execute = match ($commandPredicate) {
+            CommandPredicate::WORLD_SET_VIEW => function () use ($commandArguments) {
+                $worldType = $commandArguments[0] ?? 'world';
+                $worldViewType = match ($worldType) {
+                    'fluid' => Fluid::class,
+                    'world' => MapSymbol::class,
+                    default => (function () use (&$worldType) { $worldType = 'world'; return null;})(),
+                };
+
+                $this->world->setDrawableClass($worldViewType);
+
+                Dispatcher::getInstance()->dispatch(
+                    new UiMessageEvent(
+                        sprintf("World view mode set to %s\n", $worldType)
+                    )
+                );
+            },
+            default => null
+        };
+
+        $execute && $execute();
     }
 }

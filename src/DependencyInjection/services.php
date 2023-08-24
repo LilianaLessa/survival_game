@@ -24,11 +24,13 @@ use App\System\Helpers\RouteService;
 use App\System\Item\ItemPresetLibrary;
 use App\System\Monster\MonsterPresetLibrary;
 use App\System\Monster\Spawner\MonsterSpawnerLibrary;
+use App\System\Player\PlayerFactory;
 use App\System\Player\PlayerPresetLibrary;
 use App\System\Screen\ScreenUpdater;
 use App\System\Server\Client\ClientPool;
 use App\System\Server\PacketHandlers\GameCommandHandler;
 use App\System\Server\PacketHandlers\RegisterNewClientHandler;
+use App\System\Server\PacketHandlers\ShutdownSocketHandler;
 use App\System\Server\ServerPresetLibrary;
 use App\System\World\WorldManager;
 use App\System\World\WorldPresetLibrary;
@@ -69,6 +71,8 @@ function registerPresetLibraries(ServicesConfigurator $services): void
         ->args([
             new Reference(BehaviorPresetLibrary::class)
         ]);
+
+    $services->set(ServerPresetLibrary::class, ServerPresetLibrary::class);
 }
 
 function registerManagers(ServicesConfigurator $services): void
@@ -176,26 +180,37 @@ function registerEngineServices(ServicesConfigurator $services)
 }
 
 
-function registerInfrastructure(ServicesConfigurator $services): void
+function registerGameInfrastructure(ServicesConfigurator $services): void
 {
     $services->set(ScreenUpdater::class, ScreenUpdater::class)
         ->args([
             new Reference(EntityManager::class),
             new Reference(WorldManager::class),
             new Reference(WorldPresetLibrary::class),
-
         ]);
 
-    $services->set(ServerPresetLibrary::class, ServerPresetLibrary::class);
+
+    $services->set(PlayerFactory::class, PlayerFactory::class)
+        ->args([
+            new Reference(WorldManager::class),
+            new Reference(EntityManager::class),
+        ]);
 }
 
 function registerNetworkPacketHandlers(ServicesConfigurator $services): void
 {
     $services->set(RegisterNewClientHandler::class, RegisterNewClientHandler::class)->args([
         new Reference(ClientPool::class),
+        new Reference(PlayerPresetLibrary::class),
+        new Reference(WorldManager::class),
+        new Reference(PlayerFactory::class),
     ]);
 
     $services->set(GameCommandHandler::class, GameCommandHandler::class)->args([
+        new Reference(ClientPool::class),
+    ]);
+
+    $services->set(ShutdownSocketHandler::class, ShutdownSocketHandler::class)->args([
         new Reference(ClientPool::class),
     ]);
 }
@@ -204,7 +219,9 @@ function registerNetworkInfrastructure(ServicesConfigurator $services)
 {
     registerNetworkPacketHandlers($services);
 
-    $services->set(ClientPool::class, ClientPool::class);
+    $services->set(ClientPool::class, ClientPool::class)->args([
+        new Reference(EntityManager::class),
+    ]);
 }
 
 return static function (ContainerConfigurator $container): void {
@@ -212,7 +229,7 @@ return static function (ContainerConfigurator $container): void {
 
     registerManagers($services);
 
-    registerInfrastructure($services);
+    registerGameInfrastructure($services);
     registerPresetLibraries($services);
     registerBehaviorEffectHandlers($services);
     registerHelpers($services);

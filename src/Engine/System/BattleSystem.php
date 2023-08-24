@@ -11,6 +11,7 @@ use App\Engine\Component\AttackTarget;
 use App\Engine\Component\ColorEffect;
 use App\Engine\Component\HitByEntity;
 use App\Engine\Component\HitPoints;
+use App\Engine\Component\Item\Inventory;
 use App\Engine\Component\Item\ItemDropper\DropOn;
 use App\Engine\Component\Item\ItemDropper\ItemDropper;
 use App\Engine\Component\Item\ItemDropper\ItemDropperCollection;
@@ -19,6 +20,7 @@ use App\Engine\Component\MapPosition;
 use App\Engine\Component\Monster;
 use App\Engine\Component\MovementQueue;
 use App\Engine\Component\MsTimeFromLastAttack;
+use App\Engine\Component\Player;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\System\ConsoleColorCode;
@@ -70,7 +72,12 @@ class BattleSystem implements AISystemInterface
                     )
                 );
 
-                $this->entityManager->removeEntity($entityId);
+                $deadEntity->removeComponent(MapPosition::class);
+                //todo if player, remove inventory or drop it?
+                $deadEntity->removeComponent(Inventory::class);
+                if (!$deadEntity->getComponent(Player::class)) {
+                    $this->entityManager->removeEntity($entityId);
+                }
             }
         }
     }

@@ -84,8 +84,6 @@ echo match($argv[2] ?? null) {
     default => "\n\nCommand input mode active\n\n",
 };
 
-
-
 $socket = null;
 do {
     if (!$socket || $socket->isClosed()) {

@@ -10,6 +10,7 @@ enum CommandPredicate : string {
     case PLAYER_MOVE_DOWN = 's';
     case PLAYER_MOVE_LEFT = 'a';
     case PLAYER_MOVE_RIGHT = 'd';
+    case PLAYER_WARP = 'warp';
 
     case PLAYER_SELF_WHERE = 'where';
     case PLAYER_VIEWPORT = 'vi';

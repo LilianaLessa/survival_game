@@ -11,16 +11,22 @@ use App\Engine\Component\Item\ItemCollector;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\Engine\System\WorldActorActionType;
-use App\System\ConsoleColorCode;
 use App\System\Helpers\ConsoleColorPalette;
 use App\System\Player\PlayerPreset;
 
+//todo basically PlayerCommandQueue also represents a player. so maybe this class is not necessary.
 class Player implements ComponentInterface
 {
-    static public function createPlayer(EntityManager $entityManager, PlayerPreset $playerPreset, $x, $y): Entity
-    {
+    static public function createPlayer(
+        EntityManager $entityManager,
+        PlayerPreset $playerPreset,
+        string $socketUuid,
+        $x,
+        $y
+    ): Entity {
         return $entityManager->createEntity(
             new Player(),
+            new PlayerCommandQueue($socketUuid),
             new HitPoints($playerPreset->getTotalHitPoints(),$playerPreset->getTotalHitPoints()),
             new MapPosition($x,$y),
             new DefaultColor(ConsoleColorPalette::SYSTEM_YELLOW),

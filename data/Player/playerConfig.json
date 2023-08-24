@@ -4,5 +4,6 @@
   "initialViewportWidth": 30,
   "initialViewportHeight": 30,
   "defaultSymbol": "☻",
-  "totalHitPoints": 100
+  "totalHitPoints": 100,
+  "baseMovementSpeed": 10
 }
