@@ -57,9 +57,9 @@ class TCPServer
         });
     }
 
-    private function handleMessages(ResourceSocket $socket, UuidInterface $uuid): void
+    private function handleMessages(ResourceSocket $socket, UuidInterface $socketUuid): void
     {
-        async(function () use ($socket, $uuid) {
+        async(function () use ($socket, $socketUuid) {
             do {
                 $data = null;
                 if ($socket->isWritable() && $socket->isReadable()) {
@@ -71,18 +71,12 @@ class TCPServer
                 $clientPackage = ClientPacketHeader::tryFrom($packageExplodedData[0] ?? '');
 
                 if ($clientPackage) {
-                    $clientPackage->getHandler()->handle($socket, $uuid, ...$packageExplodedData);
-
-
-                    foreach ($this->systems as $system) {
-                        if ($system instanceof ReceiverSystemInterface) {
-                            $system->parse($data);
-                        }
-                    }
+                    array_shift($packageExplodedData);
+                    $clientPackage->getHandler()->handle($socket, $socketUuid, ...$packageExplodedData);
                 }
             } while ($data !== null && $data !== 'exit');
             $socket->close();
-            unset($this->sockets[$uuid->toString()]);
+            unset($this->sockets[$socketUuid->toString()]);
         });
     }
 }

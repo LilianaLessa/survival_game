@@ -27,6 +27,7 @@ use App\System\Monster\Spawner\MonsterSpawnerLibrary;
 use App\System\Player\PlayerPresetLibrary;
 use App\System\Screen\ScreenUpdater;
 use App\System\Server\Client\ClientPool;
+use App\System\Server\PacketHandlers\GameCommandHandler;
 use App\System\Server\PacketHandlers\RegisterNewClientHandler;
 use App\System\Server\ServerPresetLibrary;
 use App\System\World\WorldManager;
@@ -192,7 +193,10 @@ function registerNetworkPacketHandlers(ServicesConfigurator $services): void
 {
     $services->set(RegisterNewClientHandler::class, RegisterNewClientHandler::class)->args([
         new Reference(ClientPool::class),
+    ]);
 
+    $services->set(GameCommandHandler::class, GameCommandHandler::class)->args([
+        new Reference(ClientPool::class),
     ]);
 }
 
@@ -201,8 +205,6 @@ function registerNetworkInfrastructure(ServicesConfigurator $services)
     registerNetworkPacketHandlers($services);
 
     $services->set(ClientPool::class, ClientPool::class);
-
-
 }
 
 return static function (ContainerConfigurator $container): void {

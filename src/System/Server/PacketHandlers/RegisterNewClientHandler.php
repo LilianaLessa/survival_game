@@ -28,6 +28,8 @@ class RegisterNewClientHandler implements ClientPacketHandlerInterface
             )
         );
 
+        $this->clientPool->addClient($newClient);
+
         $response = sprintf(
             "%s %s",
             'register_new_client_response',

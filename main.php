@@ -3,17 +3,7 @@
 declare(strict_types=1);
 
 use App\Engine\System\AISystemInterface;
-use App\Engine\System\BattleSystem;
-use App\Engine\System\ColorEffectsSystem;
-use App\Engine\System\ItemCollection\CollectItems;
-use App\Engine\System\ItemCollection\EntityBehaviorSystem;
-use App\Engine\System\MonsterSpawner;
-use App\Engine\System\MovementApplier;
 use App\Engine\System\PhysicsSystemInterface;
-use App\Engine\System\PlayerController;
-use App\Engine\System\PlayerSpawner;
-use App\Engine\System\WorldActionApplier;
-use App\Engine\System\WorldController;
 use App\Engine\System\WorldSystemInterface;
 use App\System\AI\BehaviorPresetLibrary;
 use App\System\Biome\BiomeGeneratorService;
@@ -62,19 +52,7 @@ $worldManager = Kernel::getContainer()->get(WorldManager::class)->setMapBiomeDat
 );
 
 $systems = [
-    ///...Kernel::getRegisteredGameSystemInstances(),
-    Kernel::getContainer()->get(WorldActionApplier::class),
-    Kernel::getContainer()->get(CollectItems::class),
-    Kernel::getContainer()->get(MovementApplier::class),
-    Kernel::getContainer()->get(BattleSystem::class),
-    Kernel::getContainer()->get(ColorEffectsSystem::class),
-    Kernel::getContainer()->get(PlayerSpawner::class),
-    Kernel::getContainer()->get(EntityBehaviorSystem::class),
-    Kernel::getContainer()->get(WorldController::class),
-    Kernel::getContainer()->get(MonsterSpawner::class),
-
-    //todo this should be attached to the player cli/unblocking cli socket.
-    Kernel::getContainer()->get(PlayerController::class),
+    ...Kernel::getRegisteredGameSystemInstances(),
 ];
 
 (new TCPServer('127.0.0.1:1988', $systems))->init();

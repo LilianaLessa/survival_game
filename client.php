@@ -6,6 +6,7 @@ use Amp\Socket\ClientTlsContext;
 use Amp\Socket\ConnectContext;
 use App\System\Kernel;
 use App\System\PresetLibrary\PresetDataType;
+use App\System\Server\ClientPacketHeader;
 use App\System\Server\ServerPreset;
 use App\System\Server\ServerPresetLibrary;
 use League\Uri\Http;
@@ -44,9 +45,20 @@ $socket = connectToGameServer(
 $clientUuid = $argv[1] ?? null;
 
 if ($clientUuid) {
-    $socket->write(sprintf('register_client %s', $clientUuid));
+    $socket->write(sprintf('%s %s',
+        ClientPacketHeader::REGISTER_CLIENT->value,
+        $clientUuid
+    ));
+
+    //todo from here, connect different types of clients.
+
 } else {
-    $socket->write(sprintf('register_new_client', $clientUuid));
+    $socket->write(
+        sprintf(
+            '%s',
+            ClientPacketHeader::REGISTER_NEW_CLIENT->value
+        )
+    );
 }
 
 while (1) {

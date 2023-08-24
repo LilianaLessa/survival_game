@@ -23,19 +23,21 @@ class Kernel
     /** @return GameSystemInterface */
     public static function getRegisteredGameSystemInstances(): array
     {
-        //todo make it work.
+        return self::getAllRegisteredConcreteClassesFromInterface(GameSystemInterface::class);
+    }
 
+    /** @return object[] */
+    public static function getAllRegisteredConcreteClassesFromInterface(string $interfaceClass): array
+    {
         $container = self::getContainer();
 
-        $gameSystemClasses = array_filter(
-            get_declared_classes(),
-            fn ($c) => in_array(GameSystemInterface::class, class_implements($c))
-        );
+        $serviceIds = $container->getServiceIds();
 
         $instances = [];
-        foreach ($gameSystemClasses as $gameSystemClass)  {
-            $instance = $container->get($gameSystemClass);
-            $instance && $instances[] = $instance;
+        foreach ($serviceIds as $serviceId) {
+            if (class_exists($serviceId) && in_array($interfaceClass, class_implements($serviceId))) {
+                    $instances[] = $container->get($serviceId);
+            }
         }
 
         return $instances;

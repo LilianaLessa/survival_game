@@ -8,6 +8,7 @@ use App\Engine\System\WorldActorActionType;
 use App\System\CommandPredicate;
 use App\System\Direction;
 use App\System\Key;
+use App\System\Server\ClientPacketHeader;
 use League\Uri\Http;
 use function Amp\Socket\connect;
 use function Amp\Socket\connectTls;
@@ -50,7 +51,9 @@ function unblockingInputMode(\Amp\Socket\Socket $socket): void
     $keypress = fgets($stdin);
     if ($keypress) {
         $command = key2Command($keypress);
-        $socket->write($command);
+        $socket->write(
+            sprintf('%s %s', ClientPacketHeader::GAME_COMMAND->value, $command)
+        );
     }
 
     fclose($stdin);
@@ -59,7 +62,9 @@ function unblockingInputMode(\Amp\Socket\Socket $socket): void
 function commandInputMode(\Amp\Socket\Socket $socket): void
 {
     $command = readline('>>');
-    $socket->write($command);
+    $socket->write(
+        sprintf('%s %s', ClientPacketHeader::GAME_COMMAND->value, $command)
+    );
 }
 
 function messageReceiverMode(\Amp\Socket\Socket $socket): void
