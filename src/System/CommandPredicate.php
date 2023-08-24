@@ -17,6 +17,8 @@ enum CommandPredicate : string {
 
     case PLAYER_ACTION = 'action';
 
+    case PLAYER_SET_NAME = 'set_name';
+
     case MINE = 'm';
     case INVENTORY = 'i';
 

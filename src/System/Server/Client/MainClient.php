@@ -58,6 +58,7 @@ class MainClient extends AbstractClient
 
         switch ($serverPacketHeader) {
             case ServerPacketHeader::CLIENT_ID:
+                $this->initPlayerName();
                 $this->initChildClients($packetData[0] ?? null);
                 break;
             default:
@@ -84,6 +85,20 @@ class MainClient extends AbstractClient
                     system($openClientCommand);
                 }
             }
+        }
+    }
+
+    private function initPlayerName():void
+    {
+        echo "\n\n";
+        $name = readline("If you want, type a player name: ");
+
+        if ($name) {
+            $this->socket->write(sprintf(
+                '%s %s',
+                ClientPacketHeader::SET_PLAYER_NAME->value,
+                $name
+            ));
         }
     }
 }

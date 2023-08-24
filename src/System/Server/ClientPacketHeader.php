@@ -11,6 +11,7 @@ use App\System\Server\PacketHandlers\GameCommandHandler;
 use App\System\Server\PacketHandlers\RegisterNewClientHandler;
 use App\System\Server\PacketHandlers\RequestClientUuidHandler;
 use App\System\Server\PacketHandlers\RequestPlayerDataHandler;
+use App\System\Server\PacketHandlers\SetPlayerNameHandler;
 use App\System\Server\PacketHandlers\ShutdownSocketHandler;
 
 enum ClientPacketHeader: string
@@ -24,6 +25,8 @@ enum ClientPacketHeader: string
 
     case REQUEST_PLAYER_DATA = 'request_player_data';
 
+    case SET_PLAYER_NAME = 'set_player_name';
+
     public function getHandler(): ClientPacketHandlerInterface
     {
         return match ($this) {
@@ -33,6 +36,7 @@ enum ClientPacketHeader: string
             self::ATTACH_CLIENT => Kernel::getContainer()->get(AttachClientHandler::class),
             self::GAME_COMMAND => Kernel::getContainer()->get(GameCommandHandler::class),
             self::SHUTDOWN_SOCKET => Kernel::getContainer()->get(ShutdownSocketHandler::class),
+            self::SET_PLAYER_NAME => Kernel::getContainer()->get(SetPlayerNameHandler::class),
         };
     }
 }

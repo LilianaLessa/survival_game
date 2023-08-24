@@ -36,6 +36,7 @@ use App\System\Server\PacketHandlers\GameCommandHandler;
 use App\System\Server\PacketHandlers\RegisterNewClientHandler;
 use App\System\Server\PacketHandlers\RequestClientUuidHandler;
 use App\System\Server\PacketHandlers\RequestPlayerDataHandler;
+use App\System\Server\PacketHandlers\SetPlayerNameHandler;
 use App\System\Server\PacketHandlers\ShutdownSocketHandler;
 use App\System\Server\ServerPresetLibrary;
 use App\System\World\WorldManager;
@@ -222,6 +223,11 @@ function registerClientPacketHandlers(ServicesConfigurator $services): void
         new Reference(ClientPool::class),
     ]);
     $services->set(RequestPlayerDataHandler::class, RequestPlayerDataHandler::class)->args([
+        new Reference(ClientPool::class),
+        new Reference(EntityManager::class),
+    ]);
+
+    $services->set(SetPlayerNameHandler::class, SetPlayerNameHandler::class)->args([
         new Reference(ClientPool::class),
         new Reference(EntityManager::class),
     ]);
