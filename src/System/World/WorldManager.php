@@ -87,11 +87,12 @@ class WorldManager
         return $this->entityMap;
     }
 
-    public function draw(): void
+    public function drawByBufferSwap(): void
     {
         $this->groundPathWeights = null;
         [$viewportStart, $viewportEnd] = $this->calculateViewport();
 
+        ob_start();
         //show world x coordinates on viewport border.
         for ($i = 0; $i < strlen($this->width . ''); $i++) {
             echo str_pad(
@@ -154,6 +155,7 @@ class WorldManager
             }
             echo "\n";
         }
+
         if ($this->lastDraw !== null) {
             echo sprintf(
                 "\n%s\n%d\n",
@@ -161,6 +163,13 @@ class WorldManager
                 count($this->entityManager->getEntityCollection())
             );
         }
+
+        //swap frame
+        $frame = ob_get_contents();
+        ob_end_clean();
+        system('clear');
+        echo $frame;
+
         $this->lastDraw = microtime(true);
     }
 

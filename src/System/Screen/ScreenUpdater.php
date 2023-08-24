@@ -27,8 +27,7 @@ class ScreenUpdater
             $frameDurationInSeconds = 1 / max(1, $this->fps);
             do {
                 $this->updateScreen();
-                system('clear');
-                $this->world->draw();
+                $this->world->drawByBufferSwap();
                 delay($frameDurationInSeconds);
             } while (1);
         });
