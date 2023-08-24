@@ -9,6 +9,9 @@ use Amp\Socket\ResourceSocket;
 use App\Engine\System\ReceiverSystemInterface;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\UiMessageEvent;
+use App\System\Server\ClientPacketHeader;
+use Ramsey\Uuid\Rfc4122\UuidV4;
+use Ramsey\Uuid\UuidInterface;
 use function Amp\async;
 
 class TCPServer
@@ -24,7 +27,6 @@ class TCPServer
     {
         $this->sockets = [];
         $this->setUpUiMessageEventListener();
-
 
         $server = Socket\listen($this->address);
         echo 'TCP Command listener on ' . $server->getAddress() . ' ...' . PHP_EOL;
@@ -48,18 +50,30 @@ class TCPServer
     {
         async(function () use ($server) {
             while ($socket = $server->accept()) {
-                $this->sockets[] = $socket;
-                $this->handleMessages($socket);
+                $uuid = UuidV4::uuid4();
+                $this->sockets[$uuid->toString()] = $socket;
+                $this->handleMessages($socket, $uuid);
             }
         });
     }
 
-    private function handleMessages(ResourceSocket $socket): void
+    private function handleMessages(ResourceSocket $socket, UuidInterface $uuid): void
     {
-        async(function () use ($socket) {
+        async(function () use ($socket, $uuid) {
             do {
-                $data = $socket->read();
-                if ($data) {
+                $data = null;
+                if ($socket->isWritable() && $socket->isReadable()) {
+                    $data = $socket->read();
+                }
+
+                $packageExplodedData = explode(' ', $data ?? '');
+
+                $clientPackage = ClientPacketHeader::tryFrom($packageExplodedData[0] ?? '');
+
+                if ($clientPackage) {
+                    $clientPackage->getHandler()->handle($socket, $uuid, ...$packageExplodedData);
+
+
                     foreach ($this->systems as $system) {
                         if ($system instanceof ReceiverSystemInterface) {
                             $system->parse($data);
@@ -68,6 +82,7 @@ class TCPServer
                 }
             } while ($data !== null && $data !== 'exit');
             $socket->close();
+            unset($this->sockets[$uuid->toString()]);
         });
     }
 }

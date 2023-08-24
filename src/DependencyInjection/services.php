@@ -26,6 +26,9 @@ use App\System\Monster\MonsterPresetLibrary;
 use App\System\Monster\Spawner\MonsterSpawnerLibrary;
 use App\System\Player\PlayerPresetLibrary;
 use App\System\Screen\ScreenUpdater;
+use App\System\Server\Client\ClientPool;
+use App\System\Server\PacketHandlers\RegisterNewClientHandler;
+use App\System\Server\ServerPresetLibrary;
 use App\System\World\WorldManager;
 use App\System\World\WorldPresetLibrary;
 use PHP_Parallel_Lint\PhpConsoleColor\ConsoleColor;
@@ -181,8 +184,26 @@ function registerInfrastructure(ServicesConfigurator $services): void
             new Reference(WorldPresetLibrary::class),
 
         ]);
+
+    $services->set(ServerPresetLibrary::class, ServerPresetLibrary::class);
 }
 
+function registerNetworkPacketHandlers(ServicesConfigurator $services): void
+{
+    $services->set(RegisterNewClientHandler::class, RegisterNewClientHandler::class)->args([
+        new Reference(ClientPool::class),
+
+    ]);
+}
+
+function registerNetworkInfrastructure(ServicesConfigurator $services)
+{
+    registerNetworkPacketHandlers($services);
+
+    $services->set(ClientPool::class, ClientPool::class);
+
+
+}
 
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
@@ -194,4 +215,6 @@ return static function (ContainerConfigurator $container): void {
     registerBehaviorEffectHandlers($services);
     registerHelpers($services);
     registerEngineServices($services);
+
+    registerNetworkInfrastructure($services);
 };

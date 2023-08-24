@@ -15,4 +15,5 @@ enum PresetDataType: string
     case PLAYER_PRESET = 'playerConfigPreset';
     case ITEM_PRESET = 'itemPreset';
     case BIOME_PRESET = 'biomePreset';
+    case SERVER_CONFIG = 'serverConfig';
 }

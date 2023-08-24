@@ -1,0 +1,9 @@
+[
+  {
+    "dataType": "serverConfig",
+    "type": "mapServer",
+    "name": "main",
+    "host": "127.0.0.1",
+    "port": "1988"
+  }
+]
