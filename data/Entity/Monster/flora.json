@@ -1,0 +1,337 @@
+[
+  {
+    "dataType": "monsterPreset",
+    "name": "oakTree",
+    "inGameName": "Oak Tree",
+    "description": "A tall and sturdy oak tree with broad leaves.",
+    "symbol": "♣",
+    "defaultColor": "dark_green",
+    "totalHitPoints": 5,
+    "dropCollection": [
+      {
+        "name": "oakWood",
+        "events": [
+          {"type": "chop", "chance": 1, "min": 4, "max": 6}
+        ]
+      },
+      {
+        "name": "acorn",
+        "events": [
+          {"type": "harvest", "chance": 0.5, "min": 1, "max": 2}
+        ]
+      }
+    ],
+    "biomes": [
+      {"name": "forest", "chance": 1.0}
+    ],
+    "size": "large",
+    "growthTime": 120
+  },
+  {
+    "dataType": "monsterPreset",
+    "name": "pineTree",
+    "inGameName": "Pine Tree",
+    "description": "A tall pine tree with needle-like leaves.",
+    "symbol": "♠",
+    "defaultColor": "dark_green",
+    "totalHitPoints": 7,
+    "dropCollection": [
+      {
+        "name": "pineWood",
+        "events": [
+          {"type": "chop", "chance": 1, "min": 3, "max": 5}
+        ]
+      },
+      {
+        "name": "pinecone",
+        "events": [
+          {"type": "harvest", "chance": 0.4, "min": 1, "max": 2}
+        ]
+      }
+    ],
+    "biomes": [
+      {"name": "forest", "chance": 1.0}
+    ],
+    "size": "large",
+    "growthTime": 180
+  },
+  {
+    "dataType": "monsterPreset",
+    "name": "ancientMahogany",
+    "inGameName": "Ancient Mahogany",
+    "description": "A towering mahogany tree that has stood in the jungle for centuries.",
+    "symbol": "╦",
+    "defaultColor": "dark_green",
+    "totalHitPoints": 15,
+    "dropCollection": [
+      {
+        "name": "mahoganyWood",
+        "events": [
+          {"type": "chop", "chance": 1, "min": 2, "max": 3}
+        ]
+      },
+      {
+        "name": "jungleFruit",
+        "events": [
+          {"type": "collect", "chance": 0.4, "min": 1, "max": 2}
+        ]
+      }
+    ],
+    "elements": [
+      {"element": "nature", "level": 3}
+    ],
+    "size": "large"
+  },
+  {
+    "dataType": "monsterPreset",
+    "name": "enchantedWillow",
+    "inGameName": "Enchanted Willow",
+    "description": "A mystical willow tree emitting an ethereal glow in the jungle.",
+    "symbol": "⚞",
+    "defaultColor": "dark_green",
+    "totalHitPoints": 20,
+    "dropCollection": [
+      {
+        "name": "willowBranch",
+        "events": [
+          {"type": "chop", "chance": 0.7, "min": 1, "max": 1}
+        ]
+      },
+      {
+        "name": "enchantedWood",
+        "events": [
+          {"type": "chop", "chance": 0.01, "min": 1, "max": 1}
+        ]
+      },
+      {
+        "name": "enchantedFruit",
+        "events": [
+          {"type": "chop", "chance": 0.1, "min": 1, "max": 1}
+        ]
+      },
+      {
+        "name": "jungleGlowingLeaf",
+        "events": [
+          {"type": "collect", "chance": 0.5, "min": 1, "max": 1}
+        ]
+      }
+    ],
+    "elements": [
+      {"element": "nature", "level": 2},
+      {"element": "magic", "level": 1}
+    ],
+    "size": "medium"
+  },
+  {
+    "dataType": "monsterPreset",
+    "name": "desertCactus",
+    "inGameName": "Desert Cactus",
+    "description": "A spiky desert cactus adapted to survive in harsh arid conditions.",
+    "level": 1,
+    "totalHitPoints": 10,
+    "symbol": "╫",
+    "defaultColor": "dark_green",
+    "dropCollection": [
+      {
+        "name": "cactusSpines",
+        "events": [
+          {"type": "harvest", "chance": 0.8, "min": 1, "max": 3}
+        ]
+      },
+      {
+        "name": "cactusWater",
+        "events": [
+          {"type": "harvest", "chance": 0.4, "min": 1, "max": 1}
+        ]
+      }
+    ],
+    "elements": [
+      {"element": "earth", "level": 1},
+      {"element": "plant", "level": 2}
+    ],
+    "size": "small"
+  },
+  {
+    "dataType": "monsterPreset",
+    "name": "sandLily",
+    "inGameName": "Sand Lily",
+    "description": "A delicate desert flower that thrives in sandy environments.",
+    "level": 1,
+    "totalHitPoints": 5,
+    "symbol": "✿",
+    "defaultColor": "yellow2",
+    "dropCollection": [
+      {
+        "name": "fragrantPetal",
+        "events": [
+          {"type": "harvest", "chance": 0.6, "min": 1, "max": 2}
+        ]
+      },
+      {
+        "name": "aromaticOil",
+        "events": [
+          {"type": "harvest", "chance": 0.2, "min": 1, "max": 1}
+        ]
+      }
+    ],
+    "elements": [
+      {"element": "earth", "level": 1},
+      {"element": "plant", "level": 2}
+    ],
+    "size": "tiny"
+  },
+  {
+    "dataType": "monsterPreset",
+    "name": "mountainFern",
+    "inGameName": "Mountain Fern",
+    "description": "A hardy fern that thrives in the mountainous terrain.",
+    "level": 1,
+    "totalHitPoints": 10,
+    "symbol": "♧",
+    "defaultColor": "green4",
+    "dropCollection": [
+      {
+        "name": "fernLeaf",
+        "events": [
+          {"type": "die", "chance": 0.6, "min": 1, "max": 2}
+        ]
+      },
+      {
+        "name": "mountainDew",
+        "events": [
+          {"type": "die", "chance": 0.3, "min": 1, "max": 1}
+        ]
+      }
+    ],
+    "sightRadius": 5,
+    "elements": [
+      {"element": "nature", "level": 1}
+    ],
+    "race": "plant",
+    "size": "small"
+  },
+  {
+    "dataType": "monsterPreset",
+    "name": "rockyMoss",
+    "inGameName": "Rocky Moss",
+    "description": "A patch of moss that clings to the rocky surfaces of the mountains.",
+    "level": 2,
+    "totalHitPoints": 3,
+    "symbol": "♦",
+    "defaultColor": "dark_green",
+    "dropCollection": [
+      {
+        "name": "mossyCluster",
+        "events": [
+          {"type": "die", "chance": 0.5, "min": 1, "max": 1}
+        ]
+      },
+      {
+        "name": "mountainPebble",
+        "events": [
+          {"type": "die", "chance": 0.4, "min": 1, "max": 2}
+        ]
+      }
+    ],
+    "sightRadius": 3,
+    "elements": [
+      {"element": "earth", "level": 1}
+    ],
+    "race": "plant",
+    "size": "tiny"
+  },
+  {
+    "dataType": "monsterPreset",
+    "name": "meadowBlossom",
+    "inGameName": "Meadow Blossom",
+    "description": "A delicate blossom found in the serene meadow.",
+    "level": 2,
+    "symbol": "❀",
+    "defaultColor": "yellow4",
+    "dropCollection": [
+      {
+        "name": "fragrantPetal",
+        "events": [
+          {"type": "harvest", "chance": 0.6, "min": 1, "max": 2}
+        ]
+      },
+      {
+        "name": "dewdrop",
+        "events": [
+          {"type": "harvest", "chance": 0.4, "min": 1, "max": 1}
+        ]
+      }
+    ],
+    "elements": [
+      {"element": "nature", "level": 1}
+    ],
+    "size": "small"
+  },
+  {
+    "dataType": "monsterPreset",
+    "name": "meadowGrass",
+    "inGameName": "Meadow Grass",
+    "description": "Lush green grass covering the meadow's expanse.",
+    "level": 1,
+    "symbol": "\"",
+    "defaultColor": "lime",
+    "dropCollection": [
+      {
+        "name": "freshBlade",
+        "events": [
+          {"type": "harvest", "chance": 0.7, "min": 1, "max": 3}
+        ]
+      }
+    ],
+    "elements": [
+      {"element": "nature", "level": 1}
+    ],
+    "size": "small"
+  },
+  {
+    "dataType": "monsterPreset",
+    "name": "frostberryBush",
+    "inGameName": "Frostberry Bush",
+    "description": "A hardy bush that grows in the cold tundra, bearing frost-covered berries.",
+    "level": 2,
+    "totalHitPoints": 15,
+    "symbol": "❀",
+    "defaultColor": "medium_spring_green",
+    "dropCollection": [
+      {
+        "name": "frostberry",
+        "events": [
+          {"type": "harvest", "chance": 0.6, "min": 1, "max": 3}
+        ]
+      },
+      {
+        "name": "tundraLeaf",
+        "events": [
+          {"type": "harvest", "chance": 0.3, "min": 1, "max": 2}
+        ]
+      }
+    ],
+    "harvestSkill": "foraging",
+    "harvestTool": "knife"
+  },
+  {
+    "dataType": "monsterPreset",
+    "name": "snowdropFlower",
+    "inGameName": "Snowdrop Flower",
+    "description": "A delicate flower that blooms in the icy tundra, bringing a touch of color.",
+    "level": 1,
+    "totalHitPoints": 10,
+    "symbol": "❆",
+    "defaultColor": "deep_sky_blue4_2",
+    "dropCollection": [
+      {
+        "name": "snowdropPetal",
+        "events": [
+          {"type": "harvest", "chance": 0.7, "min": 1, "max": 1}
+        ]
+      }
+    ],
+    "harvestSkill": "herbalism",
+    "harvestTool": "shears"
+  }
+]

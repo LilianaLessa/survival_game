@@ -128,7 +128,7 @@ $systems = [
     Kernel::getContainer()->get(WorldController::class),
     Kernel::getContainer()->get(MonsterSpawner::class),
 
-    new TreeSpawner($worldManager, $entityManager, $itemPresetLibrary, (int) ceil(($worldWidth * $worldHeight) * 0.1)),
+    //new TreeSpawner($worldManager, $entityManager, $itemPresetLibrary, (int) ceil(($worldWidth * $worldHeight) * 0.1)),
     //controllers
     //new MonsterController($entityManager),
     //todo this should be attached to the player cli/unblocking cli socket.

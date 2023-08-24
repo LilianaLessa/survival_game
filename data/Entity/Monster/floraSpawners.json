@@ -1,0 +1,330 @@
+[
+  {
+    "dataType": "monsterSpawner",
+    "name": "oakTree_forest",
+    "monster": "oakTree",
+    "max": 200,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "forest",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "pineTree_forest",
+    "monster": "pineTree",
+    "max": 200,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "forest",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "oakTree_jungle",
+    "monster": "oakTree",
+    "max": 5,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "jungle",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "pineTree_jungle",
+    "monster": "pineTree",
+    "max": 5,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "jungle",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "ancientMahogany_forest",
+    "monster": "ancientMahogany",
+    "max": 5,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "forest",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "enchantedWillow_forest",
+    "monster": "enchantedWillow",
+    "max": 1,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "forest",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "ancientMahogany_jungle",
+    "monster": "ancientMahogany",
+    "max": 90,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "jungle",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "enchantedWillow_jungle",
+    "monster": "enchantedWillow",
+    "max": 15,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "jungle",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+
+
+  {
+    "dataType": "monsterSpawner",
+    "name": "ancientMahogany_jungle",
+    "monster": "ancientMahogany",
+    "max": 90,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "jungle",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "desertCactus",
+    "monster": "desertCactus",
+    "max": 20,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "desert",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "sandLily",
+    "monster": "sandLily",
+    "max": 15,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "desert",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "mountainFern",
+    "monster": "mountainFern",
+    "max": 20,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "mountains",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "rockyMoss",
+    "monster": "rockyMoss",
+    "max": 10,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "mountains",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "meadowBlossom",
+    "monster": "meadowBlossom",
+    "max": 30,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "meadow",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "meadowGrass",
+    "monster": "meadowGrass",
+    "max": 300,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "meadow",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+
+
+
+  {
+    "dataType": "monsterSpawner",
+    "name": "frostberryBush",
+    "monster": "frostberryBush",
+    "max": 10,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "tundra",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "snowdropFlower",
+    "monster": "snowdropFlower",
+    "max": 15,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "tundra",
+        "chance": 0.7
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  }
+]

@@ -118,7 +118,7 @@
     }
   },
   {
-    "dataType": "monsterSpawner_mountains_DEBUG_TODO_NOT_SPAWNING!",
+    "dataType": "monsterSpawner",
     "name": "stoneGolem_mountains",
     "monster": "stoneGolem",
     "max": 5,
