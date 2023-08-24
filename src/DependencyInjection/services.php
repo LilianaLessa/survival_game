@@ -25,6 +25,7 @@ use App\System\Item\ItemPresetLibrary;
 use App\System\Monster\MonsterPresetLibrary;
 use App\System\Monster\Spawner\MonsterSpawnerLibrary;
 use App\System\Player\PlayerPresetLibrary;
+use App\System\Screen\ScreenUpdater;
 use App\System\World\WorldManager;
 use App\System\World\WorldPresetLibrary;
 use PHP_Parallel_Lint\PhpConsoleColor\ConsoleColor;
@@ -170,11 +171,25 @@ function registerEngineServices(ServicesConfigurator $services)
         ]);
 }
 
+
+function registerInfrastructure(ServicesConfigurator $services): void
+{
+    $services->set(ScreenUpdater::class, ScreenUpdater::class)
+        ->args([
+            new Reference(EntityManager::class),
+            new Reference(WorldManager::class),
+            new Reference(WorldPresetLibrary::class),
+
+        ]);
+}
+
+
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
 
     registerManagers($services);
 
+    registerInfrastructure($services);
     registerPresetLibraries($services);
     registerBehaviorEffectHandlers($services);
     registerHelpers($services);

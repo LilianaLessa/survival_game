@@ -271,7 +271,7 @@
     "dataType": "monsterSpawner",
     "name": "meadowGrass",
     "monster": "meadowGrass",
-    "max": 300,
+    "max": 500,
     "chance": 0.8,
     "biomes": [
       {
@@ -286,9 +286,6 @@
       "endY": 249
     }
   },
-
-
-
   {
     "dataType": "monsterSpawner",
     "name": "frostberryBush",
