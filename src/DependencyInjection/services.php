@@ -325,6 +325,7 @@ function registerServerEventListeners(ServicesConfigurator $services)
         new Reference(ClientPool::class),
         new Reference(EntityManager::class),
         new Reference(WorldManager::class),
+        new Reference(MapEntityUpdatedServerEventListener::class),
     ]);
 
     $services->set(

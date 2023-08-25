@@ -78,7 +78,8 @@ class MapEntityUpdatedServerEventListener extends AbstractEventListener
         return MapEntityUpdated::EVENT_NAME;
     }
 
-    private function getReducedEntity(Entity $updatedEntity): Entity
+    //todo move it to factory.
+    public function getReducedEntity(Entity $updatedEntity): Entity
     {
         return $updatedEntity->reduce(
             MapPosition::class,

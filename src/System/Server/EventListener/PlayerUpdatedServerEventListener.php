@@ -11,12 +11,10 @@ use App\Engine\Component\MapSymbol;
 use App\Engine\Component\MapViewPort;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
-use App\System\Event\Dispatcher;
 use App\System\Event\Event\AbstractEvent;
 use App\System\Event\Event\AbstractEventListener;
-use App\System\Event\Event\MapEntityRemoved;
-use App\System\Event\Event\MapEntityUpdated;
 use App\System\Event\Event\PlayerUpdated;
+use App\System\Server\Client\Network\Client;
 use App\System\Server\Client\Network\ClientPool;
 use App\System\Server\Client\Network\SocketType;
 use App\System\Server\ServerPacketHeader;
@@ -28,6 +26,7 @@ class PlayerUpdatedServerEventListener extends AbstractEventListener
         private readonly ClientPool $clientPool,
         private readonly EntityManager $entityManager,
         private readonly WorldManager $worldManager,
+        private readonly MapEntityUpdatedServerEventListener $mapEntityUpdatedServerEventListener,
     )
     {
         parent::__construct();
@@ -50,7 +49,7 @@ class PlayerUpdatedServerEventListener extends AbstractEventListener
                 SocketType::MAP
             );
 
-            $this->sendMapEntitiesUpdates($player);
+            $this->sendMapEntitiesUpdates($player, $client);
         }
     }
 
@@ -70,7 +69,7 @@ class PlayerUpdatedServerEventListener extends AbstractEventListener
         );
     }
 
-    private function sendMapEntitiesUpdates(Entity $player): void
+    private function sendMapEntitiesUpdates(Entity $player, Client $client): void
     {
         /**
          * @var MapViewPort $playerViewport
@@ -85,6 +84,8 @@ class PlayerUpdatedServerEventListener extends AbstractEventListener
             MapPosition::class
         );
 
+        $entityUpdates = '';
+
         /**
          * @var MapPosition $entityMapPosition
          */
@@ -97,11 +98,16 @@ class PlayerUpdatedServerEventListener extends AbstractEventListener
 
             if ($inViewport) {
                 $mapEntity = $this->entityManager->getEntityById($mapEntityId);
-                Dispatcher::dispatch(new MapEntityUpdated($mapEntity));
+                $message = serialize($this->mapEntityUpdatedServerEventListener->getReducedEntity($mapEntity));
+                $entityUpdates .= ServerPacketHeader::MAP_ENTITY_UPDATED->pack($message);
             } else {
                 //todo only relevant entities for player.
-                Dispatcher::dispatch(new MapEntityRemoved($mapEntityId));
+                $entityUpdates .= ServerPacketHeader::MAP_ENTITY_REMOVED->pack($mapEntityId);
             }
+        }
+
+        if ($entityUpdates) {
+            $client->send($entityUpdates, SocketType::MAP);
         }
     }
 }
