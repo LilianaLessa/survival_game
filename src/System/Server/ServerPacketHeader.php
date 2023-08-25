@@ -31,6 +31,11 @@ enum ServerPacketHeader: string
 
     case MAP_INFO_UPDATED = 'map_dimensions_updated';
 
+    public function pack(string $data): string
+    {
+        return sprintf('%s %s', $this->value, $data);
+    }
+
     public function getHandler(): ServerPacketHandlerInterface
     {
 //        return match ($this) {

@@ -8,12 +8,14 @@ use App\Engine\System\WorldSystemInterface;
 use App\System\AI\BehaviorPresetLibrary;
 use App\System\Biome\BiomeGeneratorService;
 use App\System\Biome\BiomePresetLibrary;
+use App\System\Event\Event\AbstractEventListener;
 use App\System\Item\ItemPresetLibrary;
 use App\System\Kernel;
 use App\System\Monster\MonsterPresetLibrary;
 use App\System\Monster\Spawner\MonsterSpawnerLibrary;
 use App\System\Player\PlayerPresetLibrary;
 use App\System\Screen\ScreenUpdater;
+use App\System\Server\EventListener\UiMessageServerEventListener;
 use App\System\TCP\TCPServer;
 use App\System\World\WorldManager;
 use App\System\World\WorldPresetLibrary;
@@ -21,6 +23,12 @@ use function Amp\delay;
 use function Amp\async;
 
 require_once 'vendor/autoload.php';
+
+
+function initEventListeners() {
+    Kernel::getAllRegisteredConcreteInstances(AbstractEventListener::class);
+}
+
 
 echo "loading AI...\n"; Kernel::getContainer()->get(BehaviorPresetLibrary::class)->load('./data/Entity/AI/Behavior');
 echo "loading monsters...\n"; Kernel::getContainer()->get(MonsterPresetLibrary::class)->load('./data/Entity/Monster');
@@ -64,6 +72,8 @@ function gameTick(): void
 
     delay($tickDurationInSeconds); //tick
 }
+
+initEventListeners();
 
 do { //game loop
     //steps, in order:

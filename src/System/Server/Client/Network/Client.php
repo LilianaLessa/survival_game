@@ -30,6 +30,18 @@ class Client
         return $this->sockets;
     }
 
+    /** @return Socket[] */
+    public function getSocketsByType(SocketType ...$types): array
+    {
+        $sockets = [];
+
+        foreach ($this->sockets as $socket) {
+            in_array($socket->getSocketType(), $types) && $sockets[] = $socket;
+        }
+
+        return $sockets;
+    }
+
     public function getSocketByUuid(string $uuid): ?Socket
     {
         return $this->sockets[$uuid] ?? null;
@@ -49,7 +61,6 @@ class Client
     {
         //do clean up related to client, as such as removing the player and related controllers.
 
-
     }
 
     public function getPlayer(): ?Entity
@@ -61,5 +72,13 @@ class Client
     {
         $this->player = $player;
         return $this;
+    }
+
+    public function send(string $data, SocketType ...$socketTypes): void
+    {
+        $sockets = $this->getSocketsByType(...$socketTypes);
+        foreach ($sockets as $socket) {
+            $socket->getSocket()->write($data);
+        }
     }
 }

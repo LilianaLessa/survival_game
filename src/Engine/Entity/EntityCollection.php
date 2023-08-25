@@ -106,7 +106,6 @@ class EntityCollection extends \ArrayObject
         return [
             $targetClass,
             ...class_parents($componentOrClassName),
-            ...class_parents($componentOrClassName),
             ...array_filter(class_implements($componentOrClassName), fn($c) => $c !== ComponentInterface::class),
         ];
     }

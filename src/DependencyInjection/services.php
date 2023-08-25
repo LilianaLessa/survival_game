@@ -34,6 +34,12 @@ use App\System\Server\Client\MapClient;
 use App\System\Server\Client\Network\ClientPool;
 use App\System\Server\Client\UiMessageReceiverClient;
 use App\System\Server\Client\UnblockingCliClient;
+use App\System\Server\EventListener\DebugMessageServerEventListener;
+use App\System\Server\EventListener\MapEntityRemovedServerEventListener;
+use App\System\Server\EventListener\MapEntityUpdatedServerEventListener;
+use App\System\Server\EventListener\PlayerUpdatedServerEventListener;
+use App\System\Server\EventListener\UiMessageServerEventListener;
+use App\System\Server\EventListener\UpdatePlayerCurrentTargetServerEventListener;
 use App\System\Server\PacketHandlers\AttachClientHandler;
 use App\System\Server\PacketHandlers\GameCommandHandler;
 use App\System\Server\PacketHandlers\RegisterNewClientHandler;
@@ -257,7 +263,6 @@ function registerNetworkInfrastructure(ServicesConfigurator $services)
 
     $services->set(ClientPool::class, ClientPool::class)->args([
         new Reference(EntityManager::class),
-        new Reference(WorldManager::class),
     ]);
 }
 
@@ -297,6 +302,54 @@ function registerClientServices(ServicesConfigurator $services)
     ]);
 }
 
+function registerServerEventListeners(ServicesConfigurator $services)
+{
+    $services->set(
+        UiMessageServerEventListener::class,
+        UiMessageServerEventListener::class
+    )->args([
+        new Reference(ClientPool::class),
+    ]);
+
+    $services->set(
+        DebugMessageServerEventListener::class,
+        DebugMessageServerEventListener::class
+    )->args([
+        new Reference(ClientPool::class),
+    ]);
+
+    $services->set(
+        PlayerUpdatedServerEventListener::class,
+        PlayerUpdatedServerEventListener::class
+    )->args([
+        new Reference(ClientPool::class),
+        new Reference(EntityManager::class),
+        new Reference(WorldManager::class),
+    ]);
+
+    $services->set(
+        MapEntityUpdatedServerEventListener::class,
+        MapEntityUpdatedServerEventListener::class
+    )->args([
+        new Reference(ClientPool::class),
+        new Reference(WorldManager::class),
+    ]);
+
+    $services->set(
+        MapEntityRemovedServerEventListener::class,
+        MapEntityRemovedServerEventListener::class
+    )->args([
+        new Reference(ClientPool::class),
+    ]);
+
+    $services->set(
+        UpdatePlayerCurrentTargetServerEventListener::class,
+        UpdatePlayerCurrentTargetServerEventListener::class
+    )->args([
+        new Reference(ClientPool::class),
+    ]);
+}
+
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
 
@@ -311,4 +364,5 @@ return static function (ContainerConfigurator $container): void {
     registerClientServices($services);
 
     registerNetworkInfrastructure($services);
+    registerServerEventListeners($services);
 };
