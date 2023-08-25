@@ -91,6 +91,12 @@ class EntityManager
         return $this->entityCollection[$entityId]->getComponent($componentClass);
     }
 
+    /** ?ComponentInterface[] */
+    public function getComponentsFromEntityId(string $entityId, string ...$componentClasses): array
+    {
+        return $this->entityCollection[$entityId]->explode(...$componentClasses);
+    }
+
     private function generateEntityId(): string
     {
         return (Uuid::uuid4())->toString();

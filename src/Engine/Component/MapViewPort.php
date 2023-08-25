@@ -87,6 +87,6 @@ class MapViewPort implements ComponentInterface
             $viewPortCenterY + ($this->height / 2) >= $mapHeight - 1 ?
                 $mapHeight - ($this->height / 2) - 1 : $viewPortCenterY;
 
-        return new Point2D($viewportCenterX, $viewPortCenterY);
+        return new Point2D((int)$viewportCenterX, (int)$viewPortCenterY);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Engine\System;
 
+use App\Engine\Component\CurrentChunk;
 use App\Engine\Component\MapPosition;
 use App\Engine\Component\MovementQueue;
 use App\Engine\Component\Player;
@@ -13,6 +14,7 @@ use App\Engine\Entity\EntityManager;
 use App\Engine\Trait\WorldAwareTrait;
 use App\System\Event\Dispatcher;
 use App\System\Event\Event\DebugMessageEvent;
+use App\System\Event\Event\PlayerChunkUpdated;
 use App\System\Event\Event\UiMessageEvent;
 use App\System\Kernel;
 use App\System\World\WorldManager;
@@ -93,9 +95,11 @@ class MovementApplier implements PhysicsSystemInterface
         [$targetX, $targetY] = $next->getCoordinates()->toArray();
 
         /** @var ?PlayerCommandQueue $playerCommandQueue */
-        $playerCommandQueue = $this->entityManager->getComponentFromEntityId(
+        /** @var ?CurrentChunk $currentChunk */
+        [$playerCommandQueue, $currentChunk] = $this->entityManager->getComponentsFromEntityId(
             $entityId,
-            PlayerCommandQueue::class
+            PlayerCommandQueue::class,
+            CurrentChunk::class
         );
 
         if ($this->validateMovement($position->getX(), $position->getY(), $targetX, $targetY)) {
@@ -108,9 +112,10 @@ class MovementApplier implements PhysicsSystemInterface
                 $chunkW = $this->world->getWorldChunkWidht();
                 $chunkH = $this->world->getWorldChunkHeight();
 
+                $currentChunkId = $this->world->getChunkNumber($targetX, $targetY);
                 $uiMessage = sprintf(
                     "Chunk c:%d",
-                    $this->world->getChunkNumber($targetX, $targetY)
+                    $currentChunkId
                 );
 
                 $adjacentChunksCoordinates = [
@@ -130,14 +135,26 @@ class MovementApplier implements PhysicsSystemInterface
                     }
                 }
 
+                $updatedCurrentChunk = $currentChunk ? null : new CurrentChunk($currentChunkId);
+
+                if ($currentChunk && $currentChunk->getId() !== $currentChunkId) {
+                    $updatedCurrentChunk = new CurrentChunk($currentChunkId);
+                    Dispatcher::dispatch(new PlayerChunkUpdated($playerCommandQueue));
+                }
+
+                $updatedCurrentChunk && $this->entityManager->updateEntityComponents(
+                    $entityId,
+                    $updatedCurrentChunk,
+                );
+                
                 $uiMessage .= "\n";
 
-                Dispatcher::getInstance()->dispatch(new DebugMessageEvent($uiMessage, $playerCommandQueue));
+                Dispatcher::dispatch(new DebugMessageEvent($uiMessage, $playerCommandQueue));
             }
 
         } else {
 
-
+            //todo avoid self collision.
             if ($playerCommandQueue) {
                 $uiMessage = "Can't move in this direction.\n";
                 Dispatcher::getInstance()->dispatch(new UiMessageEvent($uiMessage, $playerCommandQueue));

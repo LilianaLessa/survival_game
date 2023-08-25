@@ -37,6 +37,7 @@ use App\System\Server\Client\UnblockingCliClient;
 use App\System\Server\EventListener\DebugMessageServerEventListener;
 use App\System\Server\EventListener\MapEntityRemovedServerEventListener;
 use App\System\Server\EventListener\MapEntityUpdatedServerEventListener;
+use App\System\Server\EventListener\PlayerChunkUpdatedServerEventListener;
 use App\System\Server\EventListener\PlayerUpdatedServerEventListener;
 use App\System\Server\EventListener\UiMessageServerEventListener;
 use App\System\Server\EventListener\UpdatePlayerCurrentTargetServerEventListener;
@@ -348,6 +349,14 @@ function registerServerEventListeners(ServicesConfigurator $services)
         UpdatePlayerCurrentTargetServerEventListener::class
     )->args([
         new Reference(ClientPool::class),
+    ]);
+
+    $services->set(
+        PlayerChunkUpdatedServerEventListener::class,
+        PlayerChunkUpdatedServerEventListener::class
+    )->args([
+        new Reference(ClientPool::class),
+        new Reference(WorldManager::class),
     ]);
 }
 
