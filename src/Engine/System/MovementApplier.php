@@ -7,7 +7,6 @@ namespace App\Engine\System;
 use App\Engine\Component\CurrentChunk;
 use App\Engine\Component\MapPosition;
 use App\Engine\Component\MovementQueue;
-use App\Engine\Component\Player;
 use App\Engine\Component\PlayerCommandQueue;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
@@ -16,7 +15,6 @@ use App\System\Event\Dispatcher;
 use App\System\Event\Event\DebugMessageEvent;
 use App\System\Event\Event\PlayerChunkUpdated;
 use App\System\Event\Event\UiMessageEvent;
-use App\System\Kernel;
 use App\System\World\WorldManager;
 
 class MovementApplier implements PhysicsSystemInterface
@@ -108,7 +106,6 @@ class MovementApplier implements PhysicsSystemInterface
                 new MapPosition($targetX, $targetY)
             );
             if ($playerCommandQueue) {
-
                 $chunkW = $this->world->getWorldChunkWidht();
                 $chunkH = $this->world->getWorldChunkHeight();
 
@@ -136,16 +133,19 @@ class MovementApplier implements PhysicsSystemInterface
                 }
 
                 $updatedCurrentChunk = $currentChunk ? null : new CurrentChunk($currentChunkId);
-
+                $changedChunk = false; //todo this is not really working, only when warping to 10 10 and then after??
                 if ($currentChunk && $currentChunk->getId() !== $currentChunkId) {
                     $updatedCurrentChunk = new CurrentChunk($currentChunkId);
-                    Dispatcher::dispatch(new PlayerChunkUpdated($playerCommandQueue));
+                    $changedChunk = true;
+
                 }
 
                 $updatedCurrentChunk && $this->entityManager->updateEntityComponents(
                     $entityId,
                     $updatedCurrentChunk,
                 );
+
+                $changedChunk && Dispatcher::dispatch(new PlayerChunkUpdated($playerCommandQueue));
                 
                 $uiMessage .= "\n";
 

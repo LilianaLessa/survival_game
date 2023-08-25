@@ -109,11 +109,15 @@ class PlayerUpdatedServerEventListener extends AbstractEventListener
                 $mapEntity = $this->entityManager->getEntityById($mapEntityId);
                 $message = serialize($this->mapEntityUpdatedServerEventListener->getReducedEntity($mapEntity));
                 $entityUpdates .= ServerPacketHeader::MAP_ENTITY_UPDATED->pack($message);
-                $playerCommandQueue && $uiUpdates .= ServerPacketHeader::UI_NEARBY_PLAYER_EXISTS->pack($message);
+                if ($playerCommandQueue && $mapEntityId !== $player->getId()) {
+                    $uiUpdates .= ServerPacketHeader::UI_NEARBY_PLAYER_EXISTS->pack($message);
+                }
             } else {
                 //todo only relevant entities for player.
                 $entityUpdates .= ServerPacketHeader::MAP_ENTITY_REMOVED->pack($mapEntityId);
-                $playerCommandQueue && $uiUpdates .= ServerPacketHeader::UI_NEARBY_PLAYER_REMOVED->pack($mapEntityId);
+                if ($playerCommandQueue && $mapEntityId !== $player->getId()) {
+                    $uiUpdates .= ServerPacketHeader::UI_NEARBY_PLAYER_REMOVED->pack($mapEntityId);
+                }
             }
         }
 
