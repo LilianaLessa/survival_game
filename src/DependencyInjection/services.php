@@ -40,6 +40,7 @@ use App\System\Server\PacketHandlers\RegisterNewClientHandler;
 use App\System\Server\PacketHandlers\RequestClientUuidHandler;
 use App\System\Server\PacketHandlers\RequestMapDataHandler;
 use App\System\Server\PacketHandlers\RequestPlayerDataHandler;
+use App\System\Server\PacketHandlers\RequestPlayerSurroundingEntities;
 use App\System\Server\PacketHandlers\SetPlayerNameHandler;
 use App\System\Server\PacketHandlers\ShutdownSocketHandler;
 use App\System\Server\ServerPresetLibrary;
@@ -239,6 +240,12 @@ function registerClientPacketHandlers(ServicesConfigurator $services): void
     $services->set(SetPlayerNameHandler::class, SetPlayerNameHandler::class)->args([
         new Reference(ClientPool::class),
         new Reference(EntityManager::class),
+    ]);
+
+    $services->set(RequestPlayerSurroundingEntities::class, RequestPlayerSurroundingEntities::class)->args([
+        new Reference(ClientPool::class),
+        new Reference(EntityManager::class),
+        new Reference(WorldManager::class),
     ]);
 }
 

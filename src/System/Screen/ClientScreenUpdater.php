@@ -21,7 +21,7 @@ class ClientScreenUpdater
     public function __construct(private readonly Screen $screen)
     {
         //todo get from right preset.
-        $this->fps = 10;
+        $this->fps = 30;
     }
 
     public function startAsyncUpdate(MapClient $mapClient): void

@@ -84,6 +84,8 @@ class MapClient extends AbstractClient
 
             $this->requestMapData();
 
+            $this->requestPlayerSurroundingEntities();
+
             $this->clientScreenUpdater->startAsyncUpdate($this);
 
             while ($this->socket->isWritable() && $this->socket->isReadable()) {
@@ -112,8 +114,6 @@ class MapClient extends AbstractClient
         switch ($serverPacketHeader) {
             case ServerPacketHeader::PLAYER_UPDATED:
                 $this->viewer = unserialize($message);
-                $this->entityCollection = $this->entityCollection ?? new EntityCollection();
-                $this->entityCollection[$this->viewer->getId()] = $this->viewer;
                 break;
             case ServerPacketHeader::MAP_INFO_UPDATED:
                 //dimensions
@@ -151,7 +151,7 @@ class MapClient extends AbstractClient
         }
     }
 
-    private function requestMapData(): array
+    private function requestMapData(): void
     {
         $this->socket->write(
             sprintf('%s', ClientPacketHeader::REQUEST_MAP_DATA->value)
@@ -162,7 +162,13 @@ class MapClient extends AbstractClient
         if ($packageHeader) {
             $this->processNextMessage($packageHeader, ...$packageData);
         }
-        return array($rawPackageData, $packageHeader, $packageData);
+    }
+
+    private function requestPlayerSurroundingEntities()
+    {
+        $this->socket->write(
+            sprintf('%s', ClientPacketHeader::REQUEST_PLAYER_SURROUNDING_ENTITIES->value)
+        );
     }
 }
 
