@@ -47,7 +47,7 @@ class MonsterPresetLibrary extends AbstractPresetLibrary
         $monsterPreset->setDefaultColor(
             ConsoleColorPalette::tryFrom(
                 $rawPreset->defaultColor ?? ''
-            ) ?? ConsoleColorPalette::default()
+            ) ?? ConsoleColorPalette::defaultForeground()
         );
 
         return $monsterPreset;

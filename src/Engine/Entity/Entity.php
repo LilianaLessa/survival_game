@@ -58,10 +58,21 @@ class Entity
         return new Entity(
             $this->id,
             ...array_filter(array_map(
-                fn ($c) => $this->getComponent($c),
+                fn ($c) => $this->components[$c] ?? null,
                 $componentsClasses,
             ))
         );
+    }
+
+    /** @return ComponentInterface[] */
+    public function explode(string ...$componentsClasses): array
+    {
+        return [
+            ...array_map(
+                fn ($c) => $this->components[$c] ?? null,
+                $componentsClasses,
+            )
+        ];
     }
 }
 

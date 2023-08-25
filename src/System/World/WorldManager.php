@@ -16,6 +16,7 @@ use App\Engine\Entity\EntityCollection;
 use App\Engine\Entity\EntityManager;
 use App\System\Biome\BiomePreset;
 use App\System\Helpers\ConsoleColorPalette;
+use App\System\Helpers\Dimension2D;
 use App\System\Helpers\Point2D;
 use App\System\Player\PlayerPresetLibrary;
 use PHP_Parallel_Lint\PhpConsoleColor\ConsoleColor;
@@ -114,7 +115,7 @@ class WorldManager
                     STR_PAD_LEFT
                 ));
 
-                echo ' ' . $paddedMapX[$i];
+                echo sprintf("%s ", $paddedMapX[$i]);
             }
             echo "\n";
         }
@@ -356,7 +357,7 @@ class WorldManager
             $colors = $biome->getColors();
             $randomColor = $colors[rand(0, count($colors)-1)];
 
-            $result = ConsoleColorPalette::tryFrom($randomColor) ?? ConsoleColorPalette::default();
+            $result = ConsoleColorPalette::tryFrom($randomColor) ?? ConsoleColorPalette::defaultForeground();
         }
 
         return $result;
@@ -370,6 +371,14 @@ class WorldManager
 
         return $colorEffect?->getColor()
         ?? $defaultColor?->getColor()
-        ?? ConsoleColorPalette::default();
+        ?? ConsoleColorPalette::defaultForeground();
+    }
+
+    public function getWorldDimensions(): Dimension2D
+    {
+        return new Dimension2D(
+            $this->width,
+            $this->height,
+        );
     }
 }

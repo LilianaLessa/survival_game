@@ -33,7 +33,7 @@ class MonsterPreset extends AbstractPreset
     ) {
         parent::__construct(PresetDataType::MONSTER_PRESET, $name);
 
-        $this->defaultColor = ConsoleColorPalette::default();
+        $this->defaultColor = ConsoleColorPalette::defaultForeground();
         $this->inGameName = $name;
     }
 

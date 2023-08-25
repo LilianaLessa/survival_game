@@ -12,7 +12,7 @@ class Client
     /** @var Socket[] */
     private array $sockets;
 
-    private ?Entity $player;
+    private ?Entity $player = null;
 
     public function __construct(private readonly UuidInterface $uuid)
     {

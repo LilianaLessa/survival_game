@@ -21,9 +21,15 @@ enum ServerPacketHeader: string
     case CLIENT_ID = 'client_id';
 
     case UI_MESSAGE = 'ui_message';
-    case UI_PLAYER_UPDATED = 'ui_player_updated';
+    case PLAYER_UPDATED = 'player_updated';
     case UI_CURRENT_TARGET_UPDATED = 'ui_current_target_updated';
     case DEBUG_MESSAGE = 'debug_message';
+
+    case MAP_ENTITY_UPDATED = 'map_entity_updated';
+
+    case MAP_ENTITY_REMOVED = 'map_entity_removed';
+
+    case MAP_INFO_UPDATED = 'map_dimensions_updated';
 
     public function getHandler(): ServerPacketHandlerInterface
     {

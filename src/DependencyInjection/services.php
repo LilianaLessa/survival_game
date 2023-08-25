@@ -25,9 +25,12 @@ use App\System\Monster\MonsterPresetLibrary;
 use App\System\Monster\Spawner\MonsterSpawnerLibrary;
 use App\System\Player\PlayerFactory;
 use App\System\Player\PlayerPresetLibrary;
+use App\System\Screen\ClientScreenUpdater;
+use App\System\Screen\Screen;
 use App\System\Screen\ScreenUpdater;
 use App\System\Server\Client\FixedUIClient;
 use App\System\Server\Client\MainClient;
+use App\System\Server\Client\MapClient;
 use App\System\Server\Client\Network\ClientPool;
 use App\System\Server\Client\UiMessageReceiverClient;
 use App\System\Server\Client\UnblockingCliClient;
@@ -35,6 +38,7 @@ use App\System\Server\PacketHandlers\AttachClientHandler;
 use App\System\Server\PacketHandlers\GameCommandHandler;
 use App\System\Server\PacketHandlers\RegisterNewClientHandler;
 use App\System\Server\PacketHandlers\RequestClientUuidHandler;
+use App\System\Server\PacketHandlers\RequestMapDataHandler;
 use App\System\Server\PacketHandlers\RequestPlayerDataHandler;
 use App\System\Server\PacketHandlers\SetPlayerNameHandler;
 use App\System\Server\PacketHandlers\ShutdownSocketHandler;
@@ -227,6 +231,11 @@ function registerClientPacketHandlers(ServicesConfigurator $services): void
         new Reference(EntityManager::class),
     ]);
 
+    $services->set(RequestMapDataHandler::class, RequestMapDataHandler::class)->args([
+        new Reference(ClientPool::class),
+        new Reference(WorldManager::class),
+    ]);
+
     $services->set(SetPlayerNameHandler::class, SetPlayerNameHandler::class)->args([
         new Reference(ClientPool::class),
         new Reference(EntityManager::class),
@@ -241,6 +250,7 @@ function registerNetworkInfrastructure(ServicesConfigurator $services)
 
     $services->set(ClientPool::class, ClientPool::class)->args([
         new Reference(EntityManager::class),
+        new Reference(WorldManager::class),
     ]);
 }
 
@@ -262,6 +272,22 @@ function registerClientTypes(ServicesConfigurator $services)
     $services->set(FixedUIClient::class, FixedUIClient::class)->args([
         new Reference(ServerPresetLibrary::class),
     ]);
+
+    $services->set(MapClient::class, MapClient::class)->args([
+        new Reference(ServerPresetLibrary::class),
+        new Reference(ClientScreenUpdater::class),
+    ]);
+}
+
+function registerClientServices(ServicesConfigurator $services)
+{
+    $services->set(Screen::class, Screen::class)->args([
+        new Reference(ConsoleColor::class),
+    ]);
+
+    $services->set(ClientScreenUpdater::class, ClientScreenUpdater::class)->args([
+        new Reference(Screen::class),
+    ]);
 }
 
 return static function (ContainerConfigurator $container): void {
@@ -274,6 +300,8 @@ return static function (ContainerConfigurator $container): void {
     registerBehaviorEffectHandlers($services);
     registerHelpers($services);
     registerEngineServices($services);
+
+    registerClientServices($services);
 
     registerNetworkInfrastructure($services);
 };

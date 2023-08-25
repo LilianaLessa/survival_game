@@ -269,8 +269,13 @@ enum ConsoleColorPalette: string {
         return array_search($this, self::cases());
     }
 
-    static function default(): self
+    static function defaultForeground(): self
     {
         return self::SYSTEM_GREY;
+    }
+
+    static function defaultBackground(): self
+    {
+        return self::SYSTEM_BLACK;
     }
 }

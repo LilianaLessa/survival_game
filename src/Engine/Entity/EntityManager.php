@@ -5,9 +5,15 @@ declare(strict_types=1);
 namespace App\Engine\Entity;
 
 use App\Engine\Component\ComponentInterface;
+use App\Engine\Component\MapPosition;
+use App\Engine\Component\MapViewPort;
 use App\Engine\Component\PlayerCommandQueue;
 use App\System\Event\Dispatcher;
+use App\System\Event\Event\DebugMessageEvent;
+use App\System\Event\Event\MapEntityRemoved;
+use App\System\Event\Event\MapEntityUpdated;
 use App\System\Event\Event\PlayerUpdated;
+use App\System\World\WorldManager;
 use Ramsey\Uuid\Uuid;
 
 class EntityManager
@@ -45,7 +51,7 @@ class EntityManager
 
         $entity = $this->getEntityById($entityId);
 
-        $this->updateClientUiIfPlayer($entity);
+        $this->sendClientUpdates($entity);
     }
 
     public function updateEntityComponents(string $entityId, ComponentInterface ...$components): ?Entity
@@ -59,7 +65,7 @@ class EntityManager
             $this->addEntity($entity);
         }
 
-        $this->updateClientUiIfPlayer($entity);
+        $this->sendClientUpdates($entity);
 
         return $entity;
     }
@@ -78,6 +84,9 @@ class EntityManager
     public function removeEntity(string $entityId): void
     {
         $this->entityCollection->removeEntity($entityId);
+        $mapPosition = $this->entityCollection[$entityId]?->getComponent(MapPosition::class);
+
+        $mapPosition && Dispatcher::dispatch(new MapEntityRemoved($entityId));
     }
 
     public function getComponentFromEntityId(string $entityId, string $componentClass): ?ComponentInterface
@@ -93,18 +102,29 @@ class EntityManager
     private function addEntity(Entity $entity)
     {
         $this->entityCollection->addEntity($entity);
+
+        $this->sendClientUpdates($entity);
     }
 
-    private function updateClientUiIfPlayer(?Entity $entity): void
+    private function sendClientUpdates(?Entity $entity): void
     {
         /** @var PlayerCommandQueue $playerCommandQueue */
-        $playerCommandQueue = $entity?->getComponent(PlayerCommandQueue::class) ?? null;
+        /** @var MapPosition $mapPosition */
+        /** @var MapViewPort $playerViewport */
+        [
+            $playerCommandQueue,
+            $mapPosition
+        ] = $entity?->explode(
+            PlayerCommandQueue::class,
+            MapPosition::class,
+            MapViewPort::class
+        ) ?? [null,null];
 
-        if ($playerCommandQueue) {
-            Dispatcher::dispatch(new PlayerUpdated(
-                $playerCommandQueue,
-                $entity,
-            ));
-        }
+        $playerCommandQueue && Dispatcher::dispatch(new PlayerUpdated(
+            $playerCommandQueue,
+            $entity,
+        ));
+
+        $mapPosition && Dispatcher::dispatch(new MapEntityUpdated($entity));
     }
 }

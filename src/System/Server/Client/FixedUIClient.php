@@ -8,7 +8,6 @@ use App\Engine\Component\HitPoints;
 use App\Engine\Component\InGameName;
 use App\Engine\Component\MapPosition;
 use App\Engine\Component\MapSymbol;
-use App\Engine\Component\Monster;
 use App\Engine\Entity\Entity;
 use App\System\PresetLibrary\PresetDataType;
 use App\System\Server\Client\Network\SocketType;
@@ -73,7 +72,7 @@ class FixedUIClient extends AbstractClient
 
         $needUpdate = false;
         switch ($serverPacketHeader) {
-            case ServerPacketHeader::UI_PLAYER_UPDATED:
+            case ServerPacketHeader::PLAYER_UPDATED:
                 $this->player = unserialize($message);
                 $needUpdate = true;
                 break;
@@ -129,7 +128,6 @@ class FixedUIClient extends AbstractClient
                 $hitPoints->getTotal(),
                 $inGameName->getInGameName(),
             );
-
 
             $this->currentTargets = array_filter(
                 $this->currentTargets,

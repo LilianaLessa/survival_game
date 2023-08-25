@@ -8,6 +8,7 @@ use App\System\Kernel;
 use App\System\Server\Client\AbstractClient;
 use App\System\Server\Client\FixedUIClient;
 use App\System\Server\Client\MainClient;
+use App\System\Server\Client\MapClient;
 use App\System\Server\Client\UiMessageReceiverClient;
 use App\System\Server\Client\UnblockingCliClient;
 
@@ -30,6 +31,7 @@ enum SocketType: string
             self::UNBLOCKING_CLI => Kernel::getContainer()->get(UnblockingCliClient::class),
             self::UI_MESSAGE_RECEIVER => Kernel::getContainer()->get(UiMessageReceiverClient::class),
             self::UI_FIXED => Kernel::getContainer()->get(FixedUIClient::class),
+            self::MAP => Kernel::getContainer()->get(MapClient::class),
         };
     }
 }
