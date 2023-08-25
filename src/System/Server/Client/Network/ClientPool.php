@@ -212,6 +212,9 @@ class ClientPool
                         if ($inViewport) {
                             $mapEntity = $this->entityManager->getEntityById($mapEntityId);
                             Dispatcher::dispatch(new MapEntityUpdated($mapEntity));
+                        } else {
+                            //todo only relevant entities for player.
+                            Dispatcher::dispatch(new MapEntityRemoved($mapEntityId));
                         }
                     }
                 }

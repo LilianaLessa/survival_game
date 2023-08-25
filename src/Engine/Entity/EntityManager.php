@@ -9,11 +9,9 @@ use App\Engine\Component\MapPosition;
 use App\Engine\Component\MapViewPort;
 use App\Engine\Component\PlayerCommandQueue;
 use App\System\Event\Dispatcher;
-use App\System\Event\Event\DebugMessageEvent;
 use App\System\Event\Event\MapEntityRemoved;
 use App\System\Event\Event\MapEntityUpdated;
 use App\System\Event\Event\PlayerUpdated;
-use App\System\World\WorldManager;
 use Ramsey\Uuid\Uuid;
 
 class EntityManager
@@ -84,9 +82,8 @@ class EntityManager
     public function removeEntity(string $entityId): void
     {
         $this->entityCollection->removeEntity($entityId);
-        $mapPosition = $this->entityCollection[$entityId]?->getComponent(MapPosition::class);
 
-        $mapPosition && Dispatcher::dispatch(new MapEntityRemoved($entityId));
+        Dispatcher::dispatch(new MapEntityRemoved($entityId));
     }
 
     public function getComponentFromEntityId(string $entityId, string $componentClass): ?ComponentInterface
