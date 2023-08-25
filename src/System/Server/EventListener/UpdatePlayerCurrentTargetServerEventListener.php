@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\System\Server\EventListener;
 
+use App\Engine\Component\DefaultColor;
 use App\Engine\Component\HitPoints;
 use App\Engine\Component\InGameName;
 use App\Engine\Component\MapPosition;
@@ -51,6 +52,7 @@ class UpdatePlayerCurrentTargetServerEventListener extends AbstractEventListener
             MapPosition::class,
             HitPoints::class,
             InGameName::class,
+            DefaultColor::class,
         );
     }
 }

@@ -284,6 +284,7 @@ function registerClientTypes(ServicesConfigurator $services)
 
     $services->set(FixedUIClient::class, FixedUIClient::class)->args([
         new Reference(ServerPresetLibrary::class),
+        new Reference(ConsoleColor::class),
     ]);
 
     $services->set(MapClient::class, MapClient::class)->args([

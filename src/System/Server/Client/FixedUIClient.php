@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\System\Server\Client;
 
+use App\Engine\Component\DefaultColor;
 use App\Engine\Component\HitPoints;
 use App\Engine\Component\InGameName;
 use App\Engine\Component\MapPosition;
@@ -14,6 +15,7 @@ use App\System\Server\Client\Network\SocketType;
 use App\System\Server\ClientPacketHeader;
 use App\System\Server\ServerPacketHeader;
 use App\System\Server\ServerPresetLibrary;
+use PHP_Parallel_Lint\PhpConsoleColor\ConsoleColor;
 
 class FixedUIClient extends AbstractClient
 {
@@ -23,8 +25,10 @@ class FixedUIClient extends AbstractClient
 
     private string|false $clientIdString;
 
-    public function __construct(ServerPresetLibrary $serverPresetLibrary)
-    {
+    public function __construct(
+        ServerPresetLibrary $serverPresetLibrary,
+        private readonly ConsoleColor $consoleColor,
+    ) {
         [ $mapServer ] = $serverPresetLibrary->getPresetByNameAndTypes(
             'main',
             PresetDataType::SERVER_CONFIG
@@ -104,20 +108,32 @@ class FixedUIClient extends AbstractClient
 
         if ($this->player) {
             /** @var MapSymbol $mapSymbol */
-            $mapSymbol = $this->player->getComponent(MapSymbol::class);
-
             /** @var HitPoints $hitPoints */
-            $hitPoints = $this->player->getComponent(HitPoints::class);
-
             /** @var InGameName $inGameName */
-            $inGameName = $this->player->getComponent(InGameName::class);
-
             /** @var MapPosition $mapPosition */
-            $mapPosition = $this->player->getComponent(MapPosition::class);
+            /** @var DefaultColor $defaultColor */
+            [
+                $mapSymbol,
+                $hitPoints,
+                $inGameName,
+                $mapPosition,
+                $defaultColor,
+            ]= $this->player->explode(
+                MapSymbol::class,
+                HitPoints::class,
+                InGameName::class,
+                MapPosition::class,
+                DefaultColor::class,
+            );
+
+            $playerSymbol =  $this->consoleColor->apply(
+                sprintf('color_%d', $defaultColor->getColor()->toInt()),
+                $mapSymbol->getSymbol()
+            );
 
             echo sprintf(
                 "%s (%d,%d) - HP: %d/%d - %s\n",
-                $mapSymbol->getSymbol(),
+                $playerSymbol,
                 $mapPosition->get()->getX(),
                 $mapPosition->get()->getY(),
                 $hitPoints->getCurrent(),
@@ -139,20 +155,35 @@ class FixedUIClient extends AbstractClient
                 echo "Targets:\n";
                 $index = 1;
                 foreach ($this->currentTargets as $currentTarget) {
-                    /** @var MapSymbol $mapSymbol */
-                    $mapSymbol = $currentTarget->getComponent(MapSymbol::class);
-                    /** @var HitPoints $hitPoints */
-                    $hitPoints = $currentTarget->getComponent(HitPoints::class);
-                    /** @var InGameName $inGameName */
-                    $inGameName = $currentTarget->getComponent(InGameName::class);
-                    /** @var MapPosition $mapPosition */
-                    $mapPosition = $currentTarget->getComponent(MapPosition::class);
 
+                    /** @var MapSymbol $mapSymbol */
+                    /** @var HitPoints $hitPoints */
+                    /** @var InGameName $inGameName */
+                    /** @var MapPosition $mapPosition */
+                    /** @var DefaultColor $defaultColor */
+                    [
+                        $mapSymbol,
+                        $hitPoints,
+                        $inGameName,
+                        $mapPosition,
+                        $defaultColor,
+                    ]= $currentTarget->explode(
+                        MapSymbol::class,
+                        HitPoints::class,
+                        InGameName::class,
+                        MapPosition::class,
+                        DefaultColor::class,
+                    );
+
+                    $currentTargetSymbol =  $this->consoleColor->apply(
+                        sprintf('color_%d', $defaultColor->getColor()->toInt()),
+                        $mapSymbol->getSymbol()
+                    );
 
                     echo sprintf(
                         "\t%d - %s (%d,%d) - HP: %d/%d - %s\n",
                         $index++,
-                        $mapSymbol->getSymbol(),
+                        $currentTargetSymbol,
                         $mapPosition->get()->getX(),
                         $mapPosition->get()->getY(),
                         $hitPoints->getCurrent(),

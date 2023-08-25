@@ -9,6 +9,7 @@ use App\Engine\Commands\InspectCell;
 use App\Engine\Commands\InspectEntity;
 use App\Engine\Commands\MoveEntity;
 use App\Engine\Commands\SetMapViewport;
+use App\Engine\Commands\SetPlayerColor;
 use App\Engine\Commands\SetPlayerName;
 use App\Engine\Commands\ShowInventory;
 use App\Engine\Commands\WhereAmI;
@@ -166,6 +167,11 @@ class PlayerController implements WorldSystemInterface
                 Direction::tryFrom($commandArguments[1] ?? null)
             ),
             CommandPredicate::PLAYER_SET_NAME => new SetPlayerName(
+                $this->entityManager,
+                $entityId,
+                $commandArguments[0],
+            ),
+            CommandPredicate::PLAYER_SET_COLOR => new SetPlayerColor(
                 $this->entityManager,
                 $entityId,
                 $commandArguments[0],
