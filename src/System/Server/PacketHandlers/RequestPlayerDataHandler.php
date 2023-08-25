@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\System\Server\PacketHandlers;
 
+use Amp\ByteStream\ClosedException;
+use Amp\ByteStream\StreamException;
 use Amp\Socket\ResourceSocket;
 use App\Engine\Component\PlayerCommandQueue;
 use App\Engine\Entity\EntityManager;
@@ -47,7 +49,12 @@ class RequestPlayerDataHandler implements ClientPacketHandlerInterface
         if ($entity) {
             $message = serialize($this->playerUpdatedServerEventListener->getReducedEntity($entity));
 
-            $socket->write(ServerPacketHeader::PLAYER_UPDATED->pack($message));
+
+            try {
+                $socket->write(ServerPacketHeader::PLAYER_UPDATED->pack($message));
+            } catch (ClosedException $e) {
+            } catch (StreamException $e) {
+            }
         }
     }
 }

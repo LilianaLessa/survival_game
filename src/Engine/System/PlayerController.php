@@ -79,7 +79,8 @@ class PlayerController implements WorldSystemInterface
                         $commandArguments,
                         $position,
                         $inventory,
-                        $playerCommandQueue
+                        $playerCommandQueue,
+                        $entityId
                     );
                     $this->parseActionOnWorldCommand(
                         $commandPredicate,
@@ -134,10 +135,16 @@ class PlayerController implements WorldSystemInterface
         MapPosition $position,
         Inventory $inventory,
         PlayerCommandQueue $playerCommandQueue,
+        string $entityId,
     ): void {
         $command = match ($commandPredicate) {
             CommandPredicate::PLAYER_SELF_WHERE => new WhereAmI($position),
-            CommandPredicate::PLAYER_VIEWPORT => new SetMapViewport($this->world, $commandArguments),
+            CommandPredicate::PLAYER_VIEWPORT => new SetMapViewport(
+                $this->world,
+                $this->entityManager,
+                $entityId,
+                $commandArguments
+            ),
             CommandPredicate::INVENTORY => new ShowInventory($inventory, (bool)($commandArguments[0] ?? false)),
             default => null,
         };

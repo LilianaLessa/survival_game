@@ -13,18 +13,12 @@ class PlayerUpdated extends AbstractEvent
     public const EVENT_NAME = 'player.updated';
     public function __construct(
         private readonly PlayerCommandQueue $playerCommandQueue,
-        private readonly Entity $playerEntity,
     ) {
     }
 
     public function getPlayerCommandQueue(): PlayerCommandQueue
     {
         return $this->playerCommandQueue;
-    }
-
-    public function getPlayerEntity(): Entity
-    {
-        return $this->playerEntity;
     }
 
     public function getEventName(): string

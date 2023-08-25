@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\System\Server\PacketHandlers;
 
+use Amp\ByteStream\ClosedException;
+use Amp\ByteStream\StreamException;
 use Amp\Socket\ResourceSocket;
 use App\System\Server\Client\Network\ClientPool;
 use App\System\Server\ServerPacketHeader;
@@ -27,6 +29,11 @@ class RequestClientUuidHandler implements ClientPacketHandlerInterface
             $response = ServerPacketHeader::CLIENT_ID->pack($client->getUuid()->toString());
         }
 
-        $socket->write($response);
+
+        try {
+            $socket->write($response);
+        } catch (ClosedException $e) {
+        } catch (StreamException $e) {
+        }
     }
 }

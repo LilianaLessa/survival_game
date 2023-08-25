@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\System\Server\PacketHandlers;
 
+use Amp\ByteStream\ClosedException;
+use Amp\ByteStream\StreamException;
 use Amp\Socket\ResourceSocket;
 use App\Engine\Component\HitPoints;
 use App\Engine\Component\InGameName;
@@ -45,7 +47,12 @@ class RequestMapDataHandler implements ClientPacketHandlerInterface
                 ]
             );
 
-            $socket->write(ServerPacketHeader::MAP_INFO_UPDATED->pack($message));
+
+            try {
+                $socket->write(ServerPacketHeader::MAP_INFO_UPDATED->pack($message));
+            } catch (ClosedException $e) {
+            } catch (StreamException $e) {
+            }
         }
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\System\Server\PacketHandlers;
 
+use Amp\ByteStream\ClosedException;
+use Amp\ByteStream\StreamException;
 use Amp\Socket\ResourceSocket;
 use App\System\Player\PlayerFactory;
 use App\System\Player\PlayerPresetLibrary;
@@ -62,8 +64,10 @@ class RegisterNewClientHandler implements ClientPacketHandlerInterface
 
     private function sendRegisterSuccess(ResourceSocket $socket, Client $newClient): void
     {
-        $socket->write(
-            ServerPacketHeader::CLIENT_REGISTER_SUCCESS->pack($newClient->getUuid()->toString())
-        );
+        try {
+            $socket->write( ServerPacketHeader::CLIENT_REGISTER_SUCCESS->pack($newClient->getUuid()->toString()));
+        } catch (ClosedException $e) {
+        } catch (StreamException $e) {
+        }
     }
 }

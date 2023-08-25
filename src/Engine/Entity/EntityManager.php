@@ -117,10 +117,7 @@ class EntityManager
             MapViewPort::class
         ) ?? [null,null];
 
-        $playerCommandQueue && Dispatcher::dispatch(new PlayerUpdated(
-            $playerCommandQueue,
-            $entity,
-        ));
+        $playerCommandQueue && Dispatcher::dispatch(new PlayerUpdated($playerCommandQueue));
 
         $mapPosition && Dispatcher::dispatch(new MapEntityUpdated($entity));
     }

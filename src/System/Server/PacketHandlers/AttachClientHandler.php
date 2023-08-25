@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\System\Server\PacketHandlers;
 
+use Amp\ByteStream\ClosedException;
+use Amp\ByteStream\StreamException;
 use Amp\Socket\ResourceSocket;
 use App\System\Server\Client\Network\ClientPool;
 use App\System\Server\Client\Network\Socket;
@@ -45,6 +47,10 @@ class AttachClientHandler implements ClientPacketHandlerInterface
            );
        }
 
-       $socket->write($response);
+        try {
+            $socket->write($response);
+        } catch (ClosedException $e) {
+        } catch (StreamException $e) {
+        }
     }
 }

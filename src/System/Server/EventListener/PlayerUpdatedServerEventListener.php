@@ -36,9 +36,9 @@ class PlayerUpdatedServerEventListener extends AbstractEventListener
     {
         $socketUuid = $event->getPlayerCommandQueue()->getSocketUuid();
         $client = $this->clientPool->getClientBySocketUuid($socketUuid) ?? null;
+        $player = $client?->getPlayer();
 
-        if ($client) {
-            $player = $event->getPlayerEntity();
+        if ($player) {
 
             $message = serialize($this->getReducedEntity($player));
             $data = ServerPacketHeader::PLAYER_UPDATED->pack($message);

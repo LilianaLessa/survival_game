@@ -21,7 +21,7 @@ class MapClient extends AbstractClient
     private ?Dimension2D $mapDimensions = null;
     private ?Entity $viewer = null;
 
-    private string|false $clientIdString;
+    private string|false $clientIdString = '';
     private int $screenId;
 
     /** @var ConsoleColor[][] */
@@ -72,37 +72,24 @@ class MapClient extends AbstractClient
 
     public function start(): void
     {
-        $this->socket->write(
-            ClientPacketHeader::REQUEST_CLIENT_UUID->pack()
-        );
+        $this->socket->write(ClientPacketHeader::REQUEST_CLIENT_UUID->pack());
+        //todo request screen id and put it on the right place
+        $this->screenId = 1;
 
-        $rawPackageData = $this->readSocket();
-        if ($rawPackageData) {
-            ob_start();
-            $this->printPacketInfo(
-                ...$this->parsePacket($rawPackageData)
-            );
+        $this->requestPlayerData();
 
-            $this->clientIdString = ob_get_flush();
+        $this->requestMapData();
 
-            //todo request screen id and put it on the right place
-            $this->screenId = 1;
+        $this->requestPlayerSurroundingEntities();
 
-            $this->requestPlayerData();
+        $this->clientScreenUpdater->startAsyncUpdate($this);
 
-            $this->requestMapData();
-
-            $this->requestPlayerSurroundingEntities();
-
-            $this->clientScreenUpdater->startAsyncUpdate($this);
-
-            while ($this->socket->isWritable() && $this->socket->isReadable()) {
-                $rawPacketData = ServerPacketHeader::getPackets($this->readSocket());
-                foreach ($rawPacketData as $rawPacket) {
-                    [$packetHeader, $packet] = $this->parsePacket($rawPacket);
-                    if ($packetHeader) {
-                        $this->processNextMessage($packetHeader, ...$packet);
-                    }
+        while ($this->socket->isWritable() && $this->socket->isReadable()) {
+            $rawPacketData = ServerPacketHeader::getPackets($this->readSocket());
+            foreach ($rawPacketData as $rawPacket) {
+                [$packetHeader, $packet] = $this->parsePacket($rawPacket);
+                if ($packetHeader) {
+                    $this->processNextMessage($packetHeader, ...$packet);
                 }
             }
         }
@@ -120,6 +107,9 @@ class MapClient extends AbstractClient
         $message = implode(' ', $packetData);
 
         switch ($serverPacketHeader) {
+            case ServerPacketHeader::CLIENT_ID:
+                $this->clientIdString = $message;
+                break;
             case ServerPacketHeader::PLAYER_UPDATED:
                 $entity = unserialize($message);
                 $entity && $this->viewer = $entity;
@@ -159,23 +149,11 @@ class MapClient extends AbstractClient
     private function requestPlayerData(): void
     {
         $this->socket->write(ClientPacketHeader::REQUEST_PLAYER_DATA->pack());
-
-        $rawPackageData = $this->readSocket();
-        [$packageHeader, $packageData] = $this->parsePacket($rawPackageData);
-        if ($packageHeader) {
-            $this->processNextMessage($packageHeader, ...$packageData);
-        }
     }
 
     private function requestMapData(): void
     {
         $this->socket->write(ClientPacketHeader::REQUEST_MAP_DATA->pack());
-
-        $rawPackageData = $this->readSocket();
-        [$packageHeader, $packageData] = $this->parsePacket($rawPackageData);
-        if ($packageHeader) {
-            $this->processNextMessage($packageHeader, ...$packageData);
-        }
     }
 
     private function requestPlayerSurroundingEntities()
