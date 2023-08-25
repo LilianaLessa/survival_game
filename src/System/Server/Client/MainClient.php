@@ -25,7 +25,7 @@ class MainClient extends AbstractClient
 
     public function start(): void
     {
-        $this->socket->write(ClientPacketHeader::REQUEST_CLIENT_UUID->value);
+        $this->socket->write(ClientPacketHeader::REQUEST_CLIENT_UUID->pack());
 
         while ($this->socket->isWritable() && $this->socket->isReadable()) {
             $rawPacketData = ServerPacketHeader::getPackets($this->readSocket());
@@ -42,9 +42,9 @@ class MainClient extends AbstractClient
 
     protected function register(SocketType $socketType, ?string $clientUuid): string
     {
-        $this->socket->write(ClientPacketHeader::REGISTER_NEW_CLIENT->value);
+        $this->socket->write(ClientPacketHeader::REGISTER_NEW_CLIENT->pack());
 
-        return $this->socket->read();
+        return $this->readSocket();
     }
 
     protected function getSocketType(): SocketType
@@ -94,11 +94,7 @@ class MainClient extends AbstractClient
         $name = readline("If you want, type a player name: ");
 
         if ($name) {
-            $this->socket->write(sprintf(
-                '%s %s',
-                ClientPacketHeader::SET_PLAYER_NAME->value,
-                $name
-            ));
+            $this->socket->write(ClientPacketHeader::SET_PLAYER_NAME->pack());
         }
     }
 }

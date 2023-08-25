@@ -43,6 +43,7 @@ class WorldManager
     private $worldChunkWidht = 25; //todo get from preset
     private $worldChunkHeight = 25; //todo get from preset
     private $chunkedTerrainData = [];
+    private $chunkedBackgroundColors = [];
 
     public function __construct(
         private readonly EntityManager $entityManager,
@@ -152,7 +153,7 @@ class WorldManager
 
                 echo $this->consoleColor->apply(
                     [
-                        sprintf('bg_color_%d', $this->getBackgroudColor((int)$mapX, (int)$mapY)->toInt()),
+                        sprintf('bg_color_%d', $this->getBackgroundColor((int)$mapX, (int)$mapY)->toInt()),
                         sprintf('color_%d', $this->getForegroundColor($topEntity)->toInt()),
                     ],
                     $symbol
@@ -193,14 +194,13 @@ class WorldManager
         return $this->height;
     }
 
-    //todo fix it, as world size ends on dimension-1.
     public function isOutOfBounds(int $x, int $y): bool
     {
         return
             $x < 0
-            || $x > $this->getWidth()
+            || $x > $this->getWidth()-1
             || $y < 0
-            || $y > $this->getHeight();
+            || $y > $this->getHeight()-1;
     }
 
     public function setDrawableClass(?string $drawableClass): void
@@ -307,10 +307,14 @@ class WorldManager
         foreach ($terrainData as $x => $column) {
             foreach ($column as $y => $data) {
                 $point2D = new Point2D($x, $y);
-                $this->linearTerrainData[$data['preset']->getName()][] = $point2D;
+                /** @var BiomePreset $biomePreset */
+                $biomePreset = $data['preset'];
+                $this->linearTerrainData[$biomePreset->getName()][] = $point2D;
                 $chunkNumber = $this->getChunkNumber($x, $y);
                 $terrainData[$x][$y]['chunk'] = $chunkNumber;
+                $terrainData[$x][$y]['backgroundColor'] = $biomePreset->getColors()[0];
                 $this->chunkedTerrainData[$chunkNumber][$x][$y] = $terrainData[$x][$y];
+                $this->chunkedBackgroundColors[$chunkNumber][$x][$y] = $biomePreset->getColors()[0];
             }
         }
 
@@ -346,7 +350,7 @@ class WorldManager
         return $this->worldChunkHeight;
     }
 
-    private function getBackgroudColor(int $x, int $y): ConsoleColorPalette
+    private function getBackgroundColor(int $x, int $y): ConsoleColorPalette
     {
         $result = 'bg_default';
 
@@ -380,5 +384,51 @@ class WorldManager
             $this->width,
             $this->height,
         );
+    }
+
+    /** int[] */
+    public function getNearbyChunkIds(Point2D $point): array
+    {
+        $chunkW = $this->worldChunkWidht;
+        $chunkH = $this->worldChunkHeight;
+
+        $targetX = $point->getX();
+        $targetY = $point->getY();
+
+        $chuckIds = [];
+        $chuckIds[] = $this->getChunkNumber($targetX, $targetY);
+
+        $adjacentChunksCoordinates = [
+            'u' => [$targetX, $targetY - $chunkH],
+            'r' => [$targetX + $chunkW, $targetY],
+            'd' => [$targetX, $targetY + $chunkH],
+            'l' => [$targetX - $chunkW, $targetY],
+        ];
+
+        foreach ($adjacentChunksCoordinates as $coordinates) {
+            if (!$this->isOutOfBounds(...$coordinates)) {
+
+                $chuckIds[] = $this->getChunkNumber(...$coordinates);
+            }
+        }
+
+        return $chuckIds;
+    }
+
+    /** @return ConsoleColor[][] */
+    public function getChunkBackgroundColorData(int ...$chunkIds): array
+    {
+        $colors = [];
+
+        foreach ($chunkIds as $chunkId) {
+            $chunk = $this->chunkedBackgroundColors[$chunkId] ?? [];
+            foreach ($chunk as $x => $rows) {
+                foreach ($rows as $y => $color) {
+                    $colors[$x][$y] = $color;
+                }
+            }
+        }
+
+        return $colors;
     }
 }

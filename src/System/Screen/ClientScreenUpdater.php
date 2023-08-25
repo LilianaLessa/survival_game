@@ -11,6 +11,7 @@ use App\Engine\Entity\EntityCollection;
 use App\System\Helpers\ConsoleColorPalette;
 use App\System\Helpers\Dimension2D;
 use App\System\Server\Client\MapClient;
+use PHP_Parallel_Lint\PhpConsoleColor\ConsoleColor;
 use function Amp\async;
 use function Amp\delay;
 
@@ -32,6 +33,7 @@ class ClientScreenUpdater
                 $this->renderScreen(
                     $mapClient->getEntityCollection(),
                     $mapClient->getMapDimensions(),
+                    $mapClient->getBackgroundColorData(),
                     $mapClient->getViewer(),
                     $mapClient->getClientIdString(),
                     $mapClient->getScreenId(),
@@ -41,9 +43,13 @@ class ClientScreenUpdater
         });
     }
 
+    /**
+     * @param ConsoleColor[][] $backgroundColorData
+     */
     private function renderScreen(
         ?EntityCollection $entityCollection,
         ?Dimension2D $mapDimensions,
+        array $backgroundColorData,
         ?Entity $viewer,
         string $clientIdString,
         int $screenId,
@@ -59,10 +65,8 @@ class ClientScreenUpdater
             return;
         }
 
-        $linearTerrainInfo = [];
-
         $entityMap = $this->prepareEntityMap($entityCollection);
-        $backgroundColorMap = $this->prepareBackgroundColorMap($linearTerrainInfo);
+        $backgroundColorMap = $backgroundColorData;
 
         $this->screen->setScreenData(
             $entityMap,
@@ -88,12 +92,12 @@ class ClientScreenUpdater
         foreach ($entityCollection as $entity) {
             /** @var MapPosition $position */
             $position = $entity->getComponent(MapPosition::class);
+            if ($position) {
+                $entityMap[$position->getX()][$position->getY()] =
+                    $entityMap[$position->getX()][$position->getY()] ?? new EntityCollection();
 
-            $entityMap[$position->getX()][$position->getY()] =
-                $entityMap[$position->getX()][$position->getY()] ?? new EntityCollection();
-
-            $entityMap[$position->getX()][$position->getY()]->addEntity($entity);
-
+                $entityMap[$position->getX()][$position->getY()]->addEntity($entity);
+            }
         }
 
         return $entityMap;

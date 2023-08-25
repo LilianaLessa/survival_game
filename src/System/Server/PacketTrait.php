@@ -7,9 +7,10 @@ namespace App\System\Server;
 trait PacketTrait
 {
     public const PACKET_SEPARATOR = "\u{1f}";
-    public function pack(string $data): string
+    public function pack(?string $data = null): string
     {
-        return sprintf('%s %s%s', $this->value, $data, self::PACKET_SEPARATOR);
+        $preparedData = $data ? sprintf(' %s', $data) : '';
+        return sprintf('%s%s%s', $this->value, $preparedData, self::PACKET_SEPARATOR);
     }
 
     static public function getPackets(?string $rawData): array

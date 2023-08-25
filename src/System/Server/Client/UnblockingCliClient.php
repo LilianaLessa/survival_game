@@ -29,10 +29,10 @@ class UnblockingCliClient extends AbstractClient
     public function start(): void
     {
         $this->socket->write(
-            sprintf('%s', ClientPacketHeader::REQUEST_CLIENT_UUID->value)
+            ClientPacketHeader::REQUEST_CLIENT_UUID->pack()
         );
 
-        $rawPackageData = $this->socket->read();
+        $rawPackageData = $this->readSocket();
         if ($rawPackageData) {
             $this->printPacketInfo(
                 ...$this->parsePacket($rawPackageData)
@@ -52,9 +52,7 @@ class UnblockingCliClient extends AbstractClient
                         continue;
                     }
 
-                    $this->socket->write(
-                        sprintf('%s %s', ClientPacketHeader::GAME_COMMAND->value, $command)
-                    );
+                    $this->socket->write(ClientPacketHeader::GAME_COMMAND->pack($command));
                 }
 
                 $this->unblockingActive = true;

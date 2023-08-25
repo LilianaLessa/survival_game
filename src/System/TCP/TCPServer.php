@@ -46,14 +46,18 @@ class TCPServer
     {
         async(function () use ($socket, $socketUuid) {
             while ($socket->isWritable() && $socket->isReadable()) {
-                $data = $socket->read();
-                $packageExplodedData = explode(' ', $data ?? '');
+                $rawSocketData = $this->readSocket($socket);
+                $rawPackageData = ClientPacketHeader::getPackets($rawSocketData);
 
-                $clientPackage = ClientPacketHeader::tryFrom($packageExplodedData[0] ?? '');
+                foreach ($rawPackageData as $rawPackage) {
+                    $packageExplodedData = explode(' ', $rawPackage ?? '');
 
-                if ($clientPackage) {
-                    array_shift($packageExplodedData);
-                    $clientPackage->getHandler()->handle($socket, $socketUuid, ...$packageExplodedData);
+                    $clientPackage = ClientPacketHeader::tryFrom($packageExplodedData[0] ?? '');
+
+                    if ($clientPackage) {
+                        array_shift($packageExplodedData);
+                        $clientPackage->getHandler()->handle($socket, $socketUuid, ...$packageExplodedData);
+                    }
                 }
             }
             try {
@@ -68,5 +72,18 @@ class TCPServer
 
             }
         });
+    }
+
+    protected function readSocket(ResourceSocket $socket): ?string
+    {
+        $buffer = '';
+        do {
+            if (!$socket->isReadable() || !$socket->isWritable()) {
+                return null;
+            }
+            $buffer .= $socket->read();
+        } while(!str_ends_with($buffer, ClientPacketHeader::PACKET_SEPARATOR));
+
+        return $buffer;
     }
 }

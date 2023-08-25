@@ -29,9 +29,23 @@ class RequestMapDataHandler implements ClientPacketHandlerInterface
 
     public function handle(ResourceSocket $socket, UuidInterface $socketUuid, string ...$packetData): void
     {
-        //todo send also relevant chunk data.
-        $message = serialize($this->worldManager->getWorldDimensions());
+        $client = $this->clientPool->getClientBySocketUuid($socketUuid->toString());
+        /** @var MapPosition $mapPosition */
+        $mapPosition = $client?->getPlayer()->getComponent(MapPosition::class);
+        if ($mapPosition) {
+            $relevantChunkIds = $this->worldManager->getNearbyChunkIds($mapPosition->get());
 
-        $socket->write(ServerPacketHeader::MAP_INFO_UPDATED->pack($message));
+            $colorData = $this->worldManager->getChunkBackgroundColorData(...$relevantChunkIds);
+
+            //todo send also relevant chunk data.
+            $message = serialize(
+                [
+                    $this->worldManager->getWorldDimensions(),
+                    $colorData
+                ]
+            );
+
+            $socket->write(ServerPacketHeader::MAP_INFO_UPDATED->pack($message));
+        }
     }
 }

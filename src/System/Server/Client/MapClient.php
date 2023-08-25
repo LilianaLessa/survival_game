@@ -13,6 +13,7 @@ use App\System\Server\Client\Network\SocketType;
 use App\System\Server\ClientPacketHeader;
 use App\System\Server\ServerPacketHeader;
 use App\System\Server\ServerPresetLibrary;
+use PHP_Parallel_Lint\PhpConsoleColor\ConsoleColor;
 
 class MapClient extends AbstractClient
 {
@@ -22,6 +23,9 @@ class MapClient extends AbstractClient
 
     private string|false $clientIdString;
     private int $screenId;
+
+    /** @var ConsoleColor[][] */
+    private array $backgroundColorData = [];
 
     public function __construct(
         ServerPresetLibrary $serverPresetLibrary,
@@ -61,14 +65,18 @@ class MapClient extends AbstractClient
         return $this->screenId;
     }
 
+    public function getBackgroundColorData(): array
+    {
+        return $this->backgroundColorData;
+    }
 
     public function start(): void
     {
         $this->socket->write(
-            sprintf('%s', ClientPacketHeader::REQUEST_CLIENT_UUID->value)
+            ClientPacketHeader::REQUEST_CLIENT_UUID->pack()
         );
 
-        $rawPackageData = $this->socket->read();
+        $rawPackageData = $this->readSocket();
         if ($rawPackageData) {
             ob_start();
             $this->printPacketInfo(
@@ -117,9 +125,16 @@ class MapClient extends AbstractClient
                 $entity && $this->viewer = $entity;
                 break;
             case ServerPacketHeader::MAP_INFO_UPDATED:
-                //dimensions
-                //todo current chunks background colors.
-                $this->mapDimensions = unserialize($message);
+                [$mapDimensions, $colorData] = unserialize($message);
+
+                $this->mapDimensions = $mapDimensions;
+
+                foreach ($colorData as $x => $rows) {
+                    foreach ($rows as $y => $color) {
+                        $this->backgroundColorData[$x][$y] = $color;
+                    }
+                }
+
                 break;
             case ServerPacketHeader::MAP_ENTITY_UPDATED:
                 /** @var Entity $entity */
@@ -143,11 +158,9 @@ class MapClient extends AbstractClient
 
     private function requestPlayerData(): void
     {
-        $this->socket->write(
-            sprintf('%s', ClientPacketHeader::REQUEST_PLAYER_DATA->value)
-        );
+        $this->socket->write(ClientPacketHeader::REQUEST_PLAYER_DATA->pack());
 
-        $rawPackageData = $this->socket->read();
+        $rawPackageData = $this->readSocket();
         [$packageHeader, $packageData] = $this->parsePacket($rawPackageData);
         if ($packageHeader) {
             $this->processNextMessage($packageHeader, ...$packageData);
@@ -156,11 +169,9 @@ class MapClient extends AbstractClient
 
     private function requestMapData(): void
     {
-        $this->socket->write(
-            sprintf('%s', ClientPacketHeader::REQUEST_MAP_DATA->value)
-        );
+        $this->socket->write(ClientPacketHeader::REQUEST_MAP_DATA->pack());
 
-        $rawPackageData = $this->socket->read();
+        $rawPackageData = $this->readSocket();
         [$packageHeader, $packageData] = $this->parsePacket($rawPackageData);
         if ($packageHeader) {
             $this->processNextMessage($packageHeader, ...$packageData);
@@ -169,9 +180,7 @@ class MapClient extends AbstractClient
 
     private function requestPlayerSurroundingEntities()
     {
-        $this->socket->write(
-            sprintf('%s', ClientPacketHeader::REQUEST_PLAYER_SURROUNDING_ENTITIES->value)
-        );
+        $this->socket->write(ClientPacketHeader::REQUEST_PLAYER_SURROUNDING_ENTITIES->pack());
     }
 }
 

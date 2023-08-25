@@ -18,6 +18,8 @@ use App\System\Server\PacketHandlers\ShutdownSocketHandler;
 
 enum ClientPacketHeader: string
 {
+    use PacketTrait;
+
     case ATTACH_CLIENT = 'attach_client';
     case REGISTER_NEW_CLIENT = 'register_new_client';
     case REQUEST_CLIENT_UUID = 'request_client_uuid';

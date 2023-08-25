@@ -26,10 +26,10 @@ class UiMessageReceiverClient extends AbstractClient
     public function start(): void
     {
         $this->socket->write(
-            sprintf('%s', ClientPacketHeader::REQUEST_CLIENT_UUID->value)
+            ClientPacketHeader::REQUEST_CLIENT_UUID->pack()
         );
 
-        $rawPackageData = $this->socket->read();
+        $rawPackageData = $this->readSocket();
         if ($rawPackageData) {
             $this->printPacketInfo(
                 ...$this->parsePacket($rawPackageData)

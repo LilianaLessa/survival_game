@@ -163,7 +163,8 @@ class Screen
 
     private function getBackgroundColor(int $mapX, int $mapY): ConsoleColorPalette
     {
-        return $this->backgroundColorMap[$mapX][$mapY] ?? ConsoleColorPalette::defaultBackground();
+        $color = $this->backgroundColorMap[$mapX][$mapY] ?? '';
+        return ConsoleColorPalette::tryFrom($color) ?? ConsoleColorPalette::defaultForeground();
     }
 
     private function getForegroundColor(?Entity $entity): ConsoleColorPalette

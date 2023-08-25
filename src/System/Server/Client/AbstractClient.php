@@ -62,13 +62,15 @@ abstract class AbstractClient
 
     protected function register(SocketType $socketType, ?string $clientUuid): string
     {
-        $this->socket->write(sprintf('%s %s %s',
-            ClientPacketHeader::ATTACH_CLIENT->value,
-            $clientUuid,
-            $socketType->value
+        $this->socket->write(ClientPacketHeader::ATTACH_CLIENT->pack(
+            sprintf(
+                '%s %s',
+                $clientUuid,
+                $socketType->value
+            )
         ));
 
-        return $this->socket->read();
+        return $this->readSocket();
     }
 
     abstract public function start(): void;
@@ -111,10 +113,13 @@ abstract class AbstractClient
         );
     }
 
-    protected function readSocket(): string
+    protected function readSocket(): ?string
     {
         $buffer = '';
         do {
+            if (! $this->socket->isReadable() || ! $this->socket->isWritable()) {
+                return null;
+            }
             $buffer .= $this->socket->read();
         } while(!str_ends_with($buffer, ServerPacketHeader::PACKET_SEPARATOR));
 
