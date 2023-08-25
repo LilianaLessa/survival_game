@@ -17,7 +17,7 @@ class GameCommandHandler implements ClientPacketHandlerInterface
 
     public function handle(ResourceSocket $socket, UuidInterface $socketUuid, string ...$packetData): void
     {
-        $rawCommand = implode (' ', $packetData);
+        $rawCommand = implode(' ', $packetData);
 
         $client = $this->clientPool->getClientBySocketUuid($socketUuid->toString());
 
@@ -26,13 +26,5 @@ class GameCommandHandler implements ClientPacketHandlerInterface
              $playerCommandQueue = $client->getPlayer()->getComponent(PlayerCommandQueue::class);
              $playerCommandQueue->getCommandQueue()->enqueue($rawCommand);
         }
-//
-//        $systems = Kernel::getAllRegisteredConcreteClassesFromInterface(ReceiverSystemInterface::class);
-//
-//        foreach ($systems as $system) {
-//            if ($system instanceof ReceiverSystemInterface) {
-//                $system->parse($rawCommand);
-//            }
-//        }
     }
 }

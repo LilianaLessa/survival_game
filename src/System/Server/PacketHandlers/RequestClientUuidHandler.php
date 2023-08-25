@@ -19,18 +19,12 @@ class RequestClientUuidHandler implements ClientPacketHandlerInterface
     public function handle(ResourceSocket $socket, UuidInterface $socketUuid, string ...$packetData): void
     {
         $client = $this->clientPool->getClientBySocketUuid($socketUuid->toString());
-        $response = sprintf(
-            "%s %s",
-            ServerPacketHeader::INVALID_REQUEST->value,
+        $response = ServerPacketHeader::INVALID_REQUEST->pack(
             sprintf("Could not retrieve client uuid: %s", implode(' ', $packetData))
         );
 
         if ($client) {
-            $response = sprintf(
-                "%s %s",
-                ServerPacketHeader::CLIENT_ID->value,
-                $client->getUuid()->toString()
-            );
+            $response = ServerPacketHeader::CLIENT_ID->pack($client->getUuid()->toString());
         }
 
         $socket->write($response);

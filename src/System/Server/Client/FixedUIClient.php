@@ -42,8 +42,8 @@ class FixedUIClient extends AbstractClient
         $rawPackageData = $this->socket->read();
         if ($rawPackageData) {
             ob_start();
-            $this->printPackageInfo(
-                ...$this->parsePackage($rawPackageData)
+            $this->printPacketInfo(
+                ...$this->parsePacket($rawPackageData)
             );
 
             $this->clientIdString = ob_get_flush();
@@ -52,12 +52,12 @@ class FixedUIClient extends AbstractClient
                 sprintf('%s', ClientPacketHeader::REQUEST_PLAYER_DATA->value)
             );
 
-            while($this->socket->isWritable() && $this->socket->isReadable()) {
-                $rawPackageData = $this->socket->read();
-                if ($rawPackageData) {
-                    [$packageHeader, $packageData] = $this->parsePackage($rawPackageData);
-                    if ($packageHeader) {
-                        $this->processNextMessage($packageHeader, ...$packageData);
+            while ($this->socket->isWritable() && $this->socket->isReadable()) {
+                $rawPacketData = ServerPacketHeader::getPackets($this->socket->read());
+                foreach ($rawPacketData as $rawPacket) {
+                    [$packetHeader, $packet] = $this->parsePacket($rawPacket);
+                    if ($packetHeader) {
+                        $this->processNextMessage($packetHeader, ...$packet);
                     }
                 }
             }

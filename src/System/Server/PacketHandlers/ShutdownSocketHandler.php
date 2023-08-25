@@ -21,7 +21,6 @@ class ShutdownSocketHandler implements ClientPacketHandlerInterface
         if ($client) {
             $internalSocket = $client->getSocketByUuid($socketUuid->toString());
             $client->removeSocket($internalSocket);
-            $socket->close();
             $this->clientPool->updateClient($client);
             $hasRemainingSockets = count($client->getSockets()) > 0;
             if (!$hasRemainingSockets) {

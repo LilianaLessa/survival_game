@@ -36,7 +36,7 @@ abstract class AbstractClient
 
         $rawPackageData = $this->register($this->getSocketType(), $clientUuid);
 
-        [$packageHeader, $packageData] = $this->parsePackage($rawPackageData);
+        [$packageHeader, $packageData] = $this->parsePacket($rawPackageData);
 
         $message = implode(' ', $packageData);
 
@@ -88,19 +88,19 @@ abstract class AbstractClient
             : connectTls($host . ':' . $port, $connectContext);
     }
 
-    protected function parsePackage(string $rawPackageData): array
+    protected function parsePacket(string $rawPacketData): array
     {
-        $packageData = explode(' ', $rawPackageData);
-        $rawHeader = array_shift($packageData);
-        $packageHeader = ServerPacketHeader::tryFrom($rawHeader);
+        $packetData = explode(' ', $rawPacketData);
+        $rawHeader = array_shift($packetData);
+        $packetHeader = ServerPacketHeader::tryFrom($rawHeader);
 
         return [
-            $packageHeader,
-            $packageData
+            $packetHeader,
+            $packetData
         ];
     }
 
-    protected function printPackageInfo(ServerPacketHeader $serverPacketHeader, array $packetData): void
+    protected function printPacketInfo(ServerPacketHeader $serverPacketHeader, array $packetData): void
     {
         $message = implode(' ', $packetData);
 
@@ -109,5 +109,15 @@ abstract class AbstractClient
             $serverPacketHeader->value,
             $message
         );
+    }
+
+    protected function readSocket(): string
+    {
+        $buffer = '';
+        do {
+            $buffer .= $this->socket->read();
+        } while(!str_ends_with($buffer, ServerPacketHeader::PACKET_SEPARATOR));
+
+        return $buffer;
     }
 }

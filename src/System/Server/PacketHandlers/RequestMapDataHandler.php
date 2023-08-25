@@ -32,12 +32,6 @@ class RequestMapDataHandler implements ClientPacketHandlerInterface
         //todo send also relevant chunk data.
         $message = serialize($this->worldManager->getWorldDimensions());
 
-        $data = sprintf(
-            '%s %s',
-            ServerPacketHeader::MAP_INFO_UPDATED->value,
-            $message
-        );
-
-        $socket->write($data);
+        $socket->write(ServerPacketHeader::MAP_INFO_UPDATED->pack($message));
     }
 }

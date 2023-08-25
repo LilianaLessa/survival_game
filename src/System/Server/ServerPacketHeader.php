@@ -14,7 +14,8 @@ use App\System\Server\PacketHandlers\ShutdownSocketHandler;
 
 enum ServerPacketHeader: string
 {
-    case SYSTEM_MESSAGE_INFO = 'system_message_info';
+    use PacketTrait;
+
     case CLIENT_REGISTER_FAILED = 'client_register_failed';
     case INVALID_REQUEST = 'invalid_request';
     case CLIENT_REGISTER_SUCCESS = 'client_register_success';
@@ -30,16 +31,4 @@ enum ServerPacketHeader: string
     case MAP_ENTITY_REMOVED = 'map_entity_removed';
 
     case MAP_INFO_UPDATED = 'map_dimensions_updated';
-
-    public function pack(string $data): string
-    {
-        return sprintf('%s %s', $this->value, $data);
-    }
-
-    public function getHandler(): ServerPacketHandlerInterface
-    {
-//        return match ($this) {
-//            //self::SYSTEM_MESSAGE => Kernel::getContainer()->get(RegisterNewClientHandler::class),
-//        };
-    }
 }

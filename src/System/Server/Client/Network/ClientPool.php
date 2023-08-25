@@ -55,7 +55,8 @@ class ClientPool
         //remove all sockets related to client,
         $sockets = $client->getSockets();
         foreach ($sockets as $socket) {
-            $socket->getSocket()->close();
+            $socket->getSocket()->end();
+            !$socket->getSocket()->isClosed() && $socket->getSocket()->close();
             unset($this->clientsBySocketId[$socket->getUuid()->toString()]);
         }
 

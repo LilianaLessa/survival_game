@@ -12,17 +12,14 @@ use App\System\Server\Client\Network\ClientPool;
 use App\System\Server\Client\Network\Socket;
 use App\System\Server\Client\Network\SocketType;
 use App\System\Server\ServerPacketHeader;
-use App\System\World\WorldManager;
 use Ramsey\Uuid\Rfc4122\UuidV4;
 use Ramsey\Uuid\UuidInterface;
-use function Amp\delay;
 
 class RegisterNewClientHandler implements ClientPacketHandlerInterface
 {
     public function __construct(
         private readonly ClientPool $clientPool,
         private readonly PlayerPresetLibrary $playerPresetLibrary,
-        private readonly WorldManager $worldManager,
         private readonly PlayerFactory $playerFactory,
     ) {
     }
@@ -65,10 +62,8 @@ class RegisterNewClientHandler implements ClientPacketHandlerInterface
 
     private function sendRegisterSuccess(ResourceSocket $socket, Client $newClient): void
     {
-        $socket->write(sprintf(
-            "%s %s\n",
-            ServerPacketHeader::CLIENT_REGISTER_SUCCESS->value,
-            $newClient->getUuid()->toString()
-        ));
+        $socket->write(
+            ServerPacketHeader::CLIENT_REGISTER_SUCCESS->pack($newClient->getUuid()->toString())
+        );
     }
 }

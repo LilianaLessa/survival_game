@@ -215,7 +215,6 @@ function registerClientPacketHandlers(ServicesConfigurator $services): void
     $services->set(RegisterNewClientHandler::class, RegisterNewClientHandler::class)->args([
         new Reference(ClientPool::class),
         new Reference(PlayerPresetLibrary::class),
-        new Reference(WorldManager::class),
         new Reference(PlayerFactory::class),
     ]);
 
@@ -236,6 +235,7 @@ function registerClientPacketHandlers(ServicesConfigurator $services): void
     $services->set(RequestPlayerDataHandler::class, RequestPlayerDataHandler::class)->args([
         new Reference(ClientPool::class),
         new Reference(EntityManager::class),
+        new Reference(PlayerUpdatedServerEventListener::class),
     ]);
 
     $services->set(RequestMapDataHandler::class, RequestMapDataHandler::class)->args([

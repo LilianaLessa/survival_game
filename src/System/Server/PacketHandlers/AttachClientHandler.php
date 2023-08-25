@@ -25,9 +25,7 @@ class AttachClientHandler implements ClientPacketHandlerInterface
 
        $client = $this->clientPool->getClientByUuid($clientUuid);
 
-        $response = sprintf(
-            "%s %s",
-            ServerPacketHeader::CLIENT_REGISTER_FAILED->value,
+        $response = ServerPacketHeader::CLIENT_REGISTER_FAILED->pack(
             sprintf("Invalid request: %s.\n", implode(' ',$packetData))
         );
 
@@ -42,14 +40,11 @@ class AttachClientHandler implements ClientPacketHandlerInterface
 
            $this->clientPool->updateClient($client);
 
-           $response = sprintf(
-               "%s %s",
-               ServerPacketHeader::CLIENT_REGISTER_SUCCESS->value,
+           $response = ServerPacketHeader::CLIENT_REGISTER_SUCCESS->pack(
                sprintf("Client Registered. Type '%s'.\n", $socketType->value)
            );
        }
 
        $socket->write($response);
     }
-
 }

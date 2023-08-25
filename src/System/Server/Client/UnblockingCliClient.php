@@ -34,8 +34,8 @@ class UnblockingCliClient extends AbstractClient
 
         $rawPackageData = $this->socket->read();
         if ($rawPackageData) {
-            $this->printPackageInfo(
-                ...$this->parsePackage($rawPackageData)
+            $this->printPacketInfo(
+                ...$this->parsePacket($rawPackageData)
             );
 
             echo "\n\n";

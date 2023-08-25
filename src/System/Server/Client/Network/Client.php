@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\System\Server\Client\Network;
 
+use Amp\ByteStream\ClosedException;
+use Amp\ByteStream\StreamException;
 use App\Engine\Entity\Entity;
 use Ramsey\Uuid\UuidInterface;
 
@@ -77,8 +79,13 @@ class Client
     public function send(string $data, SocketType ...$socketTypes): void
     {
         $sockets = $this->getSocketsByType(...$socketTypes);
-        foreach ($sockets as $socket) {
-            $socket->getSocket()->write($data);
+        foreach ($sockets as $index => $socket) {
+            try {
+                $socket->getSocket()->write($data);
+            } catch (ClosedException $e) {
+                unset($this->sockets[$index]);
+            } catch (StreamException $e) {
+            }
         }
     }
 }

@@ -45,12 +45,8 @@ class TCPServer
     private function handleMessages(ResourceSocket $socket, UuidInterface $socketUuid): void
     {
         async(function () use ($socket, $socketUuid) {
-            do {
-                $data = null;
-                if ($socket->isWritable() && $socket->isReadable()) {
-                    $data = $socket->read();
-                }
-
+            while ($socket->isWritable() && $socket->isReadable()) {
+                $data = $socket->read();
                 $packageExplodedData = explode(' ', $data ?? '');
 
                 $clientPackage = ClientPacketHeader::tryFrom($packageExplodedData[0] ?? '');
@@ -59,11 +55,18 @@ class TCPServer
                     array_shift($packageExplodedData);
                     $clientPackage->getHandler()->handle($socket, $socketUuid, ...$packageExplodedData);
                 }
-            } while ($data !== null);
-            ClientPacketHeader::SHUTDOWN_SOCKET->getHandler()->handle($socket, $socketUuid, ...[]);
+            }
+            try {
+                ClientPacketHeader::SHUTDOWN_SOCKET->getHandler()->handle($socket, $socketUuid, ...[]);
 
-            $socket->close();
-            unset($this->sockets[$socketUuid->toString()]);
+                if ($socket->isWritable() || $socket->isReadable()) {
+                    $socket->end();
+                }
+
+                unset($this->sockets[$socketUuid->toString()]);
+            } catch (\Throwable $e) {
+
+            }
         });
     }
 }

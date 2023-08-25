@@ -59,7 +59,7 @@ class PlayerUpdatedServerEventListener extends AbstractEventListener
         return PlayerUpdated::EVENT_NAME;
     }
 
-    private function getReducedEntity(Entity $entity): Entity
+    public function getReducedEntity(Entity $entity): Entity
     {
         return $entity->reduce(
             MapSymbol::class,

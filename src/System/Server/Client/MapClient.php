@@ -71,8 +71,8 @@ class MapClient extends AbstractClient
         $rawPackageData = $this->socket->read();
         if ($rawPackageData) {
             ob_start();
-            $this->printPackageInfo(
-                ...$this->parsePackage($rawPackageData)
+            $this->printPacketInfo(
+                ...$this->parsePacket($rawPackageData)
             );
 
             $this->clientIdString = ob_get_flush();
@@ -89,11 +89,11 @@ class MapClient extends AbstractClient
             $this->clientScreenUpdater->startAsyncUpdate($this);
 
             while ($this->socket->isWritable() && $this->socket->isReadable()) {
-                $rawPackageData = $this->socket->read();
-                if ($rawPackageData) {
-                    [$packageHeader, $packageData] = $this->parsePackage($rawPackageData);
-                    if ($packageHeader) {
-                        $this->processNextMessage($packageHeader, ...$packageData);
+                $rawPacketData = ServerPacketHeader::getPackets($this->readSocket());
+                foreach ($rawPacketData as $rawPacket) {
+                    [$packetHeader, $packet] = $this->parsePacket($rawPacket);
+                    if ($packetHeader) {
+                        $this->processNextMessage($packetHeader, ...$packet);
                     }
                 }
             }
@@ -113,7 +113,8 @@ class MapClient extends AbstractClient
 
         switch ($serverPacketHeader) {
             case ServerPacketHeader::PLAYER_UPDATED:
-                $this->viewer = unserialize($message);
+                $entity = unserialize($message);
+                $entity && $this->viewer = $entity;
                 break;
             case ServerPacketHeader::MAP_INFO_UPDATED:
                 //dimensions
@@ -123,9 +124,11 @@ class MapClient extends AbstractClient
             case ServerPacketHeader::MAP_ENTITY_UPDATED:
                 /** @var Entity $entity */
                 $entity = unserialize($message);
+
                 $this->entityCollection = $this->entityCollection ?? new EntityCollection();
 
-                $this->entityCollection[$entity->getId()] = $entity;
+                $entity && $this->entityCollection[$entity->getId()] = $entity;
+
                 break;
             case ServerPacketHeader::MAP_ENTITY_REMOVED:
                 $entityId = $message;
@@ -145,7 +148,7 @@ class MapClient extends AbstractClient
         );
 
         $rawPackageData = $this->socket->read();
-        [$packageHeader, $packageData] = $this->parsePackage($rawPackageData);
+        [$packageHeader, $packageData] = $this->parsePacket($rawPackageData);
         if ($packageHeader) {
             $this->processNextMessage($packageHeader, ...$packageData);
         }
@@ -158,7 +161,7 @@ class MapClient extends AbstractClient
         );
 
         $rawPackageData = $this->socket->read();
-        [$packageHeader, $packageData] = $this->parsePackage($rawPackageData);
+        [$packageHeader, $packageData] = $this->parsePacket($rawPackageData);
         if ($packageHeader) {
             $this->processNextMessage($packageHeader, ...$packageData);
         }

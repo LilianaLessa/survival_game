@@ -31,18 +31,18 @@ class UiMessageReceiverClient extends AbstractClient
 
         $rawPackageData = $this->socket->read();
         if ($rawPackageData) {
-            $this->printPackageInfo(
-                ...$this->parsePackage($rawPackageData)
+            $this->printPacketInfo(
+                ...$this->parsePacket($rawPackageData)
             );
 
             echo "\n\n";
 
-            while($this->socket->isWritable() && $this->socket->isReadable()) {
-                $rawPackageData = $this->socket->read();
-                if ($rawPackageData) {
-                    [$packageHeader, $packageData] = $this->parsePackage($rawPackageData);
-                    if ($packageHeader) {
-                        $this->processNextMessage($packageHeader, ...$packageData);
+            while ($this->socket->isWritable() && $this->socket->isReadable()) {
+                $rawPacketData = ServerPacketHeader::getPackets($this->readSocket());
+                foreach ($rawPacketData as $rawPacket) {
+                    [$packetHeader, $packet] = $this->parsePacket($rawPacket);
+                    if ($packetHeader) {
+                        $this->processNextMessage($packetHeader, ...$packet);
                     }
                 }
             }
