@@ -24,6 +24,8 @@ enum ServerPacketHeader: string
     case UI_MESSAGE = 'ui_message';
     case PLAYER_UPDATED = 'player_updated';
     case UI_CURRENT_TARGET_UPDATED = 'ui_current_target_updated';
+    case UI_NEARBY_PLAYER_EXISTS = 'ui_nearby_player_exists';
+    case UI_NEARBY_PLAYER_REMOVED = 'ui_nearby_player_removed';
     case DEBUG_MESSAGE = 'debug_message';
 
     case MAP_ENTITY_UPDATED = 'map_entity_updated';

@@ -6,9 +6,12 @@ namespace App\System\Server\EventListener;
 
 use App\Engine\Component\ColorEffect;
 use App\Engine\Component\DefaultColor;
+use App\Engine\Component\HitPoints;
+use App\Engine\Component\InGameName;
 use App\Engine\Component\MapPosition;
 use App\Engine\Component\MapSymbol;
 use App\Engine\Component\MapViewPort;
+use App\Engine\Component\PlayerCommandQueue;
 use App\Engine\Entity\Entity;
 use App\System\Event\Event\AbstractEvent;
 use App\System\Event\Event\AbstractEventListener;
@@ -32,7 +35,14 @@ class MapEntityUpdatedServerEventListener extends AbstractEventListener
     {
         $updatedEntity = $event->getEntity();
         /** @var ?MapPosition $entityPosition */
-        $entityPosition = $updatedEntity->getComponent(MapPosition::class);
+        /** @var ?PlayerCommandQueue $playerCommandQueue */
+        [
+            $entityPosition,
+            $playerCommandQueue
+        ]= $updatedEntity->explode(
+            MapPosition::class,
+            PlayerCommandQueue::class
+        );
 
         $worldDimensions = $this->worldManager->getWorldDimensions();
 
@@ -40,8 +50,11 @@ class MapEntityUpdatedServerEventListener extends AbstractEventListener
 
         $entityUpdatedData = ServerPacketHeader::MAP_ENTITY_UPDATED->pack($message);
         $entityRemovedData = ServerPacketHeader::MAP_ENTITY_REMOVED->pack($updatedEntity->getId());
+        $nearbyPlayerExists = ServerPacketHeader::UI_NEARBY_PLAYER_EXISTS->pack($message);
+        $nearbyPlayerExistsRemoved = ServerPacketHeader::UI_NEARBY_PLAYER_REMOVED->pack($updatedEntity->getId());
 
-        $data = $entityRemovedData;
+        $mapData = $entityRemovedData;
+        $uiData = $nearbyPlayerExistsRemoved;
 
         foreach ($this->clientPool->getClients() as $client) {
             $player = $client->getPlayer();
@@ -64,11 +77,15 @@ class MapEntityUpdatedServerEventListener extends AbstractEventListener
                     );
 
                     if ($inViewport) {
-                        $data = $entityUpdatedData;
+                        $mapData = $entityUpdatedData;
+                        $uiData = $nearbyPlayerExists;
                     }
                 }
 
-                $client->send($data, SocketType::MAP);
+                $client->send($mapData, SocketType::MAP);
+                if ($player->getId() !== $updatedEntity->getId()) {
+                    $playerCommandQueue && $client->send($uiData, SocketType::UI_FIXED);
+                }
             }
         }
     }
@@ -84,6 +101,8 @@ class MapEntityUpdatedServerEventListener extends AbstractEventListener
         return $updatedEntity->reduce(
             MapPosition::class,
             MapSymbol::class,
+            HitPoints::class,
+            InGameName::class,
             //todo any other drawable component
             DefaultColor::class,
             ColorEffect::class,

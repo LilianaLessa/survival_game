@@ -1,8 +1,8 @@
 {
   "dataType": "playerConfigPreset",
   "name": "defaultPlayerPreset",
-  "initialViewportWidth": 30,
-  "initialViewportHeight": 30,
+  "initialViewportWidth": 10,
+  "initialViewportHeight": 10,
   "defaultSymbol": "☻",
   "totalHitPoints": 100,
   "baseMovementSpeed": 10

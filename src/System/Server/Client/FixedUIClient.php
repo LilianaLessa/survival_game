@@ -20,10 +20,15 @@ use PHP_Parallel_Lint\PhpConsoleColor\ConsoleColor;
 class FixedUIClient extends AbstractClient
 {
     private ?Entity $player = null;
+
     /** @var Entity[] */
     private array $currentTargets = [];
 
+    /** @var Entity[] */
+    private $nearbyPlayers = [];
+
     private string|false $clientIdString;
+
 
     public function __construct(
         ServerPresetLibrary $serverPresetLibrary,
@@ -77,10 +82,23 @@ class FixedUIClient extends AbstractClient
                 $needUpdate = true;
                 break;
             case ServerPacketHeader::UI_CURRENT_TARGET_UPDATED:
+                /** @var Entity $nearbyPlayer */
+                $nearbyPlayer = unserialize($message);
+                $this->currentTargets[$nearbyPlayer->getId()] = $nearbyPlayer;
+
+                $needUpdate = true;
+                break;
+            case ServerPacketHeader::UI_NEARBY_PLAYER_EXISTS:
                 /** @var Entity $currentTarget */
-                echo $message;
-                $currentTarget = unserialize($message);
-                $this->currentTargets[$currentTarget->getId()] = $currentTarget;
+                $nearbyPlayer = unserialize($message);
+                $this->nearbyPlayers[$nearbyPlayer->getId()] = $nearbyPlayer;
+
+                $needUpdate = true;
+                break;
+            case ServerPacketHeader::UI_NEARBY_PLAYER_REMOVED:
+                /** @var Entity $currentTarget */
+                $nearbyPlayerId = $message;
+                unset($this->nearbyPlayers[$nearbyPlayerId]);
 
                 $needUpdate = true;
                 break;
@@ -107,94 +125,151 @@ class FixedUIClient extends AbstractClient
         }
 
         if ($this->player) {
-            /** @var MapSymbol $mapSymbol */
-            /** @var HitPoints $hitPoints */
-            /** @var InGameName $inGameName */
-            /** @var MapPosition $mapPosition */
-            /** @var DefaultColor $defaultColor */
-            [
-                $mapSymbol,
-                $hitPoints,
-                $inGameName,
-                $mapPosition,
-                $defaultColor,
-            ]= $this->player->explode(
-                MapSymbol::class,
-                HitPoints::class,
-                InGameName::class,
-                MapPosition::class,
-                DefaultColor::class,
-            );
+            $this->renderPlayerInfo();
 
-            $playerSymbol =  $this->consoleColor->apply(
-                sprintf('color_%d', $defaultColor->getColor()->toInt()),
-                $mapSymbol->getSymbol()
-            );
+            $this->renderCurrentTargets();
 
-            echo sprintf(
-                "%s (%d,%d) - HP: %d/%d - %s\n",
-                $playerSymbol,
-                $mapPosition->get()->getX(),
-                $mapPosition->get()->getY(),
-                $hitPoints->getCurrent(),
-                $hitPoints->getTotal(),
-                $inGameName->getInGameName(),
-            );
-
-            $this->currentTargets = array_filter(
-                $this->currentTargets,
-                function (Entity $currentTarget) {
-                    /** @var HitPoints $hitPoints */
-                    $hitPoints = $currentTarget->getComponent(HitPoints::class);
-
-                    return ($hitPoints?->getCurrent() ?? 0) > 0;
-                },
-            );
-
-            if (count($this->currentTargets) > 0) {
-                echo "Targets:\n";
-                $index = 1;
-                foreach ($this->currentTargets as $currentTarget) {
-
-                    /** @var MapSymbol $mapSymbol */
-                    /** @var HitPoints $hitPoints */
-                    /** @var InGameName $inGameName */
-                    /** @var MapPosition $mapPosition */
-                    /** @var DefaultColor $defaultColor */
-                    [
-                        $mapSymbol,
-                        $hitPoints,
-                        $inGameName,
-                        $mapPosition,
-                        $defaultColor,
-                    ]= $currentTarget->explode(
-                        MapSymbol::class,
-                        HitPoints::class,
-                        InGameName::class,
-                        MapPosition::class,
-                        DefaultColor::class,
-                    );
-
-                    $currentTargetSymbol =  $this->consoleColor->apply(
-                        sprintf('color_%d', $defaultColor->getColor()->toInt()),
-                        $mapSymbol->getSymbol()
-                    );
-
-                    echo sprintf(
-                        "\t%d - %s (%d,%d) - HP: %d/%d - %s\n",
-                        $index++,
-                        $currentTargetSymbol,
-                        $mapPosition->get()->getX(),
-                        $mapPosition->get()->getY(),
-                        $hitPoints->getCurrent(),
-                        $hitPoints->getTotal(),
-                        $inGameName->getInGameName(),
-                    );
-                }
-            }
+            $this->renderNearbyPlayers();
         }
 
         ob_end_flush();
+    }
+
+    private function renderNearbyPlayers(): void
+    {
+        if (count($this->nearbyPlayers) > 0) {
+            echo "\nNearby Players:\n";
+            $index = 1;
+            foreach ($this->nearbyPlayers as $nearbyPlayer) {
+
+                /** @var MapSymbol $mapSymbol */
+                /** @var HitPoints $hitPoints */
+                /** @var InGameName $inGameName */
+                /** @var MapPosition $mapPosition */
+                /** @var DefaultColor $defaultColor */
+                [
+                    $mapSymbol,
+                    $hitPoints,
+                    $inGameName,
+                    $mapPosition,
+                    $defaultColor,
+                ] = $nearbyPlayer->explode(
+                    MapSymbol::class,
+                    HitPoints::class,
+                    InGameName::class,
+                    MapPosition::class,
+                    DefaultColor::class,
+                );
+
+                $nearbyPlayerSymbol = $this->consoleColor->apply(
+                    sprintf('color_%d', $defaultColor->getColor()->toInt()),
+                    $mapSymbol->getSymbol()
+                );
+
+                echo sprintf(
+                    "\t%d - %s (%d,%d) - HP: %d/%d - %s\n",
+                    $index++,
+                    $nearbyPlayerSymbol,
+                    $mapPosition->get()->getX(),
+                    $mapPosition->get()->getY(),
+                    $hitPoints->getCurrent(),
+                    $hitPoints->getTotal(),
+                    $inGameName->getInGameName(),
+                );
+            }
+        }
+    }
+
+    private function renderCurrentTargets(): void
+    {
+        $this->currentTargets = array_filter(
+            $this->currentTargets,
+            function (Entity $currentTarget) {
+                /** @var HitPoints $hitPoints */
+                $hitPoints = $currentTarget->getComponent(HitPoints::class);
+
+                return ($hitPoints?->getCurrent() ?? 0) > 0;
+            },
+        );
+
+        if (count($this->currentTargets) > 0) {
+            echo "\nTargets:\n";
+            $index = 1;
+            foreach ($this->currentTargets as $currentTarget) {
+
+                /** @var MapSymbol $mapSymbol */
+                /** @var HitPoints $hitPoints */
+                /** @var InGameName $inGameName */
+                /** @var MapPosition $mapPosition */
+                /** @var DefaultColor $defaultColor */
+                [
+                    $mapSymbol,
+                    $hitPoints,
+                    $inGameName,
+                    $mapPosition,
+                    $defaultColor,
+                ] = $currentTarget->explode(
+                    MapSymbol::class,
+                    HitPoints::class,
+                    InGameName::class,
+                    MapPosition::class,
+                    DefaultColor::class,
+                );
+
+                $currentTargetSymbol = $this->consoleColor->apply(
+                    sprintf('color_%d', $defaultColor->getColor()->toInt()),
+                    $mapSymbol->getSymbol()
+                );
+
+                echo sprintf(
+                    "\t%d - %s (%d,%d) - HP: %d/%d - %s\n",
+                    $index++,
+                    $currentTargetSymbol,
+                    $mapPosition->get()->getX(),
+                    $mapPosition->get()->getY(),
+                    $hitPoints->getCurrent(),
+                    $hitPoints->getTotal(),
+                    $inGameName->getInGameName(),
+                );
+            }
+        }
+    }
+
+    private function renderPlayerInfo(): void
+    {
+        /** @var MapSymbol $mapSymbol */
+        /** @var HitPoints $hitPoints */
+        /** @var InGameName $inGameName */
+        /** @var MapPosition $mapPosition */
+        /** @var DefaultColor $defaultColor */
+        [
+            $mapSymbol,
+            $hitPoints,
+            $inGameName,
+            $mapPosition,
+            $defaultColor,
+        ] = $this->player->explode(
+            MapSymbol::class,
+            HitPoints::class,
+            InGameName::class,
+            MapPosition::class,
+            DefaultColor::class,
+        );
+
+        $playerSymbol = $this->consoleColor->apply(
+            sprintf('color_%d', $defaultColor->getColor()->toInt()),
+            $mapSymbol->getSymbol()
+        );
+
+        echo sprintf(
+            "%s (%d,%d) - HP: %d/%d - %s\n",
+            $playerSymbol,
+            $mapPosition->get()->getX(),
+            $mapPosition->get()->getY(),
+            $hitPoints->getCurrent(),
+            $hitPoints->getTotal(),
+            $inGameName->getInGameName(),
+        );
     }
 }
 

@@ -94,7 +94,7 @@ class MainClient extends AbstractClient
         $name = readline("If you want, type a player name: ");
 
         if ($name) {
-            $this->socket->write(ClientPacketHeader::SET_PLAYER_NAME->pack());
+            $this->socket->write(ClientPacketHeader::SET_PLAYER_NAME->pack($name));
         }
     }
 }

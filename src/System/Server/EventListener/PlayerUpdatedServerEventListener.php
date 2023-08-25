@@ -10,6 +10,7 @@ use App\Engine\Component\InGameName;
 use App\Engine\Component\MapPosition;
 use App\Engine\Component\MapSymbol;
 use App\Engine\Component\MapViewPort;
+use App\Engine\Component\PlayerCommandQueue;
 use App\Engine\Entity\Entity;
 use App\Engine\Entity\EntityManager;
 use App\System\Event\Event\AbstractEvent;
@@ -87,11 +88,17 @@ class PlayerUpdatedServerEventListener extends AbstractEventListener
         );
 
         $entityUpdates = '';
+        $uiUpdates = '';
 
         /**
          * @var MapPosition $entityMapPosition
          */
         foreach ($mapEntities as $mapEntityId => [$entityMapPosition]) {
+            $playerCommandQueue = $this->entityManager->getComponentFromEntityId(
+                $mapEntityId,
+                PlayerCommandQueue::class
+            );
+
             $inViewport = $playerViewport->isPointInBoundaries(
                 $entityMapPosition->get(),
                 $playerMapPosition,
@@ -102,14 +109,20 @@ class PlayerUpdatedServerEventListener extends AbstractEventListener
                 $mapEntity = $this->entityManager->getEntityById($mapEntityId);
                 $message = serialize($this->mapEntityUpdatedServerEventListener->getReducedEntity($mapEntity));
                 $entityUpdates .= ServerPacketHeader::MAP_ENTITY_UPDATED->pack($message);
+                $playerCommandQueue && $uiUpdates .= ServerPacketHeader::UI_NEARBY_PLAYER_EXISTS->pack($message);
             } else {
                 //todo only relevant entities for player.
                 $entityUpdates .= ServerPacketHeader::MAP_ENTITY_REMOVED->pack($mapEntityId);
+                $playerCommandQueue && $uiUpdates .= ServerPacketHeader::UI_NEARBY_PLAYER_REMOVED->pack($mapEntityId);
             }
         }
 
         if ($entityUpdates) {
             $client->send($entityUpdates, SocketType::MAP);
+        }
+
+        if ($uiUpdates) {
+            $client->send($uiUpdates, SocketType::UI_FIXED);
         }
     }
 }
