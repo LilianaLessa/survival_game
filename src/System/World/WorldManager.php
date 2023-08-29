@@ -34,8 +34,6 @@ class WorldManager
     private int $viewportWidth;
     private int $viewportHeight;
     private ?array $groundPathWeights = null;
-    private $lastDraw = null;
-
     private $terrainData = [];
 
     private $linearTerrainData = [];
@@ -162,21 +160,12 @@ class WorldManager
             echo "\n";
         }
 
-        if ($this->lastDraw !== null) {
-            echo sprintf(
-                "\n%s\n%d\n",
-                microtime(true) - $this->lastDraw,
-                count($this->entityManager->getEntityCollection())
-            );
-        }
 
         //swap frame
         $frame = ob_get_contents();
         ob_end_clean();
         system('clear');
         echo $frame;
-
-        $this->lastDraw = microtime(true);
     }
 
     public function getEntityCollection(int $x, int $y): EntityCollection

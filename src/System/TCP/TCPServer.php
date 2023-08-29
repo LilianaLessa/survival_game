@@ -18,7 +18,7 @@ class TCPServer
     /** @var ResourceSocket[]  */
     private array $sockets;
 
-    public function __construct(private readonly string $address, private readonly array $systems)
+    public function __construct(private readonly string $address)
     {
     }
 

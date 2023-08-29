@@ -25,6 +25,7 @@ use App\System\Monster\MonsterPresetLibrary;
 use App\System\Monster\Spawner\MonsterSpawnerLibrary;
 use App\System\Player\PlayerFactory;
 use App\System\Player\PlayerPresetLibrary;
+use App\System\PresetLibrary\PresetLibrariesLoader;
 use App\System\Screen\ClientScreenUpdater;
 use App\System\Screen\Screen;
 use App\System\Screen\ScreenUpdater;
@@ -80,6 +81,7 @@ function registerBehaviorEffectHandlers(ServicesConfigurator $services): void
 
 function registerPresetLibraries(ServicesConfigurator $services): void
 {
+    $services->set(PresetLibrariesLoader::class, PresetLibrariesLoader::class);
     $services->set(PlayerPresetLibrary::class, PlayerPresetLibrary::class);
     $services->set(BiomePresetLibrary::class, BiomePresetLibrary::class);
     $services->set(ItemPresetLibrary::class, ItemPresetLibrary::class);

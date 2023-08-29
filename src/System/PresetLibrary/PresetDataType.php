@@ -16,4 +16,5 @@ enum PresetDataType: string
     case ITEM_PRESET = 'itemPreset';
     case BIOME_PRESET = 'biomePreset';
     case SERVER_CONFIG = 'serverConfig';
+    case LIBRARY_CONFIG = 'libraryConfig';
 }

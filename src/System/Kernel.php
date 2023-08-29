@@ -20,7 +20,7 @@ class Kernel
         return self::$container;
     }
 
-    /** @return GameSystemInterface */
+    /** @return GameSystemInterface[] */
     public static function getRegisteredGameSystemInstances(): array
     {
         return self::getAllRegisteredConcreteInstances(GameSystemInterface::class);
@@ -36,7 +36,7 @@ class Kernel
         $instances = [];
         foreach ($serviceIds as $serviceId) {
             if (class_exists($serviceId) && is_subclass_of($serviceId, $abstractOrInterface)) {
-                    $instances[] = $container->get($serviceId);
+                    $instances[$serviceId] = $container->get($serviceId);
             }
         }
 

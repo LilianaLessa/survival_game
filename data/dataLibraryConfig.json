@@ -1,0 +1,37 @@
+[
+  {
+    "dataType": "libraryConfig",
+    "name": "BehaviorPresetLibrary",
+    "folder": "data/Entity/AI/Behavior"
+  },
+  {
+    "dataType": "libraryConfig",
+    "name": "MonsterPresetLibrary",
+    "folder": "data/Entity/Monster"
+  },
+  {
+    "dataType": "libraryConfig",
+    "name": "MonsterSpawnerLibrary",
+    "folder": "data/Entity/Monster"
+  },
+  {
+    "dataType": "libraryConfig",
+    "name": "PlayerPresetLibrary",
+    "folder": "data/Player"
+  },
+  {
+    "dataType": "libraryConfig",
+    "name": "WorldPresetLibrary",
+    "folder": "data/World"
+  },
+  {
+    "dataType": "libraryConfig",
+    "name": "BiomePresetLibrary",
+    "folder": "data/World"
+  },
+  {
+    "dataType": "libraryConfig",
+    "name": "ItemPresetLibrary",
+    "folder": "data/Item"
+  }
+]
