@@ -25,10 +25,10 @@ class Game
     private array $gameSystems;
     private ?float $lastDraw = null;
 
-    public function init(): void
+    public function init(?float $worldSeed = null): void
     {
         $this->loadDataLibraries();
-        $this->initWorld();
+        $this->initWorld($worldSeed);
         $this->initEventListeners();
         $this->loadGameSystems();
 
@@ -80,17 +80,17 @@ class Game
         Kernel::getContainer()->get(PresetLibrariesLoader::class)->load('./data');
     }
 
-    private function initWorld(): void
+    private function initWorld(?float $seed = null): void
     {
         echo "\n";
         Kernel::getContainer()->get(WorldManager::class)->setTerrainData(
-            (function (): array {
+            (function () use ($seed): array {
                 /** @var BiomeGeneratorService $biomeGenerator */
                 $biomeGenerator = Kernel::getContainer()->get(BiomeGeneratorService::class);
 
                 $mapBiomeData = null;
-                async(function () use (&$mapBiomeData, $biomeGenerator) {
-                    $mapBiomeData = $biomeGenerator->generate();
+                async(function () use (&$mapBiomeData, $biomeGenerator, $seed) {
+                    $mapBiomeData = $biomeGenerator->generate($seed);
                 });
 
                 (function () use (&$mapBiomeData) {

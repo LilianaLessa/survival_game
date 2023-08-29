@@ -20,16 +20,16 @@ class BiomeGeneratorService
     {
     }
 
-    public function generate(): array
+    public function generate(?float $seed = null): array
     {
         $width = $this->worldManager->getWidth();
         $height = $this->worldManager->getHeight();
         $scale = 1.0;
-        $offset = new Point2D(0,0);
+        $offset = new Point2D(0, 0);
 
         $biomePresets = $this->biomePresetLibrary->getAllGenerationEnabled();
 
-        $waves = $this->getWaves();
+        $waves = $this->getWaves($seed);
 
         $maps = [];
 
@@ -59,36 +59,36 @@ class BiomeGeneratorService
 
         return $mapBiomeData;
     }
-    private function getWaves(): array
+    private function getWaves(?float $seed = 1): array
     {
         $waves = [
             'height' => [
                 new PerlinNoiseWave(
-                    56,
+                    56 * $seed,
                     0.05,
                     1,
                 ),
                 new PerlinNoiseWave(
-                    199.36,
+                    199.36 * $seed,
                     0.1,
                     0.5,
                 ),
             ],
             'moisture' => [
                 new PerlinNoiseWave(
-                    621,
+                    621 * $seed,
                     0.03,
                     1,
                 ),
             ],
             'heat' => [
                 new PerlinNoiseWave(
-                    318.6,
+                    318.6 * $seed,
                     0.04,
                     1,
                 ),
                 new PerlinNoiseWave(
-                    329.7,
+                    329.7 * $seed,
                     0.02,
                     5,
                 ),

@@ -26,6 +26,8 @@ class WorldPresetLibrary extends AbstractPresetLibrary
             $rawPreset->name,
             $rawPreset->mapWidth ?? 20,
             $rawPreset->mapHeight ?? 20,
+            $rawPreset->chunkWidth ?? 25,
+            $rawPreset->chunkHeight ?? 25,
         ))
             ->setScreenUpdaterFps($rawPreset->screenUpdaterFps ?? 10);
     }

@@ -8,6 +8,6 @@ require_once('vendor/autoload.php');
 
 $game = new Game();
 
-$game->init();
-//$game->initServerScreenUpdate();
+$seed = (float)($argv[1] ?? 1);
+$game->init($seed);
 $game->start();

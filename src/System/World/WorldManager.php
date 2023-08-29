@@ -38,8 +38,8 @@ class WorldManager
 
     private $linearTerrainData = [];
 
-    private $worldChunkWidht = 25; //todo get from preset
-    private $worldChunkHeight = 25; //todo get from preset
+    private $worldChunkWidht;
+    private $worldChunkHeight;
     private $chunkedTerrainData = [];
     private $chunkedBackgroundColors = [];
 
@@ -56,6 +56,8 @@ class WorldManager
         $worldPreset = $this->worldPresetLibrary->getDefaultWorldPreset();
         $this->width = $worldPreset->getMapWidth();
         $this->height = $worldPreset->getMapHeight();
+        $this->worldChunkWidht = $worldPreset->getChunkWidth();
+        $this->worldChunkHeight = $worldPreset->getChunkHeight();
 
         $playerPreset = $this->playerPresetLibrary->getDefaultPlayerPreset();
 

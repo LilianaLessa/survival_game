@@ -15,6 +15,8 @@ class WorldPreset extends AbstractPreset
         string $name,
         private readonly int $mapWidth,
         private readonly int $mapHeight,
+        private readonly int $chunkWidth,
+        private readonly int $chunkHeight,
     )
     {
         parent::__construct(PresetDataType::WORLD_PRESET, $name);
@@ -39,5 +41,15 @@ class WorldPreset extends AbstractPreset
     {
         $this->screenUpdaterFps = $screenUpdaterFps;
         return $this;
+    }
+
+    public function getChunkWidth(): int
+    {
+        return $this->chunkWidth;
+    }
+
+    public function getChunkHeight(): int
+    {
+        return $this->chunkHeight;
     }
 }
