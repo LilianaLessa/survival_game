@@ -45,6 +45,7 @@ use App\System\Server\EventListener\UpdatePlayerCurrentTargetServerEventListener
 use App\System\Server\PacketHandlers\AttachClientHandler;
 use App\System\Server\PacketHandlers\GameCommandHandler;
 use App\System\Server\PacketHandlers\RegisterNewClientHandler;
+use App\System\Server\PacketHandlers\RequestChunkInfoHandler;
 use App\System\Server\PacketHandlers\RequestClientUuidHandler;
 use App\System\Server\PacketHandlers\RequestMapDataHandler;
 use App\System\Server\PacketHandlers\RequestPlayerDataHandler;
@@ -242,6 +243,11 @@ function registerClientPacketHandlers(ServicesConfigurator $services): void
     ]);
 
     $services->set(RequestMapDataHandler::class, RequestMapDataHandler::class)->args([
+        new Reference(ClientPool::class),
+        new Reference(WorldManager::class),
+    ]);
+
+    $services->set(RequestChunkInfoHandler::class, RequestChunkInfoHandler::class)->args([
         new Reference(ClientPool::class),
         new Reference(WorldManager::class),
     ]);

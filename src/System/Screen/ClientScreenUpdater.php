@@ -102,12 +102,4 @@ class ClientScreenUpdater
 
         return $entityMap;
     }
-
-    /**
-     * @return ConsoleColorPalette[][]
-     */
-    private function prepareBackgroundColorMap(array $terrainInfo): array
-    {
-        return [];
-    }
 }
