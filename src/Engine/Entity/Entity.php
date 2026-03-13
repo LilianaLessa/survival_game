@@ -14,7 +14,7 @@ class Entity
     /** @var ComponentInterface[] */
     private array $components = [];
 
-    public  function __construct(private readonly string $id, ComponentInterface ...$components)
+    public  function __construct(public readonly string $id, ComponentInterface ...$components)
     {
         $this->components = [];
         foreach ($components as $component) {

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Engine\Component\DrawableInterface;
+use App\Engine\Component\MapPosition;
+use App\Engine\Entity\EntityCollection;
 use App\Engine\Entity\EntityManager;
 use App\Engine\System\AISystemInterface;
 use App\Engine\System\GameSystemInterface;
@@ -61,6 +64,9 @@ class Game
                 }
             }
 
+            //update entity map here?
+            $this->updateWorldEntityMap();
+
             $this->gameTick();
 
             if ($this->lastDraw !== null) {
@@ -107,13 +113,14 @@ class Game
         );
     }
 
-    private function initEventListeners(): void {
+    private function initEventListeners(): void
+    {
         Kernel::getAllRegisteredConcreteInstances(AbstractEventListener::class);
     }
 
     private function gameTick(): void
     {
-        $tickDurationInSeconds = 0.1;
+        $tickDurationInSeconds = 0.01; //todo this is limiting the frames per second at the end
 
         delay($tickDurationInSeconds); //tick
     }
@@ -135,4 +142,32 @@ class Game
         $screenUpdater = Kernel::getContainer()->get(ScreenUpdater::class);
         $screenUpdater->startAsyncUpdate();
     }
+
+
+    private function updateWorldEntityMap(): void
+    {
+        $entityManager = Kernel::getContainer()->get(EntityManager::class);
+        $worldManager =  Kernel::getContainer()->get(WorldManager::class);
+
+
+        /** @var EntityCollection[][] $entityMap */
+        $entityMap = [];
+        $entitiesToUpdate = $entityManager->getEntitiesWithComponents(
+            MapPosition::class,
+        );
+
+        /** @var MapPosition $position */
+        foreach ($entitiesToUpdate as $entityId => [$position]) {
+            $entityMap[$position->getX()][$position->getY()] =
+                $entityMap[$position->getX()][$position->getY()] ?? new EntityCollection();
+
+            $entityMap[$position->getX()][$position->getY()]->addEntity(
+                $entityManager->getEntityById($entityId)
+            );
+        }
+
+        $worldManager->resetEntityMap();
+        $worldManager->setEntityMap($entityMap);
+    }
+
 }

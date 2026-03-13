@@ -1,0 +1,45 @@
+[
+  {
+    "dataType": "monsterPreset",
+    "name": "ironOreNode",
+    "inGameName": "Iron Ore Node",
+    "description": "A rugged chunk of iron ore embedded in rocky terrain.",
+    "level": 1,
+    "totalHitPoints": 10,
+    "symbol": "#",
+    "defaultColor": "grey58",
+    "dropCollection": [
+      {
+        "name": "ironOre",
+        "events": [
+          {"type": "harvest", "chance": 0.8, "min": 1, "max": 4}
+        ]
+      }
+    ],
+    "elements": [
+      {"element": "earth", "level": 1}
+    ],
+    "size": "small"
+  },
+  {
+    "dataType": "monsterPreset",
+    "name": "copperOreNode",
+    "inGameName": "Copper Ore Node",
+    "description": "A bright, reddish-brown chunk of copper ore nestled in the earth.",
+    "level": 1,
+    "symbol": "#",
+    "defaultColor": "orange4",
+    "dropCollection": [
+      {
+        "name": "copperOre",
+        "events": [
+          {"type": "harvest", "chance": 0.75, "min": 1, "max": 5}
+        ]
+      }
+    ],
+    "elements": [
+      {"element": "earth", "level": 1}
+    ],
+    "size": "small"
+  }
+]

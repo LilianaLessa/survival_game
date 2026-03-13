@@ -35,4 +35,14 @@ class ItemOnInventory implements ComponentInterface
     {
         return $this->amount;
     }
+
+//    public function setAmount(int $amount): void
+//    {
+//        $this->amount = max(0, $amount);
+//    }
+
+    public function decreaseAmount(int $amount): void
+    {
+        $this->amount = max(0, $this->amount - $amount);
+    }
 }

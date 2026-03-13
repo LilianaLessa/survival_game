@@ -17,4 +17,9 @@ enum PresetDataType: string
     case BIOME_PRESET = 'biomePreset';
     case SERVER_CONFIG = 'serverConfig';
     case LIBRARY_CONFIG = 'libraryConfig';
+
+    //npc data types.
+    case NPC_DEFINITION = 'npcDefinition';
+    case NPC_DIALOG = 'npcDialog';
+
 }

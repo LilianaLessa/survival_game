@@ -1,0 +1,40 @@
+[
+  {
+    "dataType": "monsterSpawner",
+    "name": "ironOreNode_desert",
+    "monster": "ironOreNode",
+    "max": 100,
+    "chance": 0.8,
+    "biomes": [
+      {
+        "name": "desert",
+        "chance": 0.5
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  },
+  {
+    "dataType": "monsterSpawner",
+    "name": "copperOreNode_mountains",
+    "monster": "copperOreNode",
+    "max": 80,
+    "chance": 0.7,
+    "biomes": [
+      {
+        "name": "mountains",
+        "chance": 0.6
+      }
+    ],
+    "area": {
+      "startX": 0,
+      "startY": 0,
+      "endX": 249,
+      "endY": 249
+    }
+  }
+]

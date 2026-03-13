@@ -28,6 +28,13 @@ class Inventory implements ComponentInterface
         }
     }
 
+    public function decreaseItem(Entity $item, int $quantity): void {
+        /** @var ItemOnInventory $itemOnInventory */
+        if ($itemOnInventory = $item->getComponent(ItemOnInventory::class)) {
+            $itemOnInventory->decreaseAmount($quantity);
+        }
+    }
+
     public function getItems(): EntityCollection
     {
         return $this->items;

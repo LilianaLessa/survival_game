@@ -55,7 +55,8 @@ class TCPServer
                     $clientPackage = ClientPacketHeader::tryFrom($packageExplodedData[0] ?? '');
 
                     if ($clientPackage) {
-                        array_shift($packageExplodedData);
+                        $header = array_shift($packageExplodedData);
+                        echo sprintf("handling %s %s\n", $header, print_r($packageExplodedData, true));
                         $clientPackage->getHandler()->handle($socket, $socketUuid, ...$packageExplodedData);
                     }
                 }

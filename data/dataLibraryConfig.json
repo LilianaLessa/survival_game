@@ -33,5 +33,15 @@
     "dataType": "libraryConfig",
     "name": "ItemPresetLibrary",
     "folder": "data/Item"
+  },
+  {
+    "dataType": "npcDefinition",
+    "name": "NpcPresetLibrary",
+    "folder": "data/Entity/NPC"
+  },
+  {
+    "dataType": "npcDialog",
+    "name": "NpcPresetLibrary",
+    "folder": "data/Entity/NPC"
   }
 ]

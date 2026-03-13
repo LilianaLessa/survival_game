@@ -1,0 +1,239 @@
+[
+  {
+    "dataType": "npcDialog",
+    "name": "dummyNpcDialog",
+    "nodes": [
+      {
+        "id": "intro",
+        "text": "Hello there, traveler. What brings you here?",
+        "choices": [
+          {
+            "id": "passingBy",
+            "text": "Just passing by.",
+            "nextNode": "goodbye"
+          },
+          {
+            "id":  "askTask",
+            "text": "Do you have any work for me?",
+            "nextNode": "task_offer",
+            "conditions": [
+              { "type": "npcState", "params": { "flagOff": "copperQuestAccepted" } }
+            ]
+          },
+          {
+            "id":  "checkTask",
+            "text": "I brought what you needed.",
+            "nextNode": "task_check",
+            "conditions": [
+              { "type": "npcState", "params": { "flagOn": "copperQuestAccepted" } }
+            ]
+          },
+          {
+            "id":  "cancelTask",
+            "text": "I dont want to work to you anymore.",
+            "nextNode": "task_cancel",
+            "conditions": [
+              { "type": "npcState", "params": { "flagOn": "copperQuestAccepted" } }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "task_offer",
+        "text": "I do, in fact. Bring me 3 copper ores and I’ll reward you.",
+        "choices": [
+          {
+            "id":  "acceptTask",
+            "text": "I accept.",
+            "nextNode": "task_accepted",
+            "actions": [
+              { "type": "npcStateChange", "params": { "flagOn": "copperQuestAccepted" } }
+            ]
+          },
+          {
+            "id":  "refuseTask",
+            "text": "Maybe later.",
+            "nextNode": "goodbye"
+          }
+        ]
+      },
+      {
+        "id": "task_accepted",
+        "text": "Come back when you have them.",
+        "choices": [
+          {
+            "id":  "taskAcceptedResponse",
+            "text": "Okay.",
+            "nextNode": "goodbye"
+          }
+        ]
+      },
+      {
+        "id": "task_cancel",
+        "text": "Oh, that's bad. But it is your choice. Come back when you are willing to do some hard work!",
+        "choices": [
+          {
+            "id":  "taskCanceledResponse",
+            "text": "Okay.",
+            "nextNode": "goodbye",
+            "actions": [
+              { "type": "npcStateChange", "params": { "flagOff": "copperQuestAccepted" } }
+
+            ]
+          }
+        ]
+      },
+      {
+        "id": "task_check",
+        "text": "Great! Let me take a look!",
+        "choices": [
+          {
+            "id":  "proceedTaskCheck",
+            "text": "Sure. Here you go.",
+            "nextNode": null,
+            "actions": [
+              {
+                "type": "conditionalNode",
+                "params": {
+                  "conditions": [
+                    { "type": "playerHasItem", "params": { "item": "copperOre", "minQuantity": 3 }}
+                  ],
+                  "successNode": "task_complete",
+                  "failureNode": "task_incomplete"
+                }
+              }
+            ]
+          },
+          {
+            "id":  "cancelTaskCheck",
+            "text": "Never mind. I changed my mind.",
+            "nextNode": "goodbye"
+          }
+        ]
+      },
+      {
+        "id": "task_complete",
+        "text": "You brought the copper ores! Well done.",
+        "choices": [
+          {
+            "id":  "taskCompleteResponse",
+            "text": "Thanks!",
+            "nextNode": "goodbye",
+            "actions": [
+              { "type": "removeItem", "params": { "item": "copperOre", "quantity": 3 } },
+              { "type": "addMoney", "params": { "amount": 50 } },
+              { "type": "addExp", "params": { "amount": 100 } },
+              { "type": "npcStateChange", "params": { "flagOff": "copperQuestAccepted" } }
+
+            ]
+          }
+        ]
+      },
+      {
+        "id": "task_incomplete",
+        "text": "It seems you did not get all the ores I asked. I need 3 cooper ores, remember. Come back when you have them.",
+        "choices": [
+          {
+            "id":  "taskIncompleteResponse",
+            "text": "Ok.",
+            "nextNode": "goodbye"
+          }
+        ]
+      },
+      {
+        "id": "goodbye",
+        "text": "Safe travels.",
+        "actions": [
+          { "type": "endNpcInteraction" }
+        ]
+      }
+    ]
+  },
+  {
+    "dataType": "npcDialog",
+    "name": "dummyBlacksmithDialog",
+    "nodes": [
+      {
+        "id": "intro",
+        "text": "Greetings, adventurer. I am the blacksmith. What do you need?",
+        "choices": [
+          {
+            "id": "passingBy",
+            "text": "Just looking around.",
+            "nextNode": "goodbye"
+          },
+          {
+            "id": "askService",
+            "text": "Can you smelt ore for me?",
+            "nextNode": "service_offer",
+            "conditions": [
+              { "type": "npcState", "params": { "flagOff": "ironSmeltAccepted" } }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "service_offer",
+        "text": "Certainly. Bring me 5 iron ores, and I'll forge them into 1 iron ingot for you.",
+        "choices": [
+          {
+            "id": "acceptService",
+            "text": "Agreed, here is the ore.",
+            "nextNode": null,
+            "actions": [
+              {
+                "type": "conditionalNode",
+                "params": {
+                  "conditions": [
+                    { "type": "playerHasItem", "params": { "item": "ironOre", "minQuantity": 5 } }
+                  ],
+                  "successNode": "service_complete",
+                  "failureNode": "service_incomplete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "refuseService",
+            "text": "Not now.",
+            "nextNode": "goodbye"
+          }
+        ]
+      },
+      {
+        "id": "service_complete",
+        "text": "Excellent! Here's your iron ingot.",
+        "choices": [
+          {
+            "id": "serviceCompleteResponse",
+            "text": "Thank you.",
+            "nextNode": "goodbye",
+            "actions": [
+              { "type": "removeItem", "params": { "item": "ironOre", "quantity": 5 } },
+              { "type": "addItem", "params": { "item": "ironIngot", "quantity": 1 } },
+              { "type": "npcStateChange", "params": { "flagOff": "ironSmeltAccepted" } }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "service_incomplete",
+        "text": "You don't have enough iron ore. I need exactly 5 to make an ingot. Return when ready.",
+        "choices": [
+          {
+            "id": "serviceIncompleteResponse",
+            "text": "Understood.",
+            "nextNode": "goodbye"
+          }
+        ]
+      },
+      {
+        "id": "goodbye",
+        "text": "Forge on, traveler.",
+        "actions": [
+          { "type": "endNpcInteraction" }
+        ]
+      }
+    ]
+  }
+]

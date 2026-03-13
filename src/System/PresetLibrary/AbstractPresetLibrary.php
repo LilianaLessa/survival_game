@@ -20,6 +20,8 @@ abstract class AbstractPresetLibrary
             ...$presetTypesToLoad,
         );
 
+        //todo fix bug: this will associate wrong data to the types if getPresetTypesToLoad returns in
+        //     a different order than the one found in files.
         $rawPresetsData = array_combine(
             array_map(fn (PresetDataType $t) => $t->value, $presetTypesToLoad),
             $rawPresetsData

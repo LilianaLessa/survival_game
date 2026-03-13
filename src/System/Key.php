@@ -19,4 +19,6 @@ enum Key: string
     case I  = "i";
 
     case ENTER = "\n";
+
+    case ESC = "\e";
 }

@@ -154,6 +154,11 @@ class MovementApplier implements PhysicsSystemInterface
 
         } else {
 
+            //todo check if there is an npc on the direction of the movement.
+            //     this should trigger the interaction mode with that npc.
+
+
+
             //todo avoid self collision.
             if ($playerCommandQueue) {
                 $uiMessage = "Can't move in this direction.\n";

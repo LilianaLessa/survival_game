@@ -1,0 +1,74 @@
+[
+  {
+    "dataType": "npcDefinition",
+    "name": "dummyNpc",
+    "inGameName": "Dummy NPC",
+    "symbol": "N",
+    "defaultColor": "medium_purple2",
+    "position": {
+      "x": 100,
+      "y": 100
+    },
+    "triggers": [
+      {
+        "type": "onDialogStart",
+        "handler": "startDialog"
+      }
+    ],
+    "handlers": [
+      {
+        "id": "startDialog",
+        "type": "dialog",
+        "dialogName": "dummyNpcDialog"
+      }
+    ]
+  },
+  {
+    "dataType": "npcDefinition",
+    "name": "dummyBlacksmith",
+    "inGameName": "Dummy BlackSmith",
+    "symbol": "N",
+    "defaultColor": "medium_purple2",
+    "position": {
+      "x": 101,
+      "y": 101
+    },
+    "triggers": [
+      {
+        "type": "onDialogStart",
+        "handler": "startDialog"
+      }
+    ],
+    "handlers": [
+      {
+        "id": "startDialog",
+        "type": "dialog",
+        "dialogName": "dummyBlacksmithDialog"
+      }
+    ]
+  },
+  {
+    "dataType": "npcDefinition",
+    "name": "wiseyTheWise",
+    "inGameName": "Wisy, the Wise",
+    "symbol": "N",
+    "defaultColor": "medium_purple2",
+    "position": {
+      "x": 101,
+      "y": 101
+    },
+    "triggers": [
+      {
+        "type": "onDialogStart",
+        "handler": "startDialog"
+      }
+    ],
+    "handlers": [
+      {
+        "id": "startDialog",
+        "type": "dialog",
+        "dialogName": "wiseSageDialog"
+      }
+    ]
+  }
+]

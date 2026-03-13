@@ -23,5 +23,8 @@
         "symfony/config": "^6.3",
         "php-parallel-lint/php-console-color": "^1.0",
       "ext-zlib": "*"
+    },
+    "require-dev": {
+        "php-school/cli-menu": "^4.3"
     }
 }

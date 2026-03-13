@@ -14,6 +14,19 @@
   },
   {
     "dataType": "itemPreset",
+    "name": "ironIngot",
+    "inGameName": "Iron Ingot",
+    "description": "Refined iron from smelting iron ore, used for crafting tools and armor.",
+    "stackable": true,
+    "stackSize": 50,
+    "shortDescription": "Refined iron for crafting",
+    "rarity": "common",
+    "priceG": 0,
+    "priceS": 25,
+    "priceC": 0
+  },
+  {
+    "dataType": "itemPreset",
     "name": "copperOre",
     "inGameName": "Copper Ore",
     "description": "A raw material containing copper, useful for crafting and trading.",

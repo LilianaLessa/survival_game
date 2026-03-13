@@ -85,10 +85,20 @@ class UnblockingCliClient extends AbstractClient
     private function blockingInputMode(): ?string
     {
         system('stty cbreak echo');
-        $command = readline("\n>>");
+        echo "\n>> ";
+        $finalCommand = '';
+        do {
+            do {
+                $command = fgets(STDIN);
+            }while ($command === false);
+            $finalCommand .= $command;
+        } while(!str_contains($finalCommand, "\n"));
+
+        $command = rtrim($finalCommand, "\r\n");
+
         system('stty cbreak -echo');
 
-        return $command;
+        return $command === false ? null : $command;
     }
 
     private function key2Command($string): string {
